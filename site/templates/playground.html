@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Playground · Guida Agenti AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <span class="eyebrow">Strumento interattivo</span>
+  <h1>Playground prompt</h1>
+  <p class="lead">Imposta system prompt e user message, scegli temperature e modello, vedi la risposta in streaming. Riferimento teorico: <a href="/capitolo/05-prompt-engineering">Cap. 5 — Prompt engineering</a>.</p>
+</div>
+
+<div class="playground-layout">
+  <div class="pg-config">
+    <div class="card">
+      <label class="field">
+        <span>System prompt</span>
+        <textarea id="pg-system" rows="6" placeholder="Es. 'Sei un editor di una rivista scientifica…'"></textarea>
+      </label>
+
+      <label class="field">
+        <span>User message</span>
+        <textarea id="pg-user" rows="8" placeholder="La domanda o richiesta dell'utente"></textarea>
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span>Modello</span>
+          <select id="pg-model">
+            <option value="claude-haiku-4-5" selected>claude-haiku-4-5 (veloce, economico)</option>
+            <option value="claude-sonnet-4-6">claude-sonnet-4-6 (bilanciato)</option>
+            <option value="claude-opus-4-7">claude-opus-4-7 (più potente)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Temperature: <span id="pg-temp-val">0.7</span></span>
+          <input id="pg-temp" type="range" min="0" max="1.5" step="0.05" value="0.7">
+        </label>
+        <label class="field">
+          <span>Max tokens</span>
+          <input id="pg-max" type="number" min="64" max="4096" step="64" value="1024">
+        </label>
+      </div>
+
+      <details class="presets">
+        <summary>📚 Esempi pronti</summary>
+        <div class="preset-grid">
+          <button type="button" class="preset" data-preset="role">Role priming</button>
+          <button type="button" class="preset" data-preset="few-shot">Few-shot</button>
+          <button type="button" class="preset" data-preset="cot">Chain-of-thought</button>
+          <button type="button" class="preset" data-preset="json">Output JSON</button>
+          <button type="button" class="preset" data-preset="critic">Self-critique</button>
+        </div>
+      </details>
+
+      <div class="actions">
+        <button id="pg-submit" type="button" class="btn btn-primary">Esegui ▶</button>
+        <button id="pg-cancel" type="button" class="btn btn-ghost" disabled>Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pg-output">
+    <div class="card output-card">
+      <div class="output-header">
+        <span>Risposta</span>
+        <span id="pg-stats" class="muted small"></span>
+      </div>
+      <div id="pg-result" class="markdown-output empty">La risposta apparirà qui in streaming.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/playground.js"></script>
+{% endblock %}

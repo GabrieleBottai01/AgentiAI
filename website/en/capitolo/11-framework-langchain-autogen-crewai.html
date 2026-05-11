@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/11-framework-langchain-autogen-crewai.html">
+<title>Ch. 11. Frameworks: LangChain, AutoGen, CrewAI · Guide to AI Agents</title>
+<meta name="description" content="For web apps (Next.js, Svelte, etc.), the Vercel AI SDK is effectively the standard.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 11. Frameworks: LangChain, AutoGen, CrewAI · Guide to AI Agents">
+<meta property="og:description" content="For web apps (Next.js, Svelte, etc.), the Vercel AI SDK is effectively the standard.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/11-framework-langchain-autogen-crewai.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 11. Frameworks: LangChain, AutoGen, CrewAI · Guide to AI Agents">
+<meta name="twitter:description" content="For web apps (Next.js, Svelte, etc.), the Vercel AI SDK is effectively the standard.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/11-framework-langchain-autogen-crewai.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 11. Frameworks: LangChain, AutoGen, CrewAI · Guide to AI Agents", "description": "For web apps (Next.js, Svelte, etc.), the Vercel AI SDK is effectively the standard.", "url": "https://myfirstaiagent.netlify.app/en/capitolo/11-framework-langchain-autogen-crewai.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class="current"><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.4"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 11</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="11-frameworks-langchain-autogen-crewai">11. Frameworks: LangChain, AutoGen, CrewAI</h1>
+<p>Frameworks provide <strong>high-level abstractions</strong> for building agents without writing the loop by hand. They give you: unified model calls, ready-made tools, memory, multi-agent, observability.</p>
+<p>Classic tradeoff: <strong>development speed vs. control</strong>. Good to know when to choose which, and when <em>not</em> to use a framework.</p>
+<h2 id="111-overview">11.1 Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Focus</th>
+<th>Strengths</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LangChain</strong></td>
+<td>Composing chains and agents</td>
+<td>Huge ecosystem, integrations with everything</td>
+<td>RAG pipelines, fast prototypes, devs who want ready-made tools</td>
+</tr>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>Workflow as graph</td>
+<td>Fine control, explicit state, debug</td>
+<td>Complex agents requiring branching, retry, human-in-the-loop</td>
+</tr>
+<tr>
+<td><strong>AutoGen</strong></td>
+<td>Conversational multi-agent</td>
+<td>"Agents talking to each other" pattern</td>
+<td>Simulations, debate, problems benefiting from multiple roles</td>
+</tr>
+<tr>
+<td><strong>CrewAI</strong></td>
+<td>Multi-agent oriented to "teams"</td>
+<td>"Role + task + tool" abstraction</td>
+<td>Business-like workflows (research → write → edit)</td>
+</tr>
+<tr>
+<td><strong>LiteLLM</strong></td>
+<td>Unified adapter for LLMs</td>
+<td>Uniforms API across OpenAI, Anthropic, local, etc.</td>
+<td>When you want provider-agnostic</td>
+</tr>
+<tr>
+<td><strong>Pydantic AI</strong></td>
+<td>Type-safe agents in Python</td>
+<td>Type rigor, structured validation</td>
+<td>Python backend that values type safety</td>
+</tr>
+<tr>
+<td><strong>Vercel AI SDK</strong></td>
+<td>Agents in TypeScript for web apps</td>
+<td>Streaming UI, React hooks</td>
+<td>Frontend/full-stack JS</td>
+</tr>
+</tbody>
+</table>
+<p>They are not mutually exclusive. A typical stack might be: <code>LiteLLM</code> (provider-agnostic) + <code>LangGraph</code> (orchestration) + <code>pgvector</code> (memory) + <code>Langfuse</code> (observability).</p>
+<h2 id="112-langchain-state-of-the-art-with-caveats">11.2 LangChain: state of the art (with caveats)</h2>
+<p>LangChain is the most popular framework. It's had a turbulent evolution: the first version ("classic chains") was superseded by one based on <strong>LCEL (LangChain Expression Language)</strong> and then accompanied by <strong>LangGraph</strong> for agents.</p>
+<h3 id="example-rag-chain-with-langchain">Example: RAG chain with LangChain</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatAnthropic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_community.vectorstores</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chroma</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAIEmbeddings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.prompts</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatPromptTemplate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.runnables</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunnablePassthrough</span>
+
+<span class="c1"># Vector store already populated</span>
+<span class="n">vstore</span> <span class="o">=</span> <span class="n">Chroma</span><span class="p">(</span><span class="n">persist_directory</span><span class="o">=</span><span class="s2">&quot;./db&quot;</span><span class="p">,</span> <span class="n">embedding_function</span><span class="o">=</span><span class="n">OpenAIEmbeddings</span><span class="p">())</span>
+<span class="n">retriever</span> <span class="o">=</span> <span class="n">vstore</span><span class="o">.</span><span class="n">as_retriever</span><span class="p">(</span><span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Reply using only the provided context.</span>
+
+<span class="s2">Context: </span><span class="si">{context}</span>
+
+<span class="s2">Question: </span><span class="si">{question}</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">chain</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;context&quot;</span><span class="p">:</span> <span class="n">retriever</span><span class="p">,</span> <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">()}</span>
+    <span class="o">|</span> <span class="n">prompt</span>
+    <span class="o">|</span> <span class="n">ChatAnthropic</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;What&#39;s the travel reimbursement policy?&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>Pros:</strong><br />
+- 5 lines for working RAG.<br />
+- Change models by changing 1 import.<br />
+- Ecosystem with hundreds of integrations (DBs, APIs, vector stores, parsers).</p>
+<p><strong>Cons:</strong><br />
+- Unstable API (frequent breaking changes).<br />
+- "Magic" that hides problems: when something goes wrong, debug is a journey.<br />
+- Sometimes forced abstractions (LCEL can become hard to read).</p>
+<p><strong>Verdict:</strong> great for <strong>prototypes</strong> and to use integrations you don't want to reimplement. For production agents, prefer <strong>LangGraph</strong> (below).</p>
+<h2 id="113-langgraph-workflow-as-graph">11.3 LangGraph: workflow as graph</h2>
+<p>LangGraph is LangChain's "grown-up" sibling. The agent is modeled as a <strong>graph of nodes</strong> where each node is a function and edges are conditional transitions.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">END</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Annotated</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">]</span>
+    <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_model</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">response</span><span class="p">],</span> <span class="s2">&quot;iterations&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;iterations&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_tools</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">execute_tool</span><span class="p">(</span><span class="n">call</span><span class="p">)</span> <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">last</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">results</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">should_continue</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;iterations&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">END</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">&quot;tools&quot;</span> <span class="k">if</span> <span class="n">last</span><span class="o">.</span><span class="n">tool_calls</span> <span class="k">else</span> <span class="n">END</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">AgentState</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">call_model</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="n">call_tools</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">set_entry_point</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_conditional_edges</span><span class="p">(</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="n">should_continue</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">:</span> <span class="n">END</span><span class="p">})</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;tools&quot;</span><span class="p">,</span> <span class="s2">&quot;agent&quot;</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">invoke</span><span class="p">({</span><span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span> <span class="s2">&quot;iterations&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+</code></pre></div>
+
+<p><strong>Pros:</strong><br />
+- Explicit state → easy debug and replay.<br />
+- Conditional branching, loops, native human-in-the-loop.<br />
+- State persistence between runs (checkpointing).<br />
+- Production-ready.</p>
+<p><strong>Cons:</strong><br />
+- Steeper learning curve.<br />
+- Overkill for simple tasks.</p>
+<p><strong>When to use it:</strong> complex agent with multiple branches, retry, human approvals, workflow replay.</p>
+<h2 id="114-autogen-agents-talking-to-each-other">11.4 AutoGen: agents talking to each other</h2>
+<p>AutoGen (Microsoft Research) focuses on <strong>conversational multi-agent</strong>: define agents with roles, let them dialogue, let the solution emerge.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">autogen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AssistantAgent</span><span class="p">,</span> <span class="n">UserProxyAgent</span>
+
+<span class="n">assistant</span> <span class="o">=</span> <span class="n">AssistantAgent</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;coder&quot;</span><span class="p">,</span>
+    <span class="n">llm_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;config_list&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">}]},</span>
+    <span class="n">system_message</span><span class="o">=</span><span class="s2">&quot;You are an expert Python programmer.&quot;</span>
+<span class="p">)</span>
+
+<span class="n">reviewer</span> <span class="o">=</span> <span class="n">AssistantAgent</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;reviewer&quot;</span><span class="p">,</span>
+    <span class="n">llm_config</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">},</span>
+    <span class="n">system_message</span><span class="o">=</span><span class="s2">&quot;You are a rigorous code reviewer.&quot;</span>
+<span class="p">)</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">UserProxyAgent</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+    <span class="n">human_input_mode</span><span class="o">=</span><span class="s2">&quot;NEVER&quot;</span><span class="p">,</span>
+    <span class="n">code_execution_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;./tmp&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">user</span><span class="o">.</span><span class="n">initiate_chat</span><span class="p">(</span>
+    <span class="n">assistant</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Write a function that calculates Fibonacci with memoization&quot;</span>
+<span class="p">)</span>
+<span class="c1"># then reviewer comments, coder revises, user runs, etc.</span>
+</code></pre></div>
+
+<p><strong>Pros:</strong><br />
+- Natural pattern for problems benefiting from "multiple viewpoints".<br />
+- Free multi-agent conversation handling.<br />
+- Great for simulations and debate.</p>
+<p><strong>Cons:</strong><br />
+- Agents chatting = many tokens. High cost.<br />
+- Converging to a "good" answer requires fine system prompt tuning.<br />
+- Often a single agent with reflection does the same at 1/3 the cost.</p>
+<p><strong>When to use it:</strong> educational simulations, dialog generation, team problems where roles are <em>truly</em> distinct.</p>
+<h2 id="115-crewai-task-driven-agent-teams">11.5 CrewAI: task-driven agent teams</h2>
+<p>CrewAI uses the "company team" metaphor: define <strong>agents</strong> (roles), <strong>tasks</strong> (things to do), <strong>tools</strong> (instruments), and compose them in a <strong>crew</strong>.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">crewai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">Task</span><span class="p">,</span> <span class="n">Crew</span>
+
+<span class="n">researcher</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;Senior Researcher&quot;</span><span class="p">,</span>
+    <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;Find accurate information on topic X&quot;</span><span class="p">,</span>
+    <span class="n">backstory</span><span class="o">=</span><span class="s2">&quot;You are a meticulous researcher with years of experience...&quot;</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">web_search_tool</span><span class="p">,</span> <span class="n">scrape_tool</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+    <span class="n">role</span><span class="o">=</span><span class="s2">&quot;Tech Writer&quot;</span><span class="p">,</span>
+    <span class="n">goal</span><span class="o">=</span><span class="s2">&quot;Write clear articles based on solid research&quot;</span><span class="p">,</span>
+    <span class="n">backstory</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+
+<span class="n">research_task</span> <span class="o">=</span> <span class="n">Task</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Investigate recent developments in </span><span class="si">{topic}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">expected_output</span><span class="o">=</span><span class="s2">&quot;Bulleted list with 5-7 key facts and sources&quot;</span><span class="p">,</span>
+    <span class="n">agent</span><span class="o">=</span><span class="n">researcher</span>
+<span class="p">)</span>
+
+<span class="n">write_task</span> <span class="o">=</span> <span class="n">Task</span><span class="p">(</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Write a popular article based on the research findings&quot;</span><span class="p">,</span>
+    <span class="n">expected_output</span><span class="o">=</span><span class="s2">&quot;800-word article, clear tone&quot;</span><span class="p">,</span>
+    <span class="n">agent</span><span class="o">=</span><span class="n">writer</span><span class="p">,</span>
+    <span class="n">context</span><span class="o">=</span><span class="p">[</span><span class="n">research_task</span><span class="p">]</span>   <span class="c1"># passes research output as context</span>
+<span class="p">)</span>
+
+<span class="n">crew</span> <span class="o">=</span> <span class="n">Crew</span><span class="p">(</span>
+    <span class="n">agents</span><span class="o">=</span><span class="p">[</span><span class="n">researcher</span><span class="p">,</span> <span class="n">writer</span><span class="p">],</span>
+    <span class="n">tasks</span><span class="o">=</span><span class="p">[</span><span class="n">research_task</span><span class="p">,</span> <span class="n">write_task</span><span class="p">],</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">crew</span><span class="o">.</span><span class="n">kickoff</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;AI agents in 2026&quot;</span><span class="p">})</span>
+</code></pre></div>
+
+<p><strong>Pros:</strong><br />
+- Easy mental abstraction for those not from ML.<br />
+- Good for linear workflows (research → write → review).<br />
+- Active community, many templates.</p>
+<p><strong>Cons:</strong><br />
+- Magic that sometimes produces mediocre results.<br />
+- Personality prompts ("backstory") can become novelistic and waste tokens.<br />
+- For short tasks, a single agent is more efficient.</p>
+<p><strong>When to use it:</strong> automation of business workflows with clear steps, prototype of an "AI team" to show non-programmers.</p>
+<h2 id="116-litellm-the-universal-adapter">11.6 LiteLLM: the universal adapter</h2>
+<p>Not an agent framework, but a <strong>unified wrapper</strong> for all providers. Same API, different models:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">litellm</span><span class="w"> </span><span class="kn">import</span> <span class="n">completion</span>
+
+<span class="c1"># Change only &quot;model&quot;</span>
+<span class="n">r1</span> <span class="o">=</span> <span class="n">completion</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">completion</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+<span class="n">r3</span> <span class="o">=</span> <span class="n">completion</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gemini/gemini-2-pro&quot;</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+<span class="n">r4</span> <span class="o">=</span> <span class="n">completion</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;ollama/llama4&quot;</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>  <span class="c1"># local!</span>
+</code></pre></div>
+
+<p>It gives you:<br />
+- Easy provider switching.<br />
+- Fallback routing (if Anthropic is down, try OpenAI).<br />
+- Telemetry and cost tracking.<br />
+- Proxy server to centralize calls from multiple services.</p>
+<p><strong>When to use it:</strong> whenever you expect to try multiple providers or want to reduce vendor lock-in.</p>
+<h2 id="117-pydantic-ai-type-safe-agents">11.7 Pydantic AI: type-safe agents</h2>
+<p>From Pydantic (most loved Python validation library). Approach: <strong>define I/O with Python types</strong>, the framework handles serialization/parsing.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic_ai</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">WeatherResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">city</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">temperature_celsius</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">conditions</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span>
+    <span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span>
+    <span class="n">result_type</span><span class="o">=</span><span class="n">WeatherResponse</span><span class="p">,</span>
+    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are a weather agent.&quot;</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="s2">&quot;What&#39;s the weather in Rome?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">city</span><span class="p">)</span>               <span class="c1"># str</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">temperature_celsius</span><span class="p">)</span> <span class="c1"># float</span>
+</code></pre></div>
+
+<p><strong>Pros:</strong><br />
+- Automatic output validation.<br />
+- Excellent developer experience in Python (autocomplete, mypy).<br />
+- Lightweight, zero magic.</p>
+<p><strong>Cons:</strong><br />
+- Younger than LangChain, fewer integrations.<br />
+- Less developed multi-agent.</p>
+<p><strong>When to use it:</strong> Python backend where type rigor matters (FastAPI, microservices).</p>
+<h2 id="118-vercel-ai-sdk-agents-in-typescript">11.8 Vercel AI SDK: agents in TypeScript</h2>
+<p>For web apps (Next.js, Svelte, etc.), the Vercel AI SDK is effectively the standard.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">streamText</span><span class="p">,</span><span class="w"> </span><span class="nx">tool</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;ai&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">anthropic</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@ai-sdk/anthropic&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">z</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;zod&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">streamText</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="kt">anthropic</span><span class="p">(</span><span class="s1">&#39;claude-opus-4-7&#39;</span><span class="p">),</span>
+<span class="w">  </span><span class="nx">tools</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">weather</span><span class="o">:</span><span class="w"> </span><span class="kt">tool</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Get weather for a city&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="kt">z.object</span><span class="p">({</span><span class="w"> </span><span class="nx">city</span><span class="o">:</span><span class="w"> </span><span class="kt">z.string</span><span class="p">()</span><span class="w"> </span><span class="p">}),</span>
+<span class="w">      </span><span class="nx">execute</span><span class="o">:</span><span class="w"> </span><span class="kt">async</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="nx">city</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">fetchWeather</span><span class="p">(</span><span class="nx">city</span><span class="p">),</span>
+<span class="w">    </span><span class="p">}),</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;What is the weather in Rome?&#39;</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>It gives you streaming, tools, structured output, React hooks (<code>useChat</code>, <code>useCompletion</code>). For chat UI in web apps, it's the fastest way.</p>
+<h2 id="119-when-not-to-use-a-framework">11.9 When NOT to use a framework</h2>
+<p>Frameworks have a cost: <strong>hidden complexity + dependencies + lock-in</strong>.</p>
+<p>Consider going without if:</p>
+<ul>
+<li>Your agent is simple (1-2 tools, direct loop). 100 lines of Python with pure SDK are clearer than 30 lines of LangChain.</li>
+<li>You're in a context with strict dependency constraints (embedded, minimal packages).</li>
+<li>You have to debug subtle behavior and the framework's magic makes everything opaque.</li>
+<li>Your company has security policies preventing unverified npm/pip dependencies.</li>
+</ul>
+<p><strong>Pragmatic rule:</strong> start with pure SDK. When you find yourself writing the same boilerplate for the third time (RAG, retry, multi-agent), it's time to consider a framework.</p>
+<h2 id="1110-quick-comparison-choosing">11.10 Quick comparison: choosing</h2>
+<div class="codehilite"><pre><span></span><code>Have a simple workflow? → Pure SDK (Ch. 10).
+Want quick RAG? → LangChain.
+Complex agent, branching, human-in-the-loop? → LangGraph.
+Conversational multi-agent? → AutoGen.
+&quot;Team-style&quot; business workflow? → CrewAI.
+Type-safe Python backend? → Pydantic AI.
+TS/JS web app? → Vercel AI SDK.
+Want to switch providers? → LiteLLM everywhere.
+Observability? → Langfuse or LangSmith (orthogonal to all).
+</code></pre></div>
+
+<h2 id="1111-observability-the-piece-you-cant-skip">11.11 Observability: the piece you can't skip</h2>
+<p>Once in production, agents break in unpredictable ways. Without structured tracing, you're blind.</p>
+<p>Tools that integrate the frameworks above:</p>
+<ul>
+<li><strong>Langfuse</strong> (open-source, self-hostable). Traces chains, agents, costs, errors.</li>
+<li><strong>LangSmith</strong> (from LangChain Inc, hosted). Commercial equivalent, perfect integration with LangChain/LangGraph.</li>
+<li><strong>Helicone</strong> (proxy + observability). Slips between you and the API.</li>
+</ul>
+<p>They let you:<br />
+- See every call with prompt, output, tokens used, latency.<br />
+- Replay problematic sessions.<br />
+- A/B test on prompts.<br />
+- Alert on errors or anomalous costs.</p>
+<p>Spending 1 hour to set up observability at the start saves days of debugging later.</p>
+<h2 id="1112-practice-redo-the-agent-from-ch-10-in-langgraph">11.12 Practice: redo the agent from Ch. 10 in LangGraph</h2>
+<p>Exercise: take the research agent from Ch. 10 and rewrite it in LangGraph. You'll see:<br />
+- How much "loop" code disappears.<br />
+- How much you gain in observability (trace every step).<br />
+- How much you lose in simplicity.</p>
+<p>Compare the two and decide which convinces you more <em>for your use</em>.</p>
+<h2 id="1113-key-takeaways">11.13 Key takeaways</h2>
+<ul>
+<li><strong>Start with pure SDK.</strong> Understand how it really works.</li>
+<li><strong>LangChain</strong> for prototypes and RAG, <strong>LangGraph</strong> for production agents.</li>
+<li><strong>AutoGen / CrewAI</strong> for multi-agent, but evaluate if it's really needed.</li>
+<li><strong>LiteLLM</strong> everywhere for provider-switching.</li>
+<li><strong>Vercel AI SDK</strong> for TS web apps.</li>
+<li><strong>Observability</strong> (Langfuse or similar) is not optional.</li>
+</ul>
+<h2 id="1114-common-mistakes">11.14 Common mistakes</h2>
+<ul>
+<li><strong>Skipping pure SDK.</strong> Without understanding the fundamentals, frameworks become magic black boxes.</li>
+<li><strong>Adopting unstable frameworks in production.</strong> LangChain has breaking changes every 6 months.</li>
+<li><strong>Multi-agent because "it's cool".</strong> An agent with reflection often beats a team of chatty agents.</li>
+<li><strong>No observability.</strong> "Works locally" → in production explodes without you understanding why.</li>
+<li><strong>Not pinning dependency versions.</strong> Automatic update = unpleasant surprises.</li>
+</ul>
+<hr />
+<p>You know how to build and orchestrate agents. Now let's talk about <strong>how to work well with them</strong>: practices, workflows, work quality.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="10-costruire-agenti-con-api-sdk.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 10. Building Agents with API and SDK</span></a>
+      <a class="nav-next" href="12-best-practice-sviluppo-con-agenti.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 12. Best Practices for Development</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 11</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 11 — Frameworks: LangChain, AutoGen, CrewAI</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="11-framework-langchain-autogen-crewai" data-chapter-n="11" data-chapter-title="Frameworks: LangChain, AutoGen, CrewAI">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

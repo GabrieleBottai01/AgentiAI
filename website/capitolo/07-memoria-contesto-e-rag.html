@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/07-memoria-contesto-e-rag.html">
+<title>Cap. 7. Memoria, contesto e RAG · Guida agli Agenti AI</title>
+<meta name="description" content="Tutta la conversazione (history + tool result + documenti) sta nel context. Quando si avvicina al limite, succedono cose brutte:">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 7. Memoria, contesto e RAG · Guida agli Agenti AI">
+<meta property="og:description" content="Tutta la conversazione (history + tool result + documenti) sta nel context. Quando si avvicina al limite, succedono cose brutte:">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/07-memoria-contesto-e-rag.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 7. Memoria, contesto e RAG · Guida agli Agenti AI">
+<meta name="twitter:description" content="Tutta la conversazione (history + tool result + documenti) sta nel context. Quando si avvicina al limite, succedono cose brutte:">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/07-memoria-contesto-e-rag.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 7. Memoria, contesto e RAG · Guida agli Agenti AI", "description": "Tutta la conversazione (history + tool result + documenti) sta nel context. Quando si avvicina al limite, succedono cose brutte:", "url": "https://myfirstaiagent.netlify.app/capitolo/07-memoria-contesto-e-rag.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class="current"><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.2"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 7</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="7-memoria-contesto-e-rag">7. Memoria, contesto e RAG</h1>
+<p>Un agente senza memoria è come un consulente con amnesia: ti aiuta benissimo per 5 minuti, poi dimentica chi sei. Vediamo come dargli memoria, e quando serve <strong>portare informazione esterna nel contesto</strong> invece di sperare che il modello la sappia.</p>
+<h2 id="71-i-tre-tipi-di-memoria">7.1 I tre tipi di memoria</h2>
+<div class="codehilite"><pre><span></span><code>┌──────────────────────────────────────┐
+│        Memoria di lavoro             │  ← context window
+│  (la conversazione in corso)         │
+├──────────────────────────────────────┤
+│        Memoria di lungo termine      │  ← file / DB / vector store
+│  (preferenze utente, fatti stabili)  │
+├──────────────────────────────────────┤
+│        Memoria episodica             │  ← log delle azioni
+│  (cosa ho fatto, in che ordine)      │
+└──────────────────────────────────────┘
+</code></pre></div>
+
+<p><strong>Memoria di lavoro</strong> = il context window. Esiste finché dura la sessione. Massima precisione (è tutta lì), ma costosa e limitata.</p>
+<p><strong>Memoria di lungo termine</strong> = informazioni durevoli salvate fuori, da richiamare quando servono. Il modello non le "ricorda", le <strong>rilegge</strong> ogni volta.</p>
+<p><strong>Memoria episodica</strong> = log delle azioni passate. Utile per debug, per non rifare le stesse cose, per imparare nel tempo.</p>
+<h2 id="72-gestire-il-context-window">7.2 Gestire il context window</h2>
+<p>Tutta la conversazione (history + tool result + documenti) sta nel context. Quando si avvicina al limite, succedono cose brutte:</p>
+<ul>
+<li>Il modello "perde" pezzi (effetto <strong>lost-in-the-middle</strong>: dimentica info nel mezzo del prompt).</li>
+<li>Costa caro: ogni token in input si paga, e il prezzo cresce linearmente.</li>
+<li>Latency cresce: più contesto, più tempo per rispondere.</li>
+</ul>
+<p>Strategie per gestirlo:</p>
+<h3 id="compaction-summarization">Compaction / summarization</h3>
+<p>Quando la storia diventa troppo lunga, si fa un riassunto dei turni più vecchi e si sostituiscono nel contesto.</p>
+<div class="codehilite"><pre><span></span><code>Turno 1-15: [riassunto: l&#39;utente chiedeva X, abbiamo fatto Y, scoperto Z]
+Turno 16-20: [contenuto integrale]
+</code></pre></div>
+
+<p>Claude Code lo fa automaticamente quando si avvicina al limite (vedrai messaggi tipo "auto-compact").</p>
+<h3 id="sliding-window">Sliding window</h3>
+<p>Tieni solo gli ultimi N turni, scartando i più vecchi. Semplice ma rischia di perdere contesto.</p>
+<h3 id="pruning-intelligente">Pruning intelligente</h3>
+<p>Il pezzo "tieni il system prompt + il messaggio user + risultati tool ESSENZIALI". Si scartano risultati intermedi voluminosi che non servono più.</p>
+<h3 id="out-of-context-summary">Out-of-context summary</h3>
+<p>Salva un riassunto in un file e citalo nel system prompt come "stato della conversazione". È quello che fa il sistema "auto memory" usato da molti agenti.</p>
+<h2 id="73-memoria-di-lungo-termine-il-pattern-base">7.3 Memoria di lungo termine: il pattern base</h2>
+<p>Il modello non impara <em>durante</em> le conversazioni (no fine-tuning runtime). Per dargli memoria persistente:</p>
+<ol>
+<li><strong>Dopo ogni interazione</strong>, salva i fatti rilevanti (preferenze utente, decisioni prese, profili) in un file/DB.</li>
+<li><strong>All'inizio della prossima conversazione</strong>, carica quei fatti nel system prompt.</li>
+</ol>
+<p>Esempio (semplificato, file-based):</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># salva</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_memory</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fact</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;memory/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">.md&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">fact</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># carica</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_memory</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;memory/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">.md&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+<span class="n">system_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Sei un assistente personale.</span>
+<span class="s2">Cosa so dell&#39;utente:</span>
+<span class="si">{</span><span class="n">load_memory</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</code></pre></div>
+
+<p>Pattern semplice, funziona benissimo per molti casi. ChatGPT e Claude.ai usano varianti di questa idea ("Memory" su ChatGPT, "Project knowledge" su Claude).</p>
+<h2 id="74-quando-il-file-non-basta-i-vector-store">7.4 Quando il file non basta: i vector store</h2>
+<p>Se la "memoria" è grande (interi documenti, knowledge base aziendale, repo di codice), non puoi metterla tutta nel system prompt. Serve un meccanismo per <strong>trovare solo le parti rilevanti</strong>.</p>
+<p>Qui entrano gli <strong>embedding</strong> e i <strong>vector store</strong>.</p>
+<h3 id="embedding-numeri-che-catturano-significato">Embedding: numeri che catturano significato</h3>
+<p>Un <strong>embedding</strong> è un vettore (lista di numeri, di solito 1024-3072 elementi) che rappresenta il significato di un testo. Testi con significato simile hanno embedding vicini nello spazio vettoriale.</p>
+<div class="codehilite"><pre><span></span><code>&quot;Il cane è un mammifero&quot;      → [0.12, -0.45, 0.88, ...]
+&quot;I cani sono animali pelosi&quot;  → [0.14, -0.42, 0.85, ...]   ← vicino
+&quot;La pizza è italiana&quot;         → [-0.32, 0.71, -0.10, ...]  ← lontano
+</code></pre></div>
+
+<p>Si producono con un <strong>embedding model</strong>: <code>text-embedding-3-small</code> (OpenAI), <code>voyage-3</code> (Voyage AI), <code>cohere-embed-v3</code> (Cohere), modelli open come <code>bge-large</code>.</p>
+<h3 id="vector-store-il-database-degli-embedding">Vector store: il database degli embedding</h3>
+<p>È un DB ottimizzato per cercare i vettori "più simili" a un vettore dato.</p>
+<p>Implementazioni popolari: Pinecone, Weaviate, Qdrant, Chroma, pgvector (Postgres extension). Anche file locali con FAISS funzionano per piccoli dataset.</p>
+<h2 id="75-rag-retrieval-augmented-generation">7.5 RAG: Retrieval-Augmented Generation</h2>
+<p><strong>RAG</strong> è il pattern più comune per dare memoria estesa a un agente.</p>
+<div class="codehilite"><pre><span></span><code>Pipeline RAG:
+
+1. INDICIZZAZIONE (offline, una tantum)
+   documenti → chunks (pezzi di 200-500 parole) → embedding → vector store
+
+2. RUNTIME (a ogni domanda)
+   domanda utente → embedding → cerca i K chunk più simili nel vector store
+   → metti i chunk nel prompt → genera risposta basata sui chunk
+</code></pre></div>
+
+<p>Esempio concreto: la tua azienda ha 500 documenti di policy interne. Senza RAG dovresti metterli tutti nel prompt (esauribile e costoso). Con RAG:</p>
+<ol>
+<li>Indicizzi tutti i 500 documenti una volta.</li>
+<li>Quando un dipendente chiede "qual è la policy per il rimborso viaggi?", il sistema:<br />
+   - Trasforma la domanda in embedding.<br />
+   - Cerca i 5 chunk più rilevanti nei tuoi documenti.<br />
+   - Costruisce un prompt: "Rispondi alla domanda usando solo questi documenti: [chunks]".<br />
+   - Il modello risponde citando i documenti.</li>
+</ol>
+<h3 id="codice-rag-minimale-python-chroma">Codice RAG minimale (Python, Chroma)</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">chromadb</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+<span class="n">chroma</span> <span class="o">=</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">PersistentClient</span><span class="p">(</span><span class="s2">&quot;./vstore&quot;</span><span class="p">)</span>
+<span class="n">coll</span> <span class="o">=</span> <span class="n">chroma</span><span class="o">.</span><span class="n">get_or_create_collection</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;text-embedding-3-small&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">text</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">embedding</span>
+
+<span class="c1"># 1. Indicizzazione (una volta)</span>
+<span class="n">docs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;policy1.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;policy2.txt&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">docs</span><span class="p">):</span>
+    <span class="n">coll</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;doc-</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span> <span class="n">embeddings</span><span class="o">=</span><span class="p">[</span><span class="n">embed</span><span class="p">(</span><span class="n">doc</span><span class="p">)],</span> <span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="n">doc</span><span class="p">])</span>
+
+<span class="c1"># 2. Query</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">answer</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">q_emb</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">coll</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_embeddings</span><span class="o">=</span><span class="p">[</span><span class="n">q_emb</span><span class="p">],</span> <span class="n">n_results</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;documents&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">completion</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Rispondi usando solo questi documenti:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">completion</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">(</span><span class="s2">&quot;Posso farmi rimborsare un Uber?&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Una decina di righe di logica. La complessità sta nel <strong>fare il chunking giusto</strong> e <strong>rifinire la qualità del retrieval</strong>.</p>
+<h2 id="76-rag-fatto-bene-chunking-re-ranking-citazioni">7.6 RAG fatto bene: chunking, re-ranking, citazioni</h2>
+<h3 id="chunking-come-spezzare-i-documenti">Chunking: come spezzare i documenti</h3>
+<p>Un documento intero come singolo chunk è troppo (rumore). Un singolo paragrafo come chunk è troppo poco (manca contesto).</p>
+<p>Linee guida:<br />
+- 200-500 parole per chunk.<br />
+- Overlap di 10-20% tra chunk consecutivi (così non spezzi info a metà).<br />
+- Rispetta i confini semantici (paragrafo, sezione) quando possibile.<br />
+- Aggiungi metadata (titolo doc, sezione, data) per filtraggio successivo.</p>
+<h3 id="re-ranking">Re-ranking</h3>
+<p>Il primo retrieval (per similarità di embedding) è veloce ma grezzo. Per migliorare, prendi i top-50 e fai un secondo passaggio con un <strong>re-ranker</strong> (modello specializzato come Cohere Rerank o un cross-encoder) che ordina meglio.</p>
+<h3 id="hybrid-search">Hybrid search</h3>
+<p>Combina ricerca per embedding (semantica) con ricerca per parole chiave (BM25/lessicale). I due pescano cose diverse: la semantica vede sinonimi, la lessicale vede nomi propri esatti.</p>
+<h3 id="citazioni">Citazioni</h3>
+<p>Il modello deve <strong>citare le fonti</strong>. Pattern:</p>
+<div class="codehilite"><pre><span></span><code>System: Rispondi citando i chunk usati con [doc-N, sezione X].
+        Se le info non bastano, dillo invece di inventare.
+</code></pre></div>
+
+<p>Riduce drasticamente le allucinazioni e dà all'utente un modo per verificare.</p>
+<h2 id="77-rag-vs-context-lungo-quando-uno-quando-laltro">7.7 RAG vs. context lungo: quando uno, quando l'altro</h2>
+<p>Con context da 1M token, è davvero ancora utile RAG?</p>
+<p><strong>Sì, in molti casi:</strong><br />
+- Costo: 1M token in input = caro. Caricare solo i chunk rilevanti costa meno.<br />
+- Latency: lo stesso.<br />
+- Lost-in-the-middle: il modello dimentica pezzi nel mezzo di prompt enormi.<br />
+- Aggiornamenti: indicizzazione incrementale è più semplice che mandare tutto a ogni query.</p>
+<p><strong>Solo context (no RAG) va bene quando:</strong><br />
+- Il dataset è piccolo (qualche libro, una settimana di chat).<br />
+- Hai bisogno di <strong>vista globale</strong> (es. analisi "a stile" che richiede di leggere tutto).<br />
+- Vuoi <strong>massima accuratezza</strong> e i costi non contano (es. consulenza one-shot).</p>
+<p>In pratica, molti sistemi reali combinano: RAG per il bulk, context lungo per eccezioni complesse.</p>
+<h2 id="78-memoria-episodica-log-strutturato">7.8 Memoria episodica: log strutturato</h2>
+<p>Per agenti che girano a lungo, salva uno <strong>log delle azioni</strong> che possa essere usato per:</p>
+<ul>
+<li>Debug ("perché ha fatto X?").</li>
+<li>Eviti di rifare le stesse cose ("hai già controllato questa fonte").</li>
+<li>Apprendimento iterativo ("nei task simili a questo, in passato ha funzionato Y").</li>
+</ul>
+<p>Schema tipico:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;session_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-07T10:30:00Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;action&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tool_call&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;web_search&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;input&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;output_summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;trovati 5 risultati su X&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;tokens_used&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Salvali in JSONL o in un DB. Costano poco e risolvono problemi enormi quando un agente "fa una cosa strana".</p>
+<h2 id="79-la-memoria-come-tool">7.9 La memoria come tool</h2>
+<p>Pattern moderno: invece di gestire la memoria a mano, dai all'agente un <strong>tool <code>remember(fact)</code></strong> e un tool <strong><code>recall(query)</code></strong>. Decide lui cosa salvare e cosa richiamare.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">tools</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;remember&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Salva un fatto importante per ricordarlo in conversazioni future. Usa per: preferenze utente, decisioni, fatti stabili. Non per dettagli effimeri.&quot;</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;recall&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Cerca fatti precedentemente salvati. Usa quando l&#39;utente fa riferimento a &#39;come la volta scorsa&#39;, &#39;di solito&#39;, o quando ti serve contesto storico.&quot;</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>È esattamente il pattern usato dal sistema "auto memory" di Claude Code.</p>
+<h2 id="710-pratica-indicizza-la-guida-che-stai-leggendo">7.10 Pratica: indicizza la guida che stai leggendo</h2>
+<p>Esercizio: prendi i 16 capitoli di questa guida, fai chunking (paragrafo per paragrafo), embedding, e costruisci un piccolo bot che risponde a domande citando il capitolo.</p>
+<p>Te ne accorgerai: il primo prototipo funziona in 100 righe, il fine-tuning della qualità (chunking, re-ranking, prompt di sintesi) è dove sta il vero lavoro.</p>
+<h2 id="711-da-ricordare">7.11 Da ricordare</h2>
+<ul>
+<li><strong>Tre memorie</strong>: lavoro (context), lungo termine (file/DB/vector), episodica (log).</li>
+<li><strong>Context window</strong> è prezioso: tienilo pulito, riassumi quando lungo.</li>
+<li><strong>RAG</strong> = retrieval + generation: trovi i pezzi giusti, li metti nel prompt, generi.</li>
+<li><strong>Embedding</strong> trasformano significato in vettori; <strong>vector store</strong> li indicizza.</li>
+<li><strong>Chunking, re-ranking, hybrid search</strong> sono dove si gioca la qualità del RAG.</li>
+<li><strong>Citazioni</strong> riducono allucinazioni.</li>
+<li><strong>Memory-as-tool</strong> lascia decidere all'agente cosa salvare.</li>
+</ul>
+<h2 id="712-errori-tipici">7.12 Errori tipici</h2>
+<ul>
+<li><strong>Mettere tutto in context "tanto c'è 1M".</strong> Costoso, lento, perde attenzione.</li>
+<li><strong>Chunking ingenuo</strong> (es. ogni frase un chunk): rompe il contesto, retrieval scadente.</li>
+<li><strong>Solo embedding, niente keyword search.</strong> Perdi nomi propri esatti, codici, sigle.</li>
+<li><strong>Niente citazioni.</strong> L'utente non può verificare, il modello inventa.</li>
+<li><strong>RAG senza valutazione.</strong> Misura "quante delle top-K contengono la risposta giusta?" su un dataset di test. Senza, lo migliori al buio.</li>
+<li><strong>Fine-tuning quando bastava RAG.</strong> Il fine-tuning è caro e fragile; RAG aggiorna in tempo reale.</li>
+</ul>
+<hr />
+<p>Abbiamo finito la Parte 1 (fondamenti) e la Parte 2 (tecniche). Adesso si scende in pratica: come usare gli agenti già pronti.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="06-tool-use-e-function-calling.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 6. Tool use e function calling</span></a>
+      <a class="nav-next" href="08-usare-i-chatbot-ai.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 8. Usare i chatbot AI</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 7</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 7 — Memoria, contesto e RAG</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="07-memoria-contesto-e-rag" data-chapter-n="7" data-chapter-title="Memoria, contesto e RAG">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/09-claude-code-per-sviluppatori.html">
+<title>Cap. 9. Claude Code per sviluppatori · Guida agli Agenti AI</title>
+<meta name="description" content="Diversamente da ChatGPT (chat) o GitHub Copilot (autocomplete), Claude Code:">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 9. Claude Code per sviluppatori · Guida agli Agenti AI">
+<meta property="og:description" content="Diversamente da ChatGPT (chat) o GitHub Copilot (autocomplete), Claude Code:">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/09-claude-code-per-sviluppatori.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 9. Claude Code per sviluppatori · Guida agli Agenti AI">
+<meta name="twitter:description" content="Diversamente da ChatGPT (chat) o GitHub Copilot (autocomplete), Claude Code:">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/09-claude-code-per-sviluppatori.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 9. Claude Code per sviluppatori · Guida agli Agenti AI", "description": "Diversamente da ChatGPT (chat) o GitHub Copilot (autocomplete), Claude Code:", "url": "https://myfirstaiagent.netlify.app/capitolo/09-claude-code-per-sviluppatori.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class="current"><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.3"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 9</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="9-claude-code-agente-da-terminale-per-sviluppatori">9. Claude Code: agente da terminale per sviluppatori</h1>
+<p>Claude Code è il prodotto che stai usando ora (probabilmente). È un <strong>agente AI da terminale</strong> pensato specificamente per chi scrive codice. Per chi sviluppa, è oggi uno degli strumenti più produttivi sul mercato.</p>
+<h2 id="91-cosa-fa-claude-code">9.1 Cosa fa Claude Code</h2>
+<p>In una frase: <strong>un terminal-based agent che può leggere, modificare ed eseguire codice nel tuo progetto, sotto il tuo controllo</strong>.</p>
+<p>Diversamente da ChatGPT (chat) o GitHub Copilot (autocomplete), Claude Code:</p>
+<ul>
+<li>Ha <strong>accesso reale al filesystem</strong> (legge ed edita file nel tuo repo).</li>
+<li>Può <strong>eseguire comandi shell</strong> (test, build, git).</li>
+<li>Lavora in <strong>loop autonomi</strong>: gli dai un obiettivo, esegue molti passi, ti riporta.</li>
+<li>Chiede <strong>conferma</strong> prima di azioni potenzialmente distruttive.</li>
+</ul>
+<p>Esempi di prompt che funzionano:</p>
+<blockquote>
+<p>"Trova il bug per cui il login fallisce con email maiuscola e fixalo, aggiungendo un test."</p>
+<p>"Refactora il modulo <code>payments/</code> per separare logica di business da quella di persistenza."</p>
+<p>"Aggiorna le dipendenze al major successivo, esegui i test, fixa quello che si rompe."</p>
+</blockquote>
+<h2 id="92-installazione-e-setup-base">9.2 Installazione e setup base</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># macOS / Linux</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://claude.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+
+<span class="c1"># o con npm</span>
+npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>@anthropic-ai/claude-code
+</code></pre></div>
+
+<p>Poi nel tuo progetto:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/my-project
+claude
+</code></pre></div>
+
+<p>Si apre una sessione interattiva. Scrivi il tuo prompt, premi Invio, l'agente lavora.</p>
+<h2 id="93-la-gerarchia-dei-file-claudemd">9.3 La gerarchia dei file CLAUDE.md</h2>
+<p>Claude Code legge automaticamente file <code>CLAUDE.md</code> (e simili) per istruzioni persistenti del progetto. Ordine di precedenza:</p>
+<ol>
+<li><strong><code>~/.claude/CLAUDE.md</code></strong> — istruzioni globali (per tutti i tuoi progetti).</li>
+<li><strong><code>&lt;project&gt;/CLAUDE.md</code></strong> — istruzioni di progetto (versionato in git).</li>
+<li><strong><code>&lt;project&gt;/.claude/CLAUDE.local.md</code></strong> — istruzioni locali tue (gitignored).</li>
+</ol>
+<p>Cosa metterci:</p>
+<div class="codehilite"><pre><span></span><code><span class="gh"># Convenzioni del progetto</span>
+
+<span class="k">-</span><span class="w"> </span>Stack: Python 3.12, FastAPI, PostgreSQL, pytest.
+<span class="k">-</span><span class="w"> </span>Stile: Black, isort, type hints obbligatori.
+<span class="k">-</span><span class="w"> </span>Test: ogni nuovo endpoint richiede un test di integrazione.
+
+<span class="gh"># Comandi utili</span>
+
+<span class="k">-</span><span class="w"> </span><span class="sb">`make test`</span> — esegue test unit + integration.
+<span class="k">-</span><span class="w"> </span><span class="sb">`make lint`</span> — lancia black + ruff + mypy.
+<span class="k">-</span><span class="w"> </span><span class="sb">`make migrate`</span> — esegue le migrations.
+
+<span class="gh"># Cose da NON fare</span>
+
+<span class="k">-</span><span class="w"> </span>Non modificare <span class="sb">`legacy/`</span> senza chiedere.
+<span class="k">-</span><span class="w"> </span>Non aggiungere dipendenze senza valutare alternative.
+</code></pre></div>
+
+<p>Il file viene caricato a ogni avvio. Risparmi di ripetere lo stesso contesto a ogni sessione.</p>
+<h2 id="94-slash-commands">9.4 Slash commands</h2>
+<p>Comandi che inizi con <code>/</code> per azioni speciali. I principali:</p>
+<ul>
+<li><code>/help</code> — vedi tutti i comandi disponibili.</li>
+<li><code>/init</code> — genera un <code>CLAUDE.md</code> analizzando il progetto.</li>
+<li><code>/clear</code> — reset della conversazione (mantiene il working directory).</li>
+<li><code>/compact</code> — comprime la storia (utile quando si avvicina al limite).</li>
+<li><code>/review</code> — review della PR corrente.</li>
+<li><code>/security-review</code> — review specifico per problemi di sicurezza.</li>
+<li><code>/model</code> — cambia modello (es. da Sonnet a Opus per task difficili).</li>
+</ul>
+<p>Puoi anche <strong>definire i tuoi slash command</strong> mettendo file <code>.md</code> in <code>.claude/commands/</code> con istruzioni:</p>
+<div class="codehilite"><pre><span></span><code><span class="gh"># .claude/commands/deploy.md</span>
+
+Esegui il deploy in staging:
+<span class="k">1.</span> Verifica che <span class="sb">`main`</span> sia pulito.
+<span class="k">2.</span> Tagga la versione corrente.
+<span class="k">3.</span> Esegui <span class="sb">`./scripts/deploy.sh staging`</span>.
+<span class="k">4.</span> Smoke test su https://staging.example.com.
+<span class="k">5.</span> Riporta esiti.
+</code></pre></div>
+
+<p>Poi in chat: <code>/deploy</code> → l'agente segue la procedura.</p>
+<h2 id="95-hooks">9.5 Hooks</h2>
+<p>Gli hook sono <strong>script shell</strong> che il sistema esegue in risposta a eventi (es. "dopo ogni edit di file", "prima di un commit"). Configurati in <code>~/.claude/settings.json</code> o <code>&lt;project&gt;/.claude/settings.json</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;PostToolUse:Edit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;make lint&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;path_regex&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;src/.*\\.py$&quot;</span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Stop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;say &#39;Claude ha finito&#39;&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Esempi utili:<br />
+- Post-edit di file Python: lancia <code>ruff</code> automaticamente.<br />
+- Post-edit di test: esegue solo i test interessati.<br />
+- Stop: notifica desktop o Slack quando l'agente ha finito un task lungo.</p>
+<p>Gli hook sono potenti perché <strong>automatizzano controlli che altrimenti dipenderebbero dal modello</strong>.</p>
+<h2 id="96-mcp-server-estendere-i-tool">9.6 MCP server: estendere i tool</h2>
+<p>Visto nel Cap. 6: i server MCP espongono tool che Claude Code può consumare.</p>
+<p>Configurazione in <code>.claude/settings.json</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;filesystem&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;-y&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@modelcontextprotocol/server-filesystem&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/path&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;github&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;-y&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;@modelcontextprotocol/server-github&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;GITHUB_TOKEN&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ghp_...&quot;</span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Una volta abilitati, Claude Code li vede come tool aggiuntivi disponibili. Puoi chiedere "apri la PR #123 e leggi i commenti" e l'agente userà il tool MCP GitHub.</p>
+<h2 id="97-permessi-e-sicurezza">9.7 Permessi e sicurezza</h2>
+<p>Claude Code chiede conferma prima di azioni rischiose. Puoi:</p>
+<ul>
+<li><strong>Approvare una sola volta</strong> (default).</li>
+<li><strong>Approvare per la sessione</strong>.</li>
+<li><strong>Aggiungere una regola permanente</strong> in <code>settings.json</code>:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;allow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;Bash(npm test)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;Bash(git status)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;Edit(src/**)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;Read(**)&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;deny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;Bash(rm -rf*)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;Edit(.env*)&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Pattern consigliato:<br />
+- <strong>Read libero</strong>, <strong>Edit limitato a cartelle di codice</strong>, <strong>Bash con whitelist</strong> di comandi non distruttivi.<br />
+- Mai <code>allow: ["*"]</code> in settings globali.</p>
+<p>Lo skill <code>fewer-permission-prompts</code> analizza i tuoi log e suggerisce permessi sensati.</p>
+<h2 id="98-subagent-parallelizzare-e-specializzare">9.8 Subagent: parallelizzare e specializzare</h2>
+<p>Claude Code può lanciare <strong>subagent</strong> per task delegati. Tipi tipici:</p>
+<ul>
+<li><strong>Explore</strong> — esplora la codebase per trovare pattern, definizioni.</li>
+<li><strong>Plan</strong> — progetta un piano di implementazione.</li>
+<li><strong>claude-code-guide</strong> — risponde a domande sull'uso di Claude Code stesso.</li>
+</ul>
+<p>Quando lanciare un subagent:<br />
+- Per ricerche ampie nel codebase (evita di "consumare" il tuo context con grep e tree).<br />
+- Per task indipendenti che possono andare in parallelo.<br />
+- Per delegare ricerca esterna mentre tu lavori sul task principale.</p>
+<p>Esempio in chat:</p>
+<blockquote>
+<p>"Esplora il codebase e trovami tutti i posti dove si fa parsing di date, riportami i pattern usati."</p>
+</blockquote>
+<p>L'agente principale lancerà un subagent di tipo <code>Explore</code> per il lavoro di ricerca, ricevendo solo il riassunto finale (e risparmiando context).</p>
+<h2 id="99-workflow-tipici-di-sviluppo-con-claude-code">9.9 Workflow tipici di sviluppo con Claude Code</h2>
+<h3 id="sviluppo-di-una-feature">Sviluppo di una feature</h3>
+<ol>
+<li>Scrivi un breve spec in chat: cosa, perché, vincoli.</li>
+<li>Chiedi a Claude di <strong>creare un piano</strong> (<code>/plan</code> o "fammi un piano prima di scrivere").</li>
+<li>Rivedi il piano, correggi se serve.</li>
+<li>"Procedi". L'agente implementa, esegue test, itera.</li>
+<li>Tu fai code review della diff (<code>git diff</code>).</li>
+<li>Commit (manualmente o chiedendo a Claude).</li>
+</ol>
+<h3 id="fix-di-un-bug">Fix di un bug</h3>
+<ol>
+<li>Descrivi il bug + come riprodurlo.</li>
+<li>"Trova la causa, proponi fix con test."</li>
+<li>Claude esplora, propone, scrive test, esegue.</li>
+<li>Tu valuti la diff e committi.</li>
+</ol>
+<h3 id="refactor">Refactor</h3>
+<ol>
+<li>"Refactora X per Y. Vincoli: non rompere i test, mantieni la API pubblica."</li>
+<li>Lascia l'agente fare il lavoro grosso.</li>
+<li>Verifica che la diff sia minima e mirata. Se gonfia, chiedi di ripartire con vincoli più stretti.</li>
+</ol>
+<h3 id="onboarding-su-un-repo-nuovo">Onboarding su un repo nuovo</h3>
+<ol>
+<li><code>/init</code> per generare un <code>CLAUDE.md</code> di base.</li>
+<li>"Spiegami l'architettura di questo repo: principali moduli, dataflow, dipendenze."</li>
+<li>"Dove devo guardare per capire X?"</li>
+<li>Salva le scoperte in <code>CLAUDE.md</code>.</li>
+</ol>
+<h2 id="910-tips-operativi">9.10 Tips operativi</h2>
+<ul>
+<li><strong>Una sessione = un task.</strong> Non usare la stessa sessione per refactor + nuova feature + bug fix. Crea sessioni separate, o usa <code>/clear</code>.</li>
+<li><strong>Dai contesto narrativo, non ordini secchi.</strong> "Stiamo migrando da X a Y, oggi tocca al modulo Z, attento al test E che è flaky" → molto più efficace di "modifica file W".</li>
+<li><strong>Verifica le diff prima del commit.</strong> L'agente è bravo, non perfetto. <code>git diff</code> è il tuo amico.</li>
+<li><strong>Usa il piano mode (<code>/plan</code>)</strong> per task &gt;30 minuti di lavoro: vedi cosa farà prima che lo faccia.</li>
+<li><strong>Quando si blocca, dagli più contesto, non più ordini.</strong> Se non capisce, di solito mancano informazioni.</li>
+<li><strong>Scrivi <code>CLAUDE.md</code> man mano</strong>: ogni volta che spieghi una convenzione una volta, scrivila lì. Risparmi tempo per sempre.</li>
+<li><strong>Limiti di iterazione</strong>: per task lunghi, l'auto-compaction comprime la storia. Funziona bene ma nei task chirurgici può perdere dettagli — preferisci sessioni focalizzate.</li>
+</ul>
+<h2 id="911-differenze-con-cursor-aider-copilot">9.11 Differenze con Cursor, Aider, Copilot</h2>
+<table>
+<thead>
+<tr>
+<th>Strumento</th>
+<th>Modello</th>
+<th>Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>Agente con loop, in terminale</td>
+<td>Tu dai obiettivi, lui agisce</td>
+</tr>
+<tr>
+<td><strong>Cursor</strong></td>
+<td>IDE-first con AI integrata</td>
+<td>Mix di autocomplete + chat in IDE</td>
+</tr>
+<tr>
+<td><strong>Aider</strong></td>
+<td>Agent CLI simile a Claude Code</td>
+<td>Pre-Claude Code, modello-agnostico</td>
+</tr>
+<tr>
+<td><strong>Copilot</strong></td>
+<td>Autocomplete in editor</td>
+<td>Suggerisce mentre scrivi</td>
+</tr>
+</tbody>
+</table>
+<p>Non sono mutuamente esclusivi. Molti dev usano Claude Code per task grossi e Copilot/Cursor per il flow quotidiano di typing.</p>
+<h2 id="912-pratica-il-primo-task-vero">9.12 Pratica: il primo task vero</h2>
+<p>Apri un tuo progetto in Claude Code e prova questo:</p>
+<blockquote>
+<p>"Analizza il progetto e dimmi: 1) cosa fa in 3 frasi, 2) le 3 aree con più debito tecnico, 3) un quick win che potresti fare oggi."</p>
+</blockquote>
+<p>In 5 minuti avrai un'analisi che richiederebbe ore a un nuovo dev. Da lì, decidi se vuoi farti aiutare a sistemare uno dei punti.</p>
+<h2 id="913-da-ricordare">9.13 Da ricordare</h2>
+<ul>
+<li><strong>Claude Code = agente da terminale per dev.</strong> Legge, edita, esegue codice nel tuo repo, con conferma.</li>
+<li><strong>CLAUDE.md</strong> salva le convenzioni del progetto: scrivi una volta, riutilizzi sempre.</li>
+<li><strong>Slash commands</strong> automatizzano procedure ripetute.</li>
+<li><strong>Hooks</strong> lanciano script in risposta a eventi (lint dopo edit, notifica a fine task).</li>
+<li><strong>MCP</strong> estende i tool disponibili.</li>
+<li><strong>Subagent</strong> per task delegabili senza saturare il context principale.</li>
+<li><strong>Permessi a whitelist</strong>, mai "permetti tutto".</li>
+</ul>
+<h2 id="914-errori-tipici">9.14 Errori tipici</h2>
+<ul>
+<li><strong>Usarlo come ChatGPT in chat.</strong> Senza dargli accesso ai file, sprechi il 90% del valore.</li>
+<li><strong>Saltare il piano</strong> per task &gt;30 minuti. Risultato: lavoro che va fuori scope.</li>
+<li><strong>Non scrivere <code>CLAUDE.md</code>.</strong> Ripeti le stesse istruzioni a ogni sessione.</li>
+<li><strong>Dare permessi troppo larghi.</strong> "Permetti Bash" = l'agente può fare <code>rm -rf</code> senza chiedere.</li>
+<li><strong>Non rivedere le diff.</strong> Il commit è tua responsabilità, non sua.</li>
+<li><strong>Sessioni troppo lunghe e mischiate.</strong> Un task = una sessione, riapri quando cambi obiettivo.</li>
+</ul>
+<hr />
+<p>Hai imparato a usare gli agenti già pronti. Adesso passiamo alla <strong>costruzione</strong>: come si fa un agente da zero, con codice tuo.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="08-usare-i-chatbot-ai.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 8. Usare i chatbot AI</span></a>
+      <a class="nav-next" href="10-costruire-agenti-con-api-sdk.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 10. Costruire agenti con API e SDK</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 9</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 9 — Claude Code per sviluppatori</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="09-claude-code-per-sviluppatori" data-chapter-n="9" data-chapter-title="Claude Code per sviluppatori">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

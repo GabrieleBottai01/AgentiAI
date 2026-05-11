@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/05-prompt-engineering.html">
+<title>Ch. 5. Prompt Engineering · Guide to AI Agents</title>
+<meta name="description" content=""Prompt engineering is 80% of the work to make an agent function well. The remaining 20% is choosing the right model and giving it the right tools."">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 5. Prompt Engineering · Guide to AI Agents">
+<meta property="og:description" content=""Prompt engineering is 80% of the work to make an agent function well. The remaining 20% is choosing the right model and giving it the right tools."">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/05-prompt-engineering.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 5. Prompt Engineering · Guide to AI Agents">
+<meta name="twitter:description" content=""Prompt engineering is 80% of the work to make an agent function well. The remaining 20% is choosing the right model and giving it the right tools."">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/05-prompt-engineering.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 5. Prompt Engineering · Guide to AI Agents", "description": "\"Prompt engineering is 80% of the work to make an agent function well. The remaining 20% is choosing the right model and giving it the right tools.\"", "url": "https://myfirstaiagent.netlify.app/en/capitolo/05-prompt-engineering.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class="current"><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.2"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 5</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="5-prompt-engineering-the-art-of-asking">5. Prompt Engineering: the Art of Asking</h1>
+<blockquote>
+<p>"Prompt engineering is 80% of the work to make an agent function well. The remaining 20% is choosing the right model and giving it the right tools."</p>
+</blockquote>
+<p>Learning to write effective prompts is the highest-leverage skill in this entire field. It applies to those who use ChatGPT, those who build agents, those who configure a customer support system.</p>
+<h2 id="51-what-a-prompt-really-is">5.1 What a "prompt" really is</h2>
+<p>A prompt is <strong>all the text the model sees before responding</strong>. It includes:</p>
+<ul>
+<li>The <strong>system prompt</strong> (base instructions, "who you are and how you behave").</li>
+<li>The <strong>user message</strong> (the current request).</li>
+<li>The <strong>history</strong> (previous turns, if it's a conversation).</li>
+<li>The <strong>tool results</strong> (output of tools in past turns).</li>
+<li>Any <strong>documents</strong> you've attached.</li>
+</ul>
+<p>When I say "the prompt," I often mean all this together. The model doesn't distinguish: for it, it's one large sequence of tokens.</p>
+<h2 id="52-the-structure-of-a-good-prompt">5.2 The structure of a good prompt</h2>
+<p>A well-crafted prompt almost always has these pieces, in this order:</p>
+<ol>
+<li><strong>Role</strong> — who is the model?</li>
+<li><strong>Goal</strong> — what should it achieve?</li>
+<li><strong>Context</strong> — background information</li>
+<li><strong>Constraints</strong> — what it must / must not do</li>
+<li><strong>Output format</strong> — how I want the response</li>
+<li><strong>Examples</strong> (optional but powerful)</li>
+</ol>
+<p>Bad example:</p>
+<blockquote>
+<p>"Summarize the text I send you."</p>
+</blockquote>
+<p>Good example:</p>
+<blockquote>
+<p>You are an editor for a scientific magazine. Your job is to summarize academic papers for non-expert readers.</p>
+<p>Goal: synthesize the input paper so a law graduate can understand it.</p>
+<p>Constraints:<br />
+- Maximum 200 words.<br />
+- No technical jargon that isn't explained.<br />
+- End with a bullet list of "3 practical implications".</p>
+<p>Format:</p>
+<h2 id="summary">Summary</h2>
+<p>[continuous text]</p>
+<h2 id="practical-implications">Practical implications</h2>
+<ul>
+<li>point 1</li>
+<li>point 2</li>
+<li>point 3</li>
+</ul>
+<p>Paper: """{paper}"""</p>
+</blockquote>
+<p>The quality difference is enormous.</p>
+<h2 id="53-fundamental-techniques">5.3 Fundamental techniques</h2>
+<h3 id="531-few-shot-prompting">5.3.1 Few-shot prompting</h3>
+<p>Show the model 2-3 examples of desired input/output. Its subsequent responses will follow the same pattern.</p>
+<div class="codehilite"><pre><span></span><code>Classify tweet sentiment as positive, negative or neutral.
+
+Tweet: &quot;I love this new phone!&quot;
+Sentiment: positive
+
+Tweet: &quot;Slowest shipping ever, never again.&quot;
+Sentiment: negative
+
+Tweet: &quot;Arrived as described.&quot;
+Sentiment: neutral
+
+Tweet: &quot;The design is ok but the battery dies fast.&quot;
+Sentiment:
+</code></pre></div>
+
+<p>The model will complete with <code>negative</code> (or <code>neutral</code> if cautious). Simple pattern, very high effectiveness.</p>
+<h3 id="532-chain-of-thought-cot">5.3.2 Chain-of-Thought (CoT)</h3>
+<p>Ask the model to <strong>reason step by step before</strong> answering.</p>
+<div class="codehilite"><pre><span></span><code>Question: Mark has 12 apples. He gives 3 to his sister, eats 2,
+then buys double what he has left. How many does he have at the end?
+
+Think step by step before answering.
+</code></pre></div>
+
+<p>Without CoT, models often get math problems wrong. With CoT, accuracy improves dramatically.</p>
+<p>Modern models (Claude with "extended thinking", o5/o7 from OpenAI) do CoT internally <em>without</em> you asking. But on smaller models or for hard tasks, telling them "reason step by step" remains useful.</p>
+<h3 id="533-self-consistency">5.3.3 Self-consistency</h3>
+<p>Ask N times the same thing with high temperature, take the most frequent answer. Statistical trick, expensive in tokens, useful on quantitative problems.</p>
+<h3 id="534-decomposition">5.3.4 Decomposition</h3>
+<p>For complex tasks, divide into explicit sub-tasks:</p>
+<div class="codehilite"><pre><span></span><code>To write this legal report, follow this procedure:
+
+STEP 1: Identify involved parties (name, role).
+STEP 2: Summarize the facts in chronological order.
+STEP 3: List reference rules.
+STEP 4: Write the legal analysis.
+STEP 5: Conclude with recommendation.
+
+Execute one step at a time, clearly marking the step number.
+</code></pre></div>
+
+<p>Models follow explicit procedural structures very well.</p>
+<h3 id="535-role-priming">5.3.5 Role priming</h3>
+<p>Having the model play a concrete role improves quality for many tasks.</p>
+<div class="codehilite"><pre><span></span><code>You are a Senior Software Engineer with 15 years of experience in distributed systems.
+You&#39;re code-reviewing a junior. Your style is direct but constructive.
+</code></pre></div>
+
+<p>It works because the model has seen, during training, millions of examples of "expert X who says Y." By specifying the role, you activate that distribution.</p>
+<h3 id="536-structured-output">5.3.6 Structured output</h3>
+<p>If you need machine-readable data, ask for it in JSON with an explicit schema:</p>
+<div class="codehilite"><pre><span></span><code>Extract the following info from the CV, in JSON:
+
+{
+  &quot;name&quot;: &quot;string&quot;,
+  &quot;years_experience&quot;: &quot;number&quot;,
+  &quot;skills&quot;: [&quot;string&quot;],
+  &quot;last_role&quot;: {
+    &quot;company&quot;: &quot;string&quot;,
+    &quot;title&quot;: &quot;string&quot;,
+    &quot;start&quot;: &quot;YYYY-MM&quot;
+  }
+}
+
+Reply ONLY with valid JSON, no extra text.
+
+CV: &quot;&quot;&quot;{cv}&quot;&quot;&quot;
+</code></pre></div>
+
+<p>Modern APIs offer <strong>JSON mode</strong> or <strong>structured outputs</strong> that guarantee output is valid JSON conforming to the schema. Use them when you can (Ch. 10).</p>
+<h3 id="537-delimiters">5.3.7 Delimiters</h3>
+<p>When inserting data into the prompt, wrap it in clear delimiters (<code>"""..."""</code>, <code>&lt;doc&gt;...&lt;/doc&gt;</code>). This helps the model distinguish instructions from content, and reduces the risk of <strong>prompt injection</strong> (Ch. 13).</p>
+<div class="codehilite"><pre><span></span><code>Summarize the text below.
+
+&lt;document&gt;
+{content}
+&lt;/document&gt;
+</code></pre></div>
+
+<h2 id="54-common-anti-patterns">5.4 Common anti-patterns</h2>
+<h3 id="please-i-beg-you">"Please" / "I beg you"</h3>
+<p>They don't hurt, but they don't help. Don't waste tokens on courtesies.</p>
+<h3 id="vague-negations">Vague negations</h3>
+<p>"Don't be too long" works less than "max 100 words".</p>
+<h3 id="be-creative-without-constraints">"Be creative" without constraints</h3>
+<p>The model doesn't know what that means to you. Give concrete examples or constraints.</p>
+<h3 id="contradictory-instructions">Contradictory instructions</h3>
+<p>"Be precise but not boring. Technical but understandable to all." The model will pick at random.</p>
+<h3 id="huge-prompts-without-structure">Huge prompts without structure</h3>
+<p>A 4000-word wall of text is hard to follow. Use headings, bullets, sections.</p>
+<h3 id="changing-format-without-example">Changing format without example</h3>
+<p>"I want output in XML format" without example = lottery. Show what it looks like.</p>
+<h2 id="55-prompts-for-agents-specific">5.5 Prompts for agents (specific)</h2>
+<p>When the prompt goes to an <em>agent</em> (not a chatbot), add:</p>
+<ul>
+<li><strong>List of available tools</strong> and when to use them.</li>
+<li><strong>Instructions on "when to stop"</strong>.</li>
+<li><strong>What to do in case of error</strong> or missing info.</li>
+<li><strong>Format of intermediate responses</strong> (if you want cleanliness).</li>
+</ul>
+<p>Example (simplified):</p>
+<div class="codehilite"><pre><span></span><code>You are a research agent. You have these tools:
+
+- web_search(query): search the web. Use for up-to-date facts.
+- fetch_url(url): download a page. Use to read specific sources.
+- ask_user(question): ask the user in case of ambiguity.
+
+Procedure:
+1. Understand the question. If ambiguous, use ask_user BEFORE searching.
+2. Search info using web_search. Maximum 3 searches.
+3. If results are uncertain, read pages with fetch_url.
+4. Synthesize the final response citing sources.
+
+Stop when you have a confident answer. If after 5 iterations you have no
+answer, admit it instead of inventing.
+</code></pre></div>
+
+<p>Notice: giving an <strong>escape hatch</strong> ("admit it instead of inventing") reduces hallucinations. Without it, the model tends to "fabricate" rather than say "I don't know."</p>
+<h2 id="56-iteration-a-prompt-is-written-three-times">5.6 Iteration: a prompt is written three times</h2>
+<p>No one writes a good prompt on the first try. The real flow is:</p>
+<ol>
+<li><strong>V1</strong> — write the minimal prompt.</li>
+<li><strong>Test</strong> — try with 5-10 representative inputs.</li>
+<li><strong>Annotate</strong> where it fails.</li>
+<li><strong>V2</strong> — add constraints/examples that address the failures.</li>
+<li>Repeat.</li>
+</ol>
+<p>Keep a versioned <code>prompts/v3.txt</code> file. Prompts are code — they deserve git.</p>
+<h2 id="57-practice-the-improving-prompt-exercise">5.7 Practice: the improving-prompt exercise</h2>
+<p>Open ChatGPT or Claude.ai and do this:</p>
+<p><strong>Step 1</strong>: ask "Summarize this article" + an article. Annotate the result.</p>
+<p><strong>Step 2</strong>: redo with a structured prompt (role, goal, constraints, format). Annotate.</p>
+<p><strong>Step 3</strong>: add an example of a well-done summary. Redo. Annotate.</p>
+<p>You'll see the quality improve at each step. This is the loop you'll do for every agent you build.</p>
+<h2 id="58-key-takeaways">5.8 Key takeaways</h2>
+<ul>
+<li><strong>Structure &gt; eloquence.</strong> Clear sections beat elegant prose.</li>
+<li><strong>Examples &gt; explanations.</strong> Showing what you want is more effective than describing it.</li>
+<li><strong>Structured output (JSON)</strong> when you need data, not text.</li>
+<li><strong>Delimiters</strong> to separate instructions from user content.</li>
+<li><strong>Escape hatches</strong> ("if you don't know, say so") reduce hallucinations.</li>
+<li><strong>Iterate.</strong> The first prompt is almost always suboptimal.</li>
+</ul>
+<h2 id="59-common-mistakes">5.9 Common mistakes</h2>
+<ul>
+<li><strong>Changing the model hoping to fix prompt problems.</strong> Often the issue is the prompt, not the model.</li>
+<li><strong>Letting it invent the format.</strong> If you need JSON, ask for JSON with schema.</li>
+<li><strong>Throwing everything into the system prompt.</strong> Things that change per request go in the user message.</li>
+<li><strong>Not testing edge cases.</strong> Empty inputs, different languages, contradictory ones, very long ones: the prompt must handle them.</li>
+<li><strong>Neglecting model version.</strong> A prompt optimized for Claude 3 may not be optimal for Claude 4. Re-test it when you upgrade.</li>
+</ul>
+<hr />
+<p>Prompts alone aren't enough: agents need <strong>hands and eyes</strong>. Let's see how tools are declared and called.</p>
+    </div>
+    <section class="exercise"
+                 data-exercise-id="ex-cap5"
+                 data-exercise-type="improve_prompt">
+          <div class="exercise-header">
+            <span class="exercise-tag">
+              <i data-icon-replace="edit"></i>
+              <span data-i18n="exercise.tag"></span>
+            </span>
+            <h3>Exercise: improve this prompt</h3>
+          </div>
+          <p class="exercise-intro">The prompt below is generic. Rewrite it following the chapter's criteria (role, goal, constraints, format, examples). Then press 'Verify' to get AI feedback.</p>
+          <textarea class="exercise-input" rows="8">Summarize the text I send you.</textarea>
+          <div class="exercise-actions">
+            <button class="btn btn-accent exercise-submit" type="button">
+              <i data-icon-replace="check-circle"></i>
+              <span data-i18n="exercise.verify"></span>
+            </button>
+            <span class="exercise-status muted"></span>
+          </div>
+          <div class="exercise-feedback markdown-output" hidden></div>
+        </section>
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="04-tipi-di-agenti-e-architetture.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 4. Types of Agents and Architectures</span></a>
+      <a class="nav-next" href="06-tool-use-e-function-calling.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 6. Tool Use and Function Calling</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 5</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 5 — Prompt Engineering</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="05-prompt-engineering" data-chapter-n="5" data-chapter-title="Prompt Engineering">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

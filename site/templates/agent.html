@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Demo Agente · Guida Agenti AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <span class="eyebrow">Strumento interattivo</span>
+  <h1>Demo agente con tool use</h1>
+  <p class="lead">Dai un obiettivo, l'agente decide autonomamente quali tool chiamare. Vedrai ogni passo del loop ReAct (Cap. 3-4-6). Tool disponibili: <code>calculator</code>, <code>current_time</code>, <code>web_search</code>, <code>fetch_url</code>.</p>
+</div>
+
+<div class="agent-layout">
+  <div class="agent-config card">
+    <label class="field">
+      <span>Obiettivo dell'agente</span>
+      <textarea id="ag-goal" rows="3" placeholder="Es. 'Quanti minuti sono passati dalla mezzanotte a ora?' oppure 'Trova quando è nata Anthropic e chi è il CEO.'"></textarea>
+    </label>
+
+    <div class="examples">
+      <span class="muted small">Prova:</span>
+      <button class="chip" data-goal="Quanti minuti sono passati dalla mezzanotte fino ad adesso (UTC)?">durata mezzanotte</button>
+      <button class="chip" data-goal="Calcola il 17% di 2.450 e poi convertilo in dollari (1€ = 1.08$).">calcolo composto</button>
+      <button class="chip" data-goal="Chi è il fondatore di Anthropic e in che anno è nata l'azienda? Cita la fonte.">ricerca web</button>
+      <button class="chip" data-goal="Cerca il prezzo attuale del token claude-opus rispetto a gpt-5.">confronto prezzi</button>
+    </div>
+
+    <div class="field-row">
+      <label class="field">
+        <span>Modello</span>
+        <select id="ag-model">
+          <option value="claude-haiku-4-5" selected>claude-haiku-4-5</option>
+          <option value="claude-sonnet-4-6">claude-sonnet-4-6</option>
+          <option value="claude-opus-4-7">claude-opus-4-7</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Max iterazioni</span>
+        <input id="ag-max" type="number" min="1" max="15" value="8">
+      </label>
+    </div>
+
+    <div class="actions">
+      <button id="ag-submit" type="button" class="btn btn-primary">Lancia agente ▶</button>
+      <button id="ag-clear" type="button" class="btn btn-ghost">Pulisci</button>
+    </div>
+  </div>
+
+  <div class="agent-trace card">
+    <div class="trace-header">
+      <span>Loop dell'agente</span>
+      <span id="ag-status" class="muted small"></span>
+    </div>
+    <div id="ag-trace" class="trace empty">
+      Premi "Lancia agente" per vedere il loop in azione: thinking → tool call → tool result → ripeti.
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <h3>Cosa stai vedendo</h3>
+  <ol>
+    <li><b>thinking</b>: l'LLM riceve lo stato e decide se chiamare un tool o rispondere.</li>
+    <li><b>tool call</b>: il modello sceglie un tool e produce gli argomenti.</li>
+    <li><b>tool result</b>: il backend esegue davvero il tool e ritorna l'output.</li>
+    <li>Il ciclo continua finché il modello non produce risposta finale o si raggiunge max iterazioni.</li>
+  </ol>
+  <p class="muted small">Nota: <code>web_search</code> usa l'API gratuita DuckDuckGo Instant Answer, quindi i risultati sono limitati per query troppo specifiche o recenti.</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/agent.js"></script>
+{% endblock %}

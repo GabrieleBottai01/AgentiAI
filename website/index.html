@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="en/index.html">
+<title>Guida agli Agenti AI</title>
+<meta name="description" content="Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Guida agli Agenti AI">
+<meta property="og:description" content="Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guida agli Agenti AI">
+<meta name="twitter:description" content="Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Guida agli Agenti AI", "description": "Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.", "url": "https://myfirstaiagent.netlify.app/", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="index.html" class="active"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html" class=""><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">
+      <i data-icon-replace="sparkles"></i>
+      <span data-i18n="hero.eyebrow"></span>
+    </span>
+    <h1>
+      <span data-i18n="hero.title.before"></span>
+      <span class="accent" data-i18n="hero.title.accent"></span>
+      <span data-i18n="hero.title.after"></span>
+    </h1>
+    <p class="lead" data-i18n="hero.lead"></p>
+    <div class="hero-cta">
+      <a href="capitolo/01-cosa-sono-gli-agenti-ai.html" class="btn btn-accent btn-lg">
+        <span data-i18n="hero.cta.start"></span>
+        <i data-icon-replace="arrow-right"></i>
+      </a>
+      <a href="playground.html" class="btn btn-ghost btn-lg">
+        <i data-icon-replace="flask"></i>
+        <span data-i18n="hero.cta.playground"></span>
+      </a>
+    </div>
+    <div class="hero-free">
+      <i data-icon-replace="gift"></i>
+      <div>
+        <b data-i18n="hero.free.title">Provala gratis:</b>
+        <span data-i18n="hero.free.body"></span>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span data-i18n="hero.meta.author"></span>
+      <span data-i18n="hero.meta.edition"></span>
+      <a href="Guida-Agenti-AI.pdf" data-i18n="hero.meta.pdf"></a>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-card">
+    <div class="feature-icon"><i data-icon-replace="message-circle"></i></div>
+    <h3 data-i18n="features.tutor.title"></h3>
+    <p data-i18n="features.tutor.desc"></p>
+    <a href="tutor.html" class="link-arrow">
+      <span data-i18n="features.tutor.cta"></span>
+      <i data-icon-replace="arrow-right"></i>
+    </a>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon"><i data-icon-replace="flask"></i></div>
+    <h3 data-i18n="features.playground.title"></h3>
+    <p data-i18n="features.playground.desc"></p>
+    <a href="playground.html" class="link-arrow">
+      <span data-i18n="features.playground.cta"></span>
+      <i data-icon-replace="arrow-right"></i>
+    </a>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon"><i data-icon-replace="bot"></i></div>
+    <h3 data-i18n="features.agent.title"></h3>
+    <p data-i18n="features.agent.desc"></p>
+    <a href="agente.html" class="link-arrow">
+      <span data-i18n="features.agent.cta"></span>
+      <i data-icon-replace="arrow-right"></i>
+    </a>
+  </div>
+</section>
+
+<section class="toc">
+  <h2 data-i18n="toc.title"></h2>
+  <p class="muted" data-i18n="toc.subtitle"></p>
+  <div class="part">
+          <h3 data-i18n="toc.part.1"></h3>
+          <div class="part-grid"><a class="ch-card" href="capitolo/01-cosa-sono-gli-agenti-ai.html">
+              <span class="ch-num">01</span>
+              <span class="ch-title">Cosa sono gli Agenti AI</span>
+            </a><a class="ch-card" href="capitolo/02-come-funzionano-gli-llm.html">
+              <span class="ch-num">02</span>
+              <span class="ch-title">Come funzionano gli LLM</span>
+            </a><a class="ch-card" href="capitolo/03-anatomia-di-un-agente.html">
+              <span class="ch-num">03</span>
+              <span class="ch-title">Anatomia di un agente</span>
+            </a><a class="ch-card" href="capitolo/04-tipi-di-agenti-e-architetture.html">
+              <span class="ch-num">04</span>
+              <span class="ch-title">Tipi di agenti e architetture</span>
+            </a></div>
+        </div><div class="part">
+          <h3 data-i18n="toc.part.2"></h3>
+          <div class="part-grid"><a class="ch-card" href="capitolo/05-prompt-engineering.html">
+              <span class="ch-num">05</span>
+              <span class="ch-title">Prompt engineering</span>
+            </a><a class="ch-card" href="capitolo/06-tool-use-e-function-calling.html">
+              <span class="ch-num">06</span>
+              <span class="ch-title">Tool use e function calling</span>
+            </a><a class="ch-card" href="capitolo/07-memoria-contesto-e-rag.html">
+              <span class="ch-num">07</span>
+              <span class="ch-title">Memoria, contesto e RAG</span>
+            </a></div>
+        </div><div class="part">
+          <h3 data-i18n="toc.part.3"></h3>
+          <div class="part-grid"><a class="ch-card" href="capitolo/08-usare-i-chatbot-ai.html">
+              <span class="ch-num">08</span>
+              <span class="ch-title">Usare i chatbot AI</span>
+            </a><a class="ch-card" href="capitolo/09-claude-code-per-sviluppatori.html">
+              <span class="ch-num">09</span>
+              <span class="ch-title">Claude Code per sviluppatori</span>
+            </a></div>
+        </div><div class="part">
+          <h3 data-i18n="toc.part.4"></h3>
+          <div class="part-grid"><a class="ch-card" href="capitolo/10-costruire-agenti-con-api-sdk.html">
+              <span class="ch-num">10</span>
+              <span class="ch-title">Costruire agenti con API e SDK</span>
+            </a><a class="ch-card" href="capitolo/11-framework-langchain-autogen-crewai.html">
+              <span class="ch-num">11</span>
+              <span class="ch-title">Framework: LangChain, AutoGen, CrewAI</span>
+            </a></div>
+        </div><div class="part">
+          <h3 data-i18n="toc.part.5"></h3>
+          <div class="part-grid"><a class="ch-card" href="capitolo/12-best-practice-sviluppo-con-agenti.html">
+              <span class="ch-num">12</span>
+              <span class="ch-title">Best practice di sviluppo</span>
+            </a><a class="ch-card" href="capitolo/13-sicurezza-costi-e-limiti.html">
+              <span class="ch-num">13</span>
+              <span class="ch-title">Sicurezza, costi, limiti</span>
+            </a><a class="ch-card" href="capitolo/14-valutazione-e-miglioramento.html">
+              <span class="ch-num">14</span>
+              <span class="ch-title">Valutazione e miglioramento</span>
+            </a></div>
+        </div><div class="part">
+          <h3 data-i18n="toc.part.6"></h3>
+          <div class="part-grid"><a class="ch-card" href="capitolo/15-casi-uso-e-workflow-reali.html">
+              <span class="ch-num">15</span>
+              <span class="ch-title">Casi d'uso e workflow reali</span>
+            </a><a class="ch-card" href="capitolo/16-glossario-e-risorse.html">
+              <span class="ch-num">16</span>
+              <span class="ch-title">Glossario e risorse</span>
+            </a></div>
+        </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="assets/i18n.js"></script>
+<script src="assets/ai-client.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/search.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="about.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../about.html">
+<title>Gabriele Bottai · Guide to AI Agents</title>
+<meta name="description" content="Who is Gabriele Bottai, author of the Guide to AI Agents. Bio, contact, info about the work.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="profile">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Gabriele Bottai · Guide to AI Agents">
+<meta property="og:description" content="Who is Gabriele Bottai, author of the Guide to AI Agents. Bio, contact, info about the work.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/about.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gabriele Bottai · Guide to AI Agents">
+<meta name="twitter:description" content="Who is Gabriele Bottai, author of the Guide to AI Agents. Bio, contact, info about the work.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/about.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Gabriele Bottai · Guide to AI Agents", "description": "Who is Gabriele Bottai, author of the Guide to AI Agents. Bio, contact, info about the work.", "url": "https://myfirstaiagent.netlify.app/en/about.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html" class=""><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="page-header">
+  <span class="eyebrow">
+    <i data-icon-replace="info"></i>
+    THE AUTHOR
+  </span>
+  <h1>Gabriele Bottai</h1>
+  <p class="lead">Software developer, author of this guide.</p>
+</div>
+
+<div class="about-grid">
+  <article class="about-bio card">
+    <h2>About me</h2>
+    <p>I'm <b>Gabriele Bottai</b>, a software developer with a focus on AI agents and their practical applications. I wrote this guide because I believe AI should be accessible to beginners, without compromising on technical rigor.</p>
+    <p>I enjoy projects where theory meets practice: writing code that works, explaining complex concepts simply, building tools people can actually use.</p>
+    <p>For my other work, take a look at my <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">portfolio</a>.</p>
+
+    <h2>About this guide</h2>
+    <p>A complete guide, in Italian and English, to AI Agents. <b>16 chapters</b>, organized in 6 parts, covering everything from fundamentals (what LLMs and agents are) to production (security, costs, evaluation). It includes integrated AI tools so you can learn by doing: tutor, playground, agent demo.</p>
+    <p>Available as <a href="../Guida-Agenti-AI.pdf">PDF (Italian)</a>, <a href="../Guide-AI-Agents-EN.pdf">PDF (English)</a>, and as an interactive website.</p>
+
+    <h2>How to use the guide</h2>
+    <ul>
+      <li><b>From scratch</b>: read chapters in order. Expect 8-10 hours of active reading.</li>
+      <li><b>Already experienced</b>: use <a href="#" onclick="document.getElementById('search-btn').click();return false">search</a> (Cmd/Ctrl+K) to jump to topics you care about.</li>
+      <li><b>For projects</b>: download the <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">runnable examples</a> and adapt them.</li>
+    </ul>
+  </article>
+
+  <aside class="about-side">
+    <div class="card about-contact">
+      <h3>Contact</h3>
+      <ul class="contact-list">
+        <li><a href="mailto:gabriele.bottai2001@gmail.com"><i data-icon-replace="send"></i> Email</a></li>
+        <li><a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener"><i data-icon-replace="external-link"></i> GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/gabriele-bottai-1825a9302/" target="_blank" rel="noopener"><i data-icon-replace="external-link"></i> LinkedIn</a></li>
+        <li><a href="https://x.com/bottai_gabriele" target="_blank" rel="noopener"><i data-icon-replace="external-link"></i> X / Twitter</a></li>
+        <li><a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener"><i data-icon-replace="external-link"></i> Portfolio</a></li>
+      </ul>
+    </div>
+
+    <div class="card about-feedback">
+      <h3>Got feedback?</h3>
+      <p>Errors, suggestions, chapters that aren't clear: <a href="mailto:gabriele.bottai2001@gmail.com">drop me a line</a>. Every piece of feedback is welcome and improves the next edition.</p>
+    </div>
+
+    <div class="card about-license">
+      <h3>License</h3>
+      <p>© 2026 Gabriele Bottai. All rights reserved.</p>
+      <p class="muted small">Unauthorized resale or redistribution is forbidden. For commercial or in-company educational use, <a href="mailto:gabriele.bottai2001@gmail.com">contact me</a>.</p>
+    </div>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+
+</body>
+</html>

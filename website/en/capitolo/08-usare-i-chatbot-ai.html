@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/08-usare-i-chatbot-ai.html">
+<title>Ch. 8. Using AI Chatbots · Guide to AI Agents</title>
+<meta name="description" content="Trying all three for two weeks is the most sensible thing.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 8. Using AI Chatbots · Guide to AI Agents">
+<meta property="og:description" content="Trying all three for two weeks is the most sensible thing.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/08-usare-i-chatbot-ai.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 8. Using AI Chatbots · Guide to AI Agents">
+<meta name="twitter:description" content="Trying all three for two weeks is the most sensible thing.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/08-usare-i-chatbot-ai.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 8. Using AI Chatbots · Guide to AI Agents", "description": "Trying all three for two weeks is the most sensible thing.", "url": "https://myfirstaiagent.netlify.app/en/capitolo/08-usare-i-chatbot-ai.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class="current"><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.3"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 8</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="8-using-ai-chatbots-chatgpt-claudeai-gemini">8. Using AI Chatbots: ChatGPT, Claude.ai, Gemini</h1>
+<p>Before building agents, learn to <strong>use them well</strong> on consumer products. It's the fastest way to develop intuition on what works and what doesn't, and for many real-life tasks it's also all you need.</p>
+<h2 id="81-the-three-main-interfaces">8.1 The three main interfaces</h2>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>URL</th>
+<th>Maker</th>
+<th>Strengths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ChatGPT</strong></td>
+<td>chat.openai.com</td>
+<td>OpenAI</td>
+<td>Richest ecosystem (GPT, Plugins, Code Interpreter, custom GPTs)</td>
+</tr>
+<tr>
+<td><strong>Claude</strong></td>
+<td>claude.ai</td>
+<td>Anthropic</td>
+<td>Excellent for writing/coding, long contexts, "Projects"</td>
+</tr>
+<tr>
+<td><strong>Gemini</strong></td>
+<td>gemini.google.com</td>
+<td>Google</td>
+<td>Google integration (Gmail, Docs, Drive), multimodality</td>
+</tr>
+</tbody>
+</table>
+<p>All three offer:<br />
+- Limited free tier.<br />
+- Paid tier (~€20/month) with more capable models and higher limits.<br />
+- Mobile and desktop apps.</p>
+<p>Practical differences change often. Your choice should be based on:<br />
+- <strong>Which ecosystem you already use</strong> (Google Workspace? → Gemini integrates well).<br />
+- <strong>What you use it for</strong> (intense writing/coding? → Claude tends to win).<br />
+- <strong>Which UX you like</strong>.</p>
+<p>Trying all three for two weeks is the most sensible thing.</p>
+<h2 id="82-the-features-that-change-life">8.2 The features that change life</h2>
+<p>All three offer, with different names, these features:</p>
+<h3 id="memory">Memory</h3>
+<p>ChatGPT "Memory", Claude "Project knowledge", Gemini "Saved info". Save facts about you between conversations.</p>
+<p><strong>What to put in:</strong><br />
+- Your role, preferred tone ("answer in English, direct style").<br />
+- Your team's conventions (language, libraries, frameworks).<br />
+- Persistent constraints ("I use macOS, prefer Python 3.12").</p>
+<p><strong>What NOT to put in:</strong><br />
+- Secrets, passwords, sensitive data (providers can use conversations for training, unless opted out).<br />
+- Information that changes often (you'll rewrite it every time).</p>
+<h3 id="attachments-and-files">Attachments and files</h3>
+<p>You can upload PDFs, images, Excel sheets, code. The model reads them and reasons about them.</p>
+<p><strong>Typical use cases:</strong><br />
+- "Summarize this 80-page PDF."<br />
+- "Extract this invoice's data into CSV."<br />
+- "Anything strange in this chart?" (multimodal: image + reasoning).</p>
+<p><strong>Limit:</strong> very large PDFs may saturate context or be processed in chunks. For document libraries, RAG (Ch. 7).</p>
+<h3 id="code-execution-code-interpreter">Code execution / Code Interpreter</h3>
+<p>The model writes and <strong>runs Python code</strong> in a sandbox to:<br />
+- Analyze a CSV.<br />
+- Generate charts.<br />
+- Convert file formats.<br />
+- Do precise calculations.</p>
+<p>This is the "code-generating agent" we talked about in Ch. 4. Very fast for data-driven tasks.</p>
+<h3 id="web-search">Web search</h3>
+<p>The model searches the web during the response. Essential for up-to-date facts (beyond knowledge cutoff).</p>
+<p>ChatGPT, Claude and Gemini all have this function. Activates by default when the model "feels" it's needed, or via an explicit toggle.</p>
+<h3 id="image-generation">Image generation</h3>
+<p>Generates images from prompts. From visual identity for slide decks to UI mockups. Quality varies: DALL-E 3 in ChatGPT, Imagen in Gemini, Sora for video.</p>
+<h3 id="voice-conversation-mode">Voice / conversation mode</h3>
+<p>Mobile app: you talk, the model answers with voice. Surprisingly good, great for long prompts while walking.</p>
+<h3 id="custom-gpts-projects-gems">Custom GPTs / Projects / Gems</h3>
+<p>"Configured" versions of the AI with dedicated prompts and knowledge. Examples:<br />
+- ChatGPT Custom GPT with specialized instructions (e.g. "my writing coach", "Italian law expert").<br />
+- Claude Project with a set of uploaded documents (e.g. all 2025 contracts).<br />
+- Gemini Gem with a customized role.</p>
+<p>They are the simplest way to "build an agent" without writing code.</p>
+<h2 id="83-recommended-workflows">8.3 Recommended workflows</h2>
+<h3 id="workflow-1-brainstorming">Workflow 1 — Brainstorming</h3>
+<ol>
+<li>Open a new chat.</li>
+<li>Explain the problem in 3-4 sentences, give context on your target.</li>
+<li>Ask for 10 ideas, each with "why it could work" and "risks".</li>
+<li>Pick a shortlist of 3 and ask to deepen them.</li>
+<li>For the favorite, ask for an execution plan.</li>
+</ol>
+<h3 id="workflow-2-writing-article-email-post">Workflow 2 — Writing (article, email, post)</h3>
+<ol>
+<li>Explain: topic, audience, tone, length, format.</li>
+<li>Ask for an <strong>outline</strong> before the full text.</li>
+<li>Iterate on the outline until it convinces you.</li>
+<li>Only then ask for the full text.</li>
+<li>Editing: ask "make it more direct", "remove adjectives", "add an example in paragraph 3".</li>
+</ol>
+<p>Skipping the outline is the most common mistake. The model will write 1000 words on an angle you don't like, and you'll have more trouble rewriting than starting over.</p>
+<h3 id="workflow-3-document-analysis">Workflow 3 — Document analysis</h3>
+<ol>
+<li>Upload the document.</li>
+<li>Start with: "Summarize in 5 bullets" → calibrates you on the content.</li>
+<li>Targeted questions: "What does it say about section X?", "What are the deadlines?".</li>
+<li>Structured extraction: "Extract dates in YYYY-MM-DD format, one per line".</li>
+</ol>
+<h3 id="workflow-4-learning-a-new-topic">Workflow 4 — Learning a new topic</h3>
+<ol>
+<li>"Explain X to me as if I were new. Start with context, then key concepts, then an example."</li>
+<li>"Now test me: ask 5 questions in increasing difficulty."</li>
+<li>You answer, it corrects.</li>
+<li>"What are the typical misconceptions of someone starting with X?"</li>
+<li>"Best resource to go deeper?" (verify suggested links — can invent).</li>
+</ol>
+<h3 id="workflow-5-coding-light">Workflow 5 — Coding (light)</h3>
+<ol>
+<li>Describe the problem with an example of desired input/output.</li>
+<li>Specify language, library, constraints (no external dependencies, etc.).</li>
+<li>Ask for code + explanation.</li>
+<li>Test: copy in an editor, run. If it doesn't work, show the error to the model.</li>
+<li>For serious projects, switch to Claude Code (Ch. 9), not chat.</li>
+</ol>
+<h2 id="84-tips-that-make-a-difference">8.4 Tips that make a difference</h2>
+<ul>
+<li><strong>Start every chat with context.</strong> "I'm a civil lawyer, this document's user is a non-technical client." Changes all quality.</li>
+<li><strong>One chat = one topic.</strong> Open a new chat for a new task. Mixing confuses the model and your memory.</li>
+<li><strong>Save good prompts.</strong> If you find a prompt that works, put it in a note. It'll come in handy.</li>
+<li><strong>Use "Continue" or "Expand"</strong> if the response is incomplete.</li>
+<li><strong>"Critique your response"</strong> before accepting. Often things that were missing emerge.</li>
+<li><strong>Compare models</strong> on the same prompt when in doubt. ChatGPT and Claude can give different useful perspectives.</li>
+<li><strong>For repetitive tasks</strong>, create a Custom GPT / Project / Gem. You reuse prompts and context without repeating each time.</li>
+</ul>
+<h2 id="85-what-not-to-do">8.5 What NOT to do</h2>
+<ul>
+<li><strong>Don't paste sensitive data.</strong> Tax IDs, credentials, confidential business IP: use opt-out training mode, or enterprise products (ChatGPT Enterprise, Claude Team) with no-training policy.</li>
+<li><strong>Don't trust links.</strong> Models invent plausible URLs that don't exist. Always verify.</li>
+<li><strong>Don't delegate critical decisions</strong> without verification. Medical diagnoses, legal advice, financial: AI is a support tool, not a decider.</li>
+<li><strong>Don't expect coherence between turns</strong>. If you ask the same thing twice with small variations, it can answer differently. It's normal.</li>
+<li><strong>Don't fight the model.</strong> If it doesn't get it after 3 attempts, rephrase or switch to another model.</li>
+</ul>
+<h2 id="86-privacy-and-training-what-you-need-to-know">8.6 Privacy and training: what you need to know</h2>
+<p>By default, providers can use your conversations to improve models. To avoid:</p>
+<ul>
+<li><strong>ChatGPT</strong>: Settings → Data Controls → "Improve the model for everyone" → OFF.</li>
+<li><strong>Claude</strong>: Pro conversations aren't used for training by default. Verify in settings.</li>
+<li><strong>Gemini</strong>: Activity → Web &amp; App Activity → check what gets saved.</li>
+</ul>
+<p>For professional use, prefer Enterprise/Team versions with non-training SLAs written in the contract.</p>
+<h2 id="87-exercise-the-days-test">8.7 Exercise: the "day's test"</h2>
+<p>For one week, every time you're about to do something that requires thinking or writing, ask yourself: <strong>"can I do it with AI first?"</strong>. Don't blindly delegate, but use it as an <strong>accelerator</strong>.</p>
+<p>List of typical tasks where it changes everything:</p>
+<ul>
+<li>Write a difficult email (warning to a supplier, condolences, awkward request).</li>
+<li>Take notes from a meeting (audio → text → summary + action items).</li>
+<li>Analyze a 50-row Excel (ask to find patterns).</li>
+<li>Translate a technical text (curate the glossary).</li>
+<li>Explain a concept to your kid simply.</li>
+<li>Generate 10 names for a project.</li>
+<li>Summarize a long article.</li>
+<li>Validate an idea ("find the 5 biggest holes in this proposal").</li>
+</ul>
+<p>After a week you'll have a natural intuition of "when AI suits me."</p>
+<h2 id="88-key-takeaways">8.8 Key takeaways</h2>
+<ul>
+<li><strong>ChatGPT, Claude, Gemini</strong> are the starting point. Try them, pick the one that fits your work best.</li>
+<li><strong>Memory, attachments, code interpreter, web search</strong>: the cross-cutting features you use daily.</li>
+<li><strong>Workflow &gt; single prompt</strong>. Outline before text, brainstorming before solution, summary before detailed questions.</li>
+<li><strong>Custom GPT / Project / Gem</strong> for repetitive tasks: configure once, reuse always.</li>
+<li><strong>Privacy</strong>: opt-out training, never sensitive data, prefer Enterprise for professional use.</li>
+</ul>
+<h2 id="89-common-mistakes">8.9 Common mistakes</h2>
+<ul>
+<li><strong>Expecting results without giving context.</strong> "Write me an email" → mediocre. "Write me an email to a B2B client complaining about delay, cordial but firm tone, in English" → excellent.</li>
+<li><strong>Sticking with single prompt.</strong> The next 5 responses refine your result.</li>
+<li><strong>Looking for the magic phrase.</strong> It doesn't exist; a good workflow does.</li>
+<li><strong>Using ChatGPT for serious coding.</strong> Great for snippets; for projects, Claude Code or Cursor are more productive.</li>
+<li><strong>Not exploiting voice mode</strong> for thinking aloud. You walk, talk, get answers. Changes how you work.</li>
+</ul>
+<hr />
+<p>Chatbots are the "consumer" level. For developers, something much more powerful exists: an AI agent inside your terminal.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="07-memoria-contesto-e-rag.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 7. Memory, Context and RAG</span></a>
+      <a class="nav-next" href="09-claude-code-per-sviluppatori.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 9. Claude Code for Developers</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 8</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 8 — Using AI Chatbots</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="08-usare-i-chatbot-ai" data-chapter-n="8" data-chapter-title="Using AI Chatbots">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

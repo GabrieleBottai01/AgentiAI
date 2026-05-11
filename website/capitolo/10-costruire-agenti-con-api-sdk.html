@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/10-costruire-agenti-con-api-sdk.html">
+<title>Cap. 10. Costruire agenti con API e SDK · Guida agli Agenti AI</title>
+<meta name="description" content="Adesso si costruisce. In questo capitolo facciamo un agente da zero in Python, con prompt caching, tool, gestione errori e best practice. Alla fine avrai un template che potrai estendere per la maggior parte dei tuoi casi d'uso.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 10. Costruire agenti con API e SDK · Guida agli Agenti AI">
+<meta property="og:description" content="Adesso si costruisce. In questo capitolo facciamo un agente da zero in Python, con prompt caching, tool, gestione errori e best practice. Alla fine avrai un template che potrai estendere per la maggior parte dei tuoi casi d'uso.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/10-costruire-agenti-con-api-sdk.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 10. Costruire agenti con API e SDK · Guida agli Agenti AI">
+<meta name="twitter:description" content="Adesso si costruisce. In questo capitolo facciamo un agente da zero in Python, con prompt caching, tool, gestione errori e best practice. Alla fine avrai un template che potrai estendere per la maggior parte dei tuoi casi d'uso.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/10-costruire-agenti-con-api-sdk.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 10. Costruire agenti con API e SDK · Guida agli Agenti AI", "description": "Adesso si costruisce. In questo capitolo facciamo un agente da zero in Python, con prompt caching, tool, gestione errori e best practice. Alla fine avrai un template che potrai estendere per la maggior parte dei tuoi casi d'uso.", "url": "https://myfirstaiagent.netlify.app/capitolo/10-costruire-agenti-con-api-sdk.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class="current"><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.4"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 10</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="10-costruire-agenti-custom-con-api-e-sdk">10. Costruire agenti custom con API e SDK</h1>
+<p>Adesso si costruisce. In questo capitolo facciamo un agente da zero in Python, con prompt caching, tool, gestione errori e best practice. Alla fine avrai un template che potrai estendere per la maggior parte dei tuoi casi d'uso.</p>
+<h2 id="101-setup">10.1 Setup</h2>
+<p>Useremo l'<strong>Anthropic SDK</strong> come SDK primario. Tutto si traduce con piccole differenze in OpenAI SDK; segneremo le differenze importanti.</p>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>anthropic
+<span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_API_KEY</span><span class="o">=</span><span class="s2">&quot;sk-ant-...&quot;</span>
+</code></pre></div>
+
+<p>(Su <a href="https://console.anthropic.com">console.anthropic.com</a> crei un'API key. Stessa cosa per <a href="https://platform.openai.com">platform.openai.com</a> per OpenAI.)</p>
+<h2 id="102-hello-agent">10.2 Hello, agent</h2>
+<p>Il livello "chiamata singola":</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Anthropic</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Anthropic</span><span class="p">()</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Ciao, chi sei?&quot;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Questo è un chatbot, non un agente — niente loop, niente tool. Costruiamo l'agente vero.</p>
+<h2 id="103-un-agente-minimale-runnable">10.3 Un agente minimale, runnable</h2>
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Agente minimo: ha 2 tool (calcolatrice + ora corrente),</span>
+<span class="sd">loopa finché il modello non smette di chiamare tool.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Anthropic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Anthropic</span><span class="p">()</span>
+<span class="n">MODEL</span> <span class="o">=</span> <span class="s2">&quot;claude-opus-4-7&quot;</span>
+
+<span class="c1"># 1. Definizione dei tool</span>
+<span class="n">TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;calculator&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Esegue un&#39;espressione aritmetica Python. Usa SOLO per calcoli numerici (es. &#39;2+2&#39;, &#39;15 * 23 / 4&#39;). Non per testo o codice generico.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;expression&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Espressione aritmetica valida in Python&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;expression&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;current_time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Restituisce data e ora correnti in formato ISO. Usa quando l&#39;utente chiede &#39;che ore sono&#39;, &#39;che giorno è&#39;, o per timestamp.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_schema&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="c1"># 2. Implementazione dei tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculator</span><span class="p">(</span><span class="n">expression</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># ATTENZIONE: eval è pericoloso. In produzione usare un parser sicuro.</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;__builtins__&quot;</span><span class="p">:</span> <span class="p">{}},</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;errore: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">current_time</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+<span class="n">TOOL_FUNCS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;calculator&quot;</span><span class="p">:</span> <span class="n">calculator</span><span class="p">,</span>
+    <span class="s2">&quot;current_time&quot;</span><span class="p">:</span> <span class="n">current_time</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># 3. Il loop dell&#39;agente</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_agent</span><span class="p">(</span><span class="n">user_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_message</span><span class="p">}]</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+            <span class="n">system</span><span class="o">=</span><span class="s2">&quot;Sei un assistente preciso. Usa i tool quando servono. Risposte concise.&quot;</span><span class="p">,</span>
+            <span class="n">tools</span><span class="o">=</span><span class="n">TOOLS</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Aggiorna la storia con la risposta</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">})</span>
+
+        <span class="c1"># Se non ha chiamato tool, ha finito</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">stop_reason</span> <span class="o">!=</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+            <span class="c1"># Trova il blocco di testo finale</span>
+            <span class="n">text_blocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">text_blocks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">text_blocks</span> <span class="k">else</span> <span class="s2">&quot;(nessuna risposta)&quot;</span>
+
+        <span class="c1"># Esegui i tool richiesti</span>
+        <span class="n">tool_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="n">TOOL_FUNCS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;errore: tool &#39;</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; non esiste&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">block</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
+                <span class="n">tool_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tool_result&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;tool_use_id&quot;</span><span class="p">:</span> <span class="n">block</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
+                <span class="p">})</span>
+
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">tool_results</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Limite iterazioni raggiunto.&quot;</span>
+
+
+<span class="c1"># Prova</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">run_agent</span><span class="p">(</span><span class="s2">&quot;Quanti minuti sono passati dalla mezzanotte fino ad adesso?&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Esegui questo file. L'agente:<br />
+1. Vede la domanda.<br />
+2. Chiama <code>current_time()</code>.<br />
+3. Pensa: "ora ho l'ora corrente, devo calcolare i minuti dalla mezzanotte".<br />
+4. Chiama <code>calculator("...")</code> con l'espressione giusta.<br />
+5. Risponde.</p>
+<p>Tre passi di LLM, due tool. <strong>Questo è un agente</strong>.</p>
+<h2 id="104-prompt-caching-il-trucco-da-imparare-subito">10.4 Prompt caching: il trucco da imparare subito</h2>
+<p>Quando il system prompt è grande (centinaia o migliaia di token), pagarli a ogni chiamata è uno spreco. Il <strong>prompt caching</strong> dell'API Anthropic permette di caricare il system prompt <strong>una volta</strong> e riutilizzarlo a costo ~10% per le chiamate successive (entro 5 minuti).</p>
+<div class="codehilite"><pre><span></span><code><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+    <span class="n">system</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">LONG_SYSTEM_PROMPT</span><span class="p">,</span>   <span class="c1"># es. 8000 token</span>
+            <span class="s2">&quot;cache_control&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ephemeral&quot;</span><span class="p">}</span>  <span class="c1"># ← cache!</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">TOOLS</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Per agenti che fanno molti turni con lo stesso system prompt, è un risparmio enorme. <strong>Sempre attivo</strong> in produzione su qualsiasi system prompt non banale.</p>
+<p>Dettagli:<br />
+- TTL: 5 minuti dall'ultima lettura. Si rinnova a ogni hit.<br />
+- Granularità: a blocchi. Puoi marcare il system prompt come cached e i tool come non cached.<br />
+- I tool definitions possono anch'essi essere cachati.</p>
+<p>OpenAI ha un meccanismo equivalente automatico (cache hit dopo i primi 1024 token comuni).</p>
+<h2 id="105-streaming">10.5 Streaming</h2>
+<p>Per UX migliore, attiva lo streaming. Il modello ritorna i token man mano che li produce.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Spiegami le reti neurali&quot;</span><span class="p">}],</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">text_stream</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</code></pre></div>
+
+<p>In agenti con tool, lo streaming si gestisce con event-based handlers (più complesso, ma utile per dare feedback realtime all'utente).</p>
+<h2 id="106-structured-outputs-json-mode">10.6 Structured outputs (JSON mode)</h2>
+<p>Se vuoi che il modello risponda in JSON conforme a uno schema, usa il pattern "tool con un solo tool" o le feature dedicate.</p>
+<p>OpenAI ha <code>response_format={"type": "json_schema", "json_schema": {...}}</code>, garantisce JSON valido.</p>
+<p>Anthropic non ha ancora un mode strict ma il pattern del "tool unico" è equivalente:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">extract_tool</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;extract_person&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Estrae info su una persona dal testo.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;input_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;occupation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">MODEL</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">extract_tool</span><span class="p">],</span>
+    <span class="n">tool_choice</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;extract_person&quot;</span><span class="p">},</span>  <span class="c1"># ← forza l&#39;uso</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Mario, 42 anni, ingegnere...&quot;</span><span class="p">}]</span>
+<span class="p">)</span>
+
+<span class="n">extracted</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">input</span>  <span class="c1"># già dict valido</span>
+</code></pre></div>
+
+<p><code>tool_choice</code> forzato garantisce che il modello chiami quel tool, e i parametri sono validati contro lo schema.</p>
+<h2 id="107-retry-timeout-errori">10.7 Retry, timeout, errori</h2>
+<p>In produzione la rete cade, le API ritornano 429 (rate limit) o 503. Best practice:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIError</span><span class="p">,</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">RateLimitError</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_with_retry</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">RateLimitError</span><span class="p">:</span>
+            <span class="n">wait</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rate limit, retry tra </span><span class="si">{</span><span class="n">wait</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">APIConnectionError</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="n">max_attempts</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;max retry raggiunti&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Configurazioni utili al client:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">client</span> <span class="o">=</span> <span class="n">Anthropic</span><span class="p">(</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>    <span class="c1"># SDK ha già retry esponenziale built-in</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<h2 id="108-loop-infiniti-come-prevenirli">10.8 Loop infiniti: come prevenirli</h2>
+<p>Tre protezioni standard:</p>
+<ol>
+<li><strong>Limite di iterazioni</strong>: già visto, mai oltre 25-30.</li>
+<li><strong>Limite di token cumulativi</strong>: traccia il totale, fermati a soglia.</li>
+<li><strong>Detection di loop</strong>: se l'agente chiama lo stesso tool con gli stessi argomenti 3 volte, fermati e logga.</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">seen_calls</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">signature</span> <span class="ow">in</span> <span class="n">seen_calls</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Loop rilevato, fermo l&#39;agente.&quot;</span>
+        <span class="n">seen_calls</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="109-openai-sdk-differenze-chiave">10.9 OpenAI SDK: differenze chiave</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;calculator&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>  <span class="c1"># JSON Schema</span>
+        <span class="p">}</span>
+    <span class="p">}]</span>
+<span class="p">)</span>
+
+<span class="c1"># Risultato accessibile a:</span>
+<span class="c1"># response.choices[0].message.tool_calls</span>
+<span class="c1"># response.choices[0].finish_reason  (&#39;tool_calls&#39;, &#39;stop&#39;, ...)</span>
+</code></pre></div>
+
+<p>Differenze rispetto ad Anthropic:<br />
+- Tool wrappato in <code>{"type": "function", "function": {...}}</code>.<br />
+- <code>parameters</code> invece di <code>input_schema</code>.<br />
+- Risposta in <code>choices[0].message.tool_calls</code> (lista di tool calls).<br />
+- <code>tool_call.function.arguments</code> è una stringa JSON, va parsato.<br />
+- Tool result va come messaggio role=<code>"tool"</code> con <code>tool_call_id</code>.</p>
+<p>Se vuoi codice agnostico, usa <strong>LiteLLM</strong> (Cap. 11) che astrae le differenze.</p>
+<h2 id="1010-claude-agent-sdk">10.10 Claude Agent SDK</h2>
+<p>Per agenti complessi con harness simile a Claude Code (file ops, bash, todo, MCP), Anthropic offre il <strong>Claude Agent SDK</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">claude_agent_sdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClaudeAgent</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">ClaudeAgent</span><span class="p">(</span>
+    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;Sei un agente sviluppatore.&quot;</span><span class="p">,</span>
+    <span class="n">allowed_tools</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;read_file&quot;</span><span class="p">,</span> <span class="s2">&quot;write_file&quot;</span><span class="p">,</span> <span class="s2">&quot;bash&quot;</span><span class="p">],</span>
+    <span class="n">working_directory</span><span class="o">=</span><span class="s2">&quot;./my-project&quot;</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;Aggiungi un endpoint /health all&#39;app FastAPI&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Ti dà gratis: gestione filesystem, esecuzione comandi, prompt caching, compaction automatica. Vale la pena per coding agents seri.</p>
+<h2 id="1011-costi-capire-e-ottimizzare">10.11 Costi: capire e ottimizzare</h2>
+<p>I costi si calcolano sui token (input + output). Tariffe tipiche 2026 (varia, controlla sempre):</p>
+<table>
+<thead>
+<tr>
+<th>Modello</th>
+<th>Input ($/M tok)</th>
+<th>Output ($/M tok)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Opus 4.7</td>
+<td>~15</td>
+<td>~75</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>~3</td>
+<td>~15</td>
+</tr>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td>~0.80</td>
+<td>~4</td>
+</tr>
+<tr>
+<td>GPT-5</td>
+<td>~10</td>
+<td>~40</td>
+</tr>
+<tr>
+<td>GPT-5 Mini</td>
+<td>~0.25</td>
+<td>~2</td>
+</tr>
+</tbody>
+</table>
+<p>Trick per risparmiare:</p>
+<ol>
+<li><strong>Prompt caching</strong> sul system prompt → -90% sull'input ripetuto.</li>
+<li><strong>Modelli piccoli</strong> dove bastano. Spesso Haiku/Mini fanno l'80% dei task per il 5% del costo.</li>
+<li><strong>Tronca i tool result</strong> a quello che serve davvero.</li>
+<li><strong>Compaction</strong> della history quando lunga.</li>
+<li><strong>Batch API</strong> per task non realtime → -50%.</li>
+<li><strong>Cap di iterazioni e token</strong> per impedire loop costosi.</li>
+</ol>
+<p>Setta SEMPRE un <strong>budget alert</strong> sull'API console quando metti in produzione.</p>
+<h2 id="1012-esempio-finale-agente-di-research">10.12 Esempio finale: agente di research</h2>
+<p>Mettiamo insieme tutto in un agente che cerca nel web e produce un brief.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Anthropic</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Anthropic</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">web_search</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fake: in realtà chiamerebbe SerpAPI / Tavily / Brave Search API.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[risultati per: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">separator</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">5000</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">}</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+
+<span class="n">TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;web_search&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Cerca nel web. Usa per fatti aggiornati o ricerche generali.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">}},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;fetch_url&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scarica e estrae testo da una URL. Usa per leggere fonti specifiche.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">}},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">TOOL_FUNCS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;web_search&quot;</span><span class="p">:</span> <span class="n">web_search</span><span class="p">,</span> <span class="s2">&quot;fetch_url&quot;</span><span class="p">:</span> <span class="n">fetch_url</span><span class="p">}</span>
+
+<span class="n">SYSTEM</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Sei un agente di ricerca. Procedura:</span>
+<span class="s2">1. Comprendi la domanda. Se ambigua, fai un&#39;unica domanda chiarificatrice nel testo.</span>
+<span class="s2">2. Fai 1-3 ricerche web mirate.</span>
+<span class="s2">3. Per le 2-3 fonti più promettenti, leggile con fetch_url.</span>
+<span class="s2">4. Sintetizza un brief di 200-300 parole CITANDO le fonti.</span>
+<span class="s2">5. Se le info non bastano, dillo invece di inventare.</span>
+
+<span class="s2">Stop quando hai un brief soddisfacente.&quot;&quot;&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">research</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_iters</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">}]</span>
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iters</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
+            <span class="n">system</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">SYSTEM</span><span class="p">,</span> <span class="s2">&quot;cache_control&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ephemeral&quot;</span><span class="p">}}],</span>
+            <span class="n">tools</span><span class="o">=</span><span class="n">TOOLS</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">stop_reason</span> <span class="o">!=</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">TOOL_FUNCS</span><span class="p">[</span><span class="n">b</span><span class="o">.</span><span class="n">name</span><span class="p">](</span><span class="o">**</span><span class="n">b</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tool_result&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;tool_use_id&quot;</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="p">),</span>
+                <span class="p">})</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">results</span><span class="p">})</span>
+    <span class="k">return</span> <span class="s2">&quot;Iterazioni esaurite.&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">research</span><span class="p">(</span><span class="s2">&quot;Qual è lo stato dei modelli AI open-source nel 2026?&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<p>200 righe, un agente di research vero. Da qui aggiungi: persistenza della history, retry, observability (Langfuse/LangSmith), web search vera (SerpAPI o Tavily).</p>
+<h2 id="1013-da-ricordare">10.13 Da ricordare</h2>
+<ul>
+<li><strong>Il loop è ~50 righe.</strong> Tutto il valore sta nei tool e nei prompt.</li>
+<li><strong>Prompt caching</strong> per system prompt grandi: risparmio enorme.</li>
+<li><strong>Limite iterazioni + detection di loop</strong> per non andare in spirale.</li>
+<li><strong>Tool result strutturato (ok/error)</strong> per far recuperare l'agente.</li>
+<li><strong>Streaming</strong> per UX, <strong>tool_choice forzato</strong> per output strutturato.</li>
+<li><strong>Modello piccolo dove basta</strong>, modello grosso solo dove serve.</li>
+<li><strong>Budget alert</strong> in produzione, sempre.</li>
+</ul>
+<h2 id="1014-errori-tipici">10.14 Errori tipici</h2>
+<ul>
+<li><strong>Niente cache</strong>: paghi 10x il dovuto su system prompt grandi.</li>
+<li><strong>Niente limite iterazioni</strong>: una notte ti accorgi di aver bruciato 50€.</li>
+<li><strong>Tool che ritorna 100KB di HTML</strong>: contesto saturato, costi che esplodono.</li>
+<li><strong>Eccezioni nei tool</strong> invece di error string strutturato: l'agente si rompe.</li>
+<li><strong><code>eval</code> come calcolatrice</strong>: in produzione apre buchi di sicurezza enormi.</li>
+<li><strong>Lasciare il modello "Opus" sempre</strong>: prova Sonnet/Haiku, spesso vanno bene.</li>
+</ul>
+<hr />
+<p>Costruire da zero è educativo e flessibile. Per pipeline più complesse, i framework danno un'astrazione più alta. Vediamo i principali.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="09-claude-code-per-sviluppatori.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 9. Claude Code per sviluppatori</span></a>
+      <a class="nav-next" href="11-framework-langchain-autogen-crewai.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 11. Framework: LangChain, AutoGen, CrewAI</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 10</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 10 — Costruire agenti con API e SDK</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="10-costruire-agenti-con-api-sdk" data-chapter-n="10" data-chapter-title="Costruire agenti con API e SDK">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

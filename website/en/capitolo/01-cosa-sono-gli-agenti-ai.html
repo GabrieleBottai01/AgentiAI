@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/01-cosa-sono-gli-agenti-ai.html">
+<title>Ch. 1. What AI Agents Are · Guide to AI Agents</title>
+<meta name="description" content=""An AI agent is a program that uses an LLM to decide what to do, act, see the result and start again."">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 1. What AI Agents Are · Guide to AI Agents">
+<meta property="og:description" content=""An AI agent is a program that uses an LLM to decide what to do, act, see the result and start again."">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/01-cosa-sono-gli-agenti-ai.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 1. What AI Agents Are · Guide to AI Agents">
+<meta name="twitter:description" content=""An AI agent is a program that uses an LLM to decide what to do, act, see the result and start again."">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/01-cosa-sono-gli-agenti-ai.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 1. What AI Agents Are · Guide to AI Agents", "description": "\"An AI agent is a program that uses an LLM to decide what to do, act, see the result and start again.\"", "url": "https://myfirstaiagent.netlify.app/en/capitolo/01-cosa-sono-gli-agenti-ai.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class="current"><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.1"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 1</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="1-what-ai-agents-are">1. What AI Agents Are</h1>
+<blockquote>
+<p>"An AI agent is a program that uses an LLM to decide what to do, act, see the result and start again."</p>
+</blockquote>
+<p>That's all there is to it. The rest of the chapter exists to show why this simple sentence changes everything.</p>
+<h2 id="11-from-chatbot-to-agent-a-story-in-three-steps">1.1 From chatbot to agent: a story in three steps</h2>
+<h3 id="step-1-the-chatbot-2022">Step 1 — The chatbot (2022)</h3>
+<p>You write a question, the model answers. End.</p>
+<div class="codehilite"><pre><span></span><code>You:    &quot;What&#39;s the capital of France?&quot;
+Bot:    &quot;Paris.&quot;
+</code></pre></div>
+
+<p>The bot <strong>doesn't act</strong>. It doesn't open browsers, read files, or write to your disk. It's a conversational machine: text in, text out.</p>
+<h3 id="step-2-the-assistant-with-tools-2023">Step 2 — The assistant with tools (2023)</h3>
+<p>We give the model the ability to <strong>call functions</strong>. Now if you ask for the weather, it can actually go look it up.</p>
+<div class="codehilite"><pre><span></span><code>You:    &quot;What&#39;s the weather in Rome?&quot;
+Bot:    [calls get_weather(&quot;Rome&quot;)]
+        [receives &quot;18°, clear&quot;]
+        &quot;It&#39;s 18 degrees and clear in Rome.&quot;
+</code></pre></div>
+
+<p>More useful, but still reactive. You ask one thing, it does one thing.</p>
+<h3 id="step-3-the-agent-2024-onward">Step 3 — The agent (2024 onward)</h3>
+<p>Now let's give it a goal, not a command. And let's let it work in a <strong>loop</strong>: think, act, observe the result, rethink, re-act. Until it's done.</p>
+<div class="codehilite"><pre><span></span><code>You:    &quot;Find the 5 best-rated Japanese restaurants in Milan,
+         book the one available Saturday night for 4 people.&quot;
+Agent:  [searches Google]
+        [reads reviews]
+        [compares results]
+        [calls booking API]
+        [checks Saturday availability]
+        [if first is full, tries the second]
+        [confirms]
+        &quot;Booked Sushi B for Saturday the 20th at 9pm.&quot;
+</code></pre></div>
+
+<p>This is an agent: <strong>an LLM in a loop, with tools and a goal</strong>.</p>
+<h2 id="12-the-useful-definition">1.2 The useful definition</h2>
+<p>Let's agree on an operational definition. An <strong>AI agent</strong> is a software system with four ingredients:</p>
+<ol>
+<li><strong>A model</strong> (LLM) that reasons and decides.</li>
+<li><strong>Tools</strong> that the model can call to act on the world: read files, make HTTP requests, run code, query databases.</li>
+<li><strong>A loop</strong> that repeats: the model produces an action → the system executes it → the result returns to the model → the model decides the next action.</li>
+<li><strong>A stop criterion</strong>: the agent halts when it reaches the goal, exhausts its attempts, or the user interrupts it.</li>
+</ol>
+<p>Without the loop and tools, you have a chatbot. With them, you have an agent.</p>
+<h2 id="13-what-makes-them-powerful-and-why-now">1.3 What makes them powerful (and why now)</h2>
+<p>Three factors have come together over the last few years:</p>
+<ul>
+<li><strong>Models can follow complex instructions.</strong> GPT-3.5 was already good at chatting; modern models (Claude 4, GPT-5, Gemini 2) can <em>plan</em> and <em>course-correct</em> mid-task.</li>
+<li><strong>"Tool use" has become standard.</strong> All the major APIs offer a structured mechanism to declare tools and have the model call them (we'll see this in Ch. 6).</li>
+<li><strong>Context windows have grown.</strong> Models with 200K-1M token contexts can "keep in mind" entire codebases, books, or long conversations.</li>
+</ul>
+<p>Result: for many tasks that until recently required a human expert plus custom scripts, today a well-configured agent is enough.</p>
+<h2 id="14-what-an-ai-agent-is-not">1.4 What an AI agent is NOT</h2>
+<p>To avoid confusion, a few important distinctions.</p>
+<table>
+<thead>
+<tr>
+<th>Not an agent</th>
+<th>What it is instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A chatbot (even a good one)</td>
+<td>A conversational interface without an autonomous loop.</td>
+</tr>
+<tr>
+<td>A single complex prompt</td>
+<td>A <em>single generation</em>. No action, no feedback.</td>
+</tr>
+<tr>
+<td>A scripted pipeline where AI does one step</td>
+<td>A traditional workflow that uses AI as a function.</td>
+</tr>
+<tr>
+<td>Classic RPA (Robotic Process Automation)</td>
+<td>Rule-based automation, not decision-based.</td>
+</tr>
+</tbody>
+</table>
+<p>The line is blurry. <strong>The key question is: does the system decide on its own what to do at the next step?</strong> If yes, it's an agent. If the next action is already written in the code, it's automation.</p>
+<h2 id="15-when-an-agent-makes-sense-and-when-not">1.5 When an agent makes sense (and when not)</h2>
+<p>AI agents are powerful, but not free: they cost tokens, are slower than a direct call, and introduce uncertainty (the same input can lead to slightly different behaviors).</p>
+<p><strong>Good use cases:</strong><br />
+- <strong>Heterogeneous</strong> tasks where the steps aren't known in advance (research, analysis, debugging).<br />
+- Work that requires <strong>judgment</strong> (summarizing, classifying, drafting).<br />
+- Interactions with <strong>many sources</strong> (searching across systems, aggregating).<br />
+- <strong>Exploration</strong> in complex environments (a codebase, a dataset).</p>
+<p><strong>Bad use cases:</strong><br />
+- Deterministic computations (1+1 is better done by Python).<br />
+- High-frequency operations where every millisecond counts.<br />
+- Regulatory/financial logic where rigorous audit trail is needed.<br />
+- Tasks where one mistake costs a lot and isn't recoverable (irreversible deletes without supervision).</p>
+<p>A good rule: <strong>if you can write a script in 30 minutes, don't use an agent.</strong> If you don't even know where to start, an agent is the right solution.</p>
+<h2 id="16-practice-spot-an-agent-in-30-seconds">1.6 Practice: spot an agent in 30 seconds</h2>
+<p>Open these three products (even just their demo pages) and try to classify them:</p>
+<ol>
+<li><strong>An email-writing assistant</strong> that waits for you to tell it what to write → <strong>chatbot</strong>.</li>
+<li><strong>A code copilot</strong> that, given a bug report, explores the code, proposes a fix, writes tests and opens the PR → <strong>agent</strong>.</li>
+<li><strong>A Slack integration</strong> that automatically translates messages to English when one comes in in Italian → <strong>automation with AI</strong>, but not a true agent (one step, no loop).</li>
+</ol>
+<p>The exercise becomes intuitive after 4-5 examples. You'll come back to this distinction many times.</p>
+<h2 id="17-key-takeaways">1.7 Key takeaways</h2>
+<ul>
+<li><strong>An AI agent = LLM + tools + loop + goal.</strong> Without the loop, it's a chatbot.</li>
+<li><strong>The agent's value lies in autonomous decision-making</strong>: it decides what to do at the next step.</li>
+<li><strong>More freedom = more power, but also more risk.</strong> An agent that errs autonomously can do damage a chatbot can't.</li>
+<li><strong>They're not suitable for everything.</strong> For deterministic tasks, writing traditional code is better.</li>
+<li><strong>The word "agent" is overused.</strong> When a product calls itself "agentic," ask yourself: is there a loop? Are there tools? Does it decide on its own?</li>
+</ul>
+<h2 id="18-common-mistakes">1.8 Common mistakes</h2>
+<ul>
+<li><strong>Confusing "AI" with "agent".</strong> Gmail uses AI for smart replies, but that's not an agent.</li>
+<li><strong>Thinking an agent is "smart" like a human.</strong> It isn't. It's good at following patterns and using tools, but it has no common sense or lived experience.</li>
+<li><strong>Giving the agent too vague a goal.</strong> "Improve my business" doesn't work. "Analyze sales.csv and find the 3 products with the largest drop in Q1" works.</li>
+<li><strong>Letting the agent run without supervision on irreversible actions.</strong> Deletes, payments, customer emails: human confirmation is needed, at least at first.</li>
+</ul>
+<hr />
+<p>Next chapter: we'll understand the <strong>engine</strong> that makes all this work, the LLM. Without diving into math, but understanding <em>enough</em> to use them well.</p>
+    </div>
+    <section class="exercise"
+                 data-exercise-id="ex-cap1"
+                 data-exercise-type="classify">
+          <div class="exercise-header">
+            <span class="exercise-tag">
+              <i data-icon-replace="edit"></i>
+              <span data-i18n="exercise.tag"></span>
+            </span>
+            <h3>Exercise: agent or chatbot?</h3>
+          </div>
+          <p class="exercise-intro">For each description, decide whether it's an <b>agent</b>, a <b>chatbot</b> or an <b>AI automation</b>. Then press 'Verify' for AI tutor feedback.</p>
+          <ol class="exercise-items"><li>
+                  <p>An assistant that, given a bug report, explores the codebase, proposes a fix, writes tests and opens the PR.</p>
+                  <div class="choice-row">
+                    <label><input type="radio" name="item-0" value="agente"> Agent</label>
+                    <label><input type="radio" name="item-0" value="chatbot"> Chatbot</label>
+                    <label><input type="radio" name="item-0" value="automazione"> AI Automation</label>
+                  </div>
+                </li><li>
+                  <p>An integration that automatically translates messages when one arrives in a different language.</p>
+                  <div class="choice-row">
+                    <label><input type="radio" name="item-1" value="agente"> Agent</label>
+                    <label><input type="radio" name="item-1" value="chatbot"> Chatbot</label>
+                    <label><input type="radio" name="item-1" value="automazione"> AI Automation</label>
+                  </div>
+                </li><li>
+                  <p>A copilot that answers questions about Italian cuisine and suggests recipes.</p>
+                  <div class="choice-row">
+                    <label><input type="radio" name="item-2" value="agente"> Agent</label>
+                    <label><input type="radio" name="item-2" value="chatbot"> Chatbot</label>
+                    <label><input type="radio" name="item-2" value="automazione"> AI Automation</label>
+                  </div>
+                </li></ol>
+          <div class="exercise-actions">
+            <button class="btn btn-accent exercise-submit" type="button">
+              <i data-icon-replace="check-circle"></i>
+              <span data-i18n="exercise.verify"></span>
+            </button>
+            <span class="exercise-status muted"></span>
+          </div>
+          <div class="exercise-feedback markdown-output" hidden></div>
+        </section>
+
+    <nav class="chapter-nav">
+      <span></span>
+      <a class="nav-next" href="02-come-funzionano-gli-llm.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 2. How LLMs Work</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 1</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 1 — What AI Agents Are</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="01-cosa-sono-gli-agenti-ai" data-chapter-n="1" data-chapter-title="What AI Agents Are">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="agent.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="en/agente.html">
+<title>Guida agli Agenti AI</title>
+<meta name="description" content="Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Guida agli Agenti AI">
+<meta property="og:description" content="Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guida agli Agenti AI">
+<meta name="twitter:description" content="Guida completa, in italiano e inglese, agli Agenti AI — di Gabriele Bottai. 16 capitoli, esercizi interattivi, strumenti AI integrati.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html" class=""><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html" class="active"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="page-header">
+  <span class="eyebrow">
+    <i data-icon-replace="bot"></i>
+    <span data-i18n="page.tag"></span>
+  </span>
+  <h1 data-i18n="agent.title"></h1>
+  <p class="lead">
+    <span data-i18n="agent.lead"></span>
+    <span data-i18n="agent.tools"></span>
+  </p>
+  <p id="ag-provider" class="provider-line"></p>
+</div>
+
+<div class="agent-layout">
+  <div class="agent-config card">
+    <label class="field">
+      <span data-i18n="form.goal"></span>
+      <textarea id="ag-goal" rows="3" data-i18n-attr="placeholder:agent.placeholder.goal"></textarea>
+    </label>
+    <div class="examples">
+      <span class="muted small" data-i18n="agent.examples"></span>
+      <button class="chip" data-goal-key="agent.example.1.goal" data-i18n="agent.example.1"></button>
+      <button class="chip" data-goal-key="agent.example.2.goal" data-i18n="agent.example.2"></button>
+      <button class="chip" data-goal-key="agent.example.3.goal" data-i18n="agent.example.3"></button>
+      <button class="chip" data-goal-key="agent.example.4.goal" data-i18n="agent.example.4"></button>
+    </div>
+    <div class="field-row" style="grid-template-columns: 2fr 1fr;">
+      <label class="field">
+        <span data-i18n="form.model"></span>
+        <select id="ag-model"></select>
+      </label>
+      <label class="field">
+        <span data-i18n="form.maxiter"></span>
+        <input id="ag-max" type="number" min="1" max="15" value="8">
+      </label>
+    </div>
+    <div class="actions">
+      <button id="ag-submit" type="button" class="btn btn-accent">
+        <i data-icon-replace="play"></i>
+        <span data-i18n="form.launch"></span>
+      </button>
+      <button id="ag-clear" type="button" class="btn btn-ghost">
+        <i data-icon-replace="trash"></i>
+        <span data-i18n="form.clear"></span>
+      </button>
+    </div>
+  </div>
+  <div class="agent-trace card">
+    <div class="trace-header">
+      <span data-i18n="agent.trace.title"></span>
+      <span id="ag-status" class="muted small"></span>
+    </div>
+    <div id="ag-trace" class="trace empty" data-i18n="agent.trace.empty"></div>
+  </div>
+</div>
+
+<div class="callout">
+  <h3>
+    <i data-icon-replace="info"></i>
+    <span data-i18n="agent.callout.title"></span>
+  </h3>
+  <ol>
+    <li data-i18n="agent.callout.1"></li>
+    <li data-i18n="agent.callout.2"></li>
+    <li data-i18n="agent.callout.3"></li>
+    <li data-i18n="agent.callout.4"></li>
+  </ol>
+  <p class="muted small" data-i18n="agent.callout.note"></p>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="assets/i18n.js"></script>
+<script src="assets/ai-client.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/search.js"></script>
+<script src="assets/agent.js"></script>
+</body>
+</html>

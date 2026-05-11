@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/16-glossario-e-risorse.html">
+<title>Cap. 16. Glossario e risorse · Guida agli Agenti AI</title>
+<meta name="description" content="Se di tutta questa guida dovessi tenere solo cinque cose:">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 16. Glossario e risorse · Guida agli Agenti AI">
+<meta property="og:description" content="Se di tutta questa guida dovessi tenere solo cinque cose:">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/16-glossario-e-risorse.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 16. Glossario e risorse · Guida agli Agenti AI">
+<meta name="twitter:description" content="Se di tutta questa guida dovessi tenere solo cinque cose:">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/16-glossario-e-risorse.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 16. Glossario e risorse · Guida agli Agenti AI", "description": "Se di tutta questa guida dovessi tenere solo cinque cose:", "url": "https://myfirstaiagent.netlify.app/capitolo/16-glossario-e-risorse.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class="current"><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.6"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 16</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="16-glossario-e-risorse">16. Glossario e risorse</h1>
+<h2 id="161-glossario">16.1 Glossario</h2>
+<h3 id="a">A</h3>
+<p><strong>Agente AI</strong> — Sistema software che usa un LLM per decidere azioni, le esegue tramite tool, osserva il risultato e ripete in un loop fino a un obiettivo o stop. (Cap. 1, 3)</p>
+<p><strong>Allucinazione</strong> — Affermazione plausibile ma falsa generata da un LLM. Dovuta al fatto che il modello predice token plausibili, non verificati. (Cap. 13)</p>
+<p><strong>API key</strong> — Credenziale per autenticare le chiamate alle API dei provider (OpenAI, Anthropic, ecc.). Va tenuta segreta.</p>
+<p><strong>Architettura agentica</strong> — Pattern strutturale di un agente: ReAct, Plan-and-Execute, multi-agent, ecc. (Cap. 4)</p>
+<p><strong>Assistant message</strong> — Messaggio prodotto dal modello in una conversazione, sia testuale che con tool call. (Cap. 2)</p>
+<h3 id="b">B</h3>
+<p><strong>Backoff esponenziale</strong> — Strategia di retry che raddoppia l'attesa a ogni tentativo (1s, 2s, 4s, 8s). Standard per rate limit. (Cap. 10)</p>
+<h3 id="c">C</h3>
+<p><strong>Cache (prompt caching)</strong> — Meccanismo che consente di pagare meno per parti del prompt riutilizzate tra chiamate. (Cap. 10)</p>
+<p><strong>Chain-of-Thought (CoT)</strong> — Tecnica di prompting che chiede al modello di ragionare passo passo prima di rispondere. (Cap. 5)</p>
+<p><strong>Chunking</strong> — Spezzare un documento in pezzi (chunk) per indicizzazione in un vector store. Tipicamente 200-500 parole con overlap. (Cap. 7)</p>
+<p><strong>Claude</strong> — Famiglia di modelli LLM di Anthropic. Modelli principali: Opus (potente), Sonnet (bilanciato), Haiku (veloce/economico).</p>
+<p><strong>Claude Code</strong> — CLI di Anthropic, agente da terminale per sviluppatori. (Cap. 9)</p>
+<p><strong>Compaction</strong> — Compressione automatica della history quando si avvicina al limite del context window. (Cap. 7)</p>
+<p><strong>Context window</strong> — Quantità massima di token che il modello può "vedere" in una chiamata. (Cap. 2)</p>
+<h3 id="d">D</h3>
+<p><strong>Dataset di valutazione (eval set)</strong> — Insieme di esempi rappresentativi usati per misurare la qualità di un agente. (Cap. 14)</p>
+<p><strong>Determinismo</strong> — Proprietà di un sistema che, dato lo stesso input, produce sempre lo stesso output. Gli LLM sono <em>non</em> deterministici per default. (Cap. 12)</p>
+<h3 id="e">E</h3>
+<p><strong>Embedding</strong> — Rappresentazione numerica (vettore) del significato di un testo. Testi simili hanno embedding vicini. (Cap. 7)</p>
+<p><strong>Eval / evaluation</strong> — Misurazione strutturata di un agente su un dataset di test. (Cap. 14)</p>
+<p><strong>Extended thinking / reasoning mode</strong> — Modalità di alcuni modelli moderni dove fanno chain-of-thought interno prima di rispondere. (Cap. 2, 5)</p>
+<h3 id="f">F</h3>
+<p><strong>Few-shot prompting</strong> — Tecnica di prompting che include esempi input/output per guidare il modello. (Cap. 5)</p>
+<p><strong>Fine-tuning</strong> — Allenamento aggiuntivo di un modello su un dataset specifico per specializzarlo. Costoso, statico (non in real-time).</p>
+<p><strong>Function calling</strong> — Vedi <em>tool use</em>. (Cap. 6)</p>
+<h3 id="g">G</h3>
+<p><strong>GPT</strong> — Famiglia di modelli LLM di OpenAI (Generative Pre-trained Transformer).</p>
+<p><strong>Gemini</strong> — Famiglia di modelli LLM di Google.</p>
+<p><strong>GDPR</strong> — Regolamento europeo sulla protezione dei dati personali. Rilevante per agenti che processano dati di utenti EU. (Cap. 13)</p>
+<p><strong>Guardrails</strong> — Vincoli e validazioni per impedire all'agente di fare cose indesiderate (es. PII filtering, toxic check).</p>
+<h3 id="h">H</h3>
+<p><strong>Hallucination</strong> — Vedi <em>allucinazione</em>.</p>
+<p><strong>Hook</strong> — In Claude Code (e in altri sistemi), script che si esegue automaticamente in risposta a eventi (es. dopo un edit). (Cap. 9)</p>
+<p><strong>Human-in-the-loop (HITL)</strong> — Pattern in cui l'umano interviene per approvare o decidere a passi critici dell'agente. (Cap. 12)</p>
+<h3 id="i">I</h3>
+<p><strong>Idempotenza</strong> — Proprietà di un'operazione che, ripetuta più volte con gli stessi parametri, produce lo stesso risultato. Importante per tool con effetti collaterali. (Cap. 12)</p>
+<p><strong>Inference</strong> — Esecuzione di un modello pre-addestrato per generare output. La parte "runtime" che paghi all'API.</p>
+<h3 id="j">J</h3>
+<p><strong>JSON mode / structured output</strong> — Modalità API che garantisce output JSON valido conforme a uno schema. (Cap. 5, 10)</p>
+<h3 id="k">K</h3>
+<p><strong>Knowledge cutoff</strong> — Data dell'ultimo training del modello. Oltre, il modello non conosce eventi/fatti senza tool. (Cap. 2)</p>
+<p><strong>Knowledge base</strong> — Insieme di documenti su cui un agente fa RAG.</p>
+<h3 id="l">L</h3>
+<p><strong>LangChain / LangGraph</strong> — Framework Python per costruire applicazioni LLM e agenti. (Cap. 11)</p>
+<p><strong>LLM (Large Language Model)</strong> — Modello di linguaggio di grandi dimensioni (Claude, GPT, Gemini, Llama, ecc.). (Cap. 2)</p>
+<p><strong>Loop (agent loop)</strong> — Il ciclo perceive → reason → act → observe → ripeti che definisce un agente. (Cap. 3)</p>
+<p><strong>Lost-in-the-middle</strong> — Effetto per cui i modelli "dimenticano" informazioni nel mezzo di prompt molto lunghi. (Cap. 2)</p>
+<h3 id="m">M</h3>
+<p><strong>MCP (Model Context Protocol)</strong> — Standard aperto per esporre tool ad agenti compatibili. (Cap. 6, 9)</p>
+<p><strong>Memoria di lungo termine</strong> — Informazioni salvate fuori dal context per persistere tra sessioni. (Cap. 7)</p>
+<p><strong>Memoria episodica</strong> — Log delle azioni passate dell'agente, per debug e learning. (Cap. 7)</p>
+<p><strong>Multi-agent</strong> — Architettura con più agenti che cooperano (orchestratore-worker, debate, swarm). (Cap. 4)</p>
+<h3 id="n">N</h3>
+<p><strong>Non-determinismo</strong> — Vedi <em>determinismo</em>.</p>
+<h3 id="o">O</h3>
+<p><strong>Observability</strong> — Capacità di vedere cosa fa il sistema in produzione (log, traces, metriche). (Cap. 11, 12)</p>
+<p><strong>Orchestratore</strong> — Componente che coordina i sottosistemi (modello, tool, memoria) di un agente. (Cap. 3, 4)</p>
+<h3 id="p">P</h3>
+<p><strong>Pairwise comparison</strong> — Tecnica di valutazione: invece di scoring assoluto, "tra A e B quale è meglio". (Cap. 14)</p>
+<p><strong>Plan-and-Execute</strong> — Architettura agentica: prima un piano completo, poi esecuzione. (Cap. 4)</p>
+<p><strong>Prompt</strong> — Tutto il testo che il modello vede prima di generare: system, user, history, tool result. (Cap. 5)</p>
+<p><strong>Prompt caching</strong> — Vedi <em>cache</em>.</p>
+<p><strong>Prompt engineering</strong> — Disciplina di scrivere prompt efficaci. (Cap. 5)</p>
+<p><strong>Prompt injection</strong> — Attacco in cui istruzioni malevole nel testo letto dall'agente lo dirottano. (Cap. 13)</p>
+<p><strong>Privilege separation</strong> — Pattern di sicurezza: tool potenti separati da contesti che leggono dati esterni non fidati. (Cap. 13)</p>
+<h3 id="r">R</h3>
+<p><strong>RAG (Retrieval-Augmented Generation)</strong> — Pattern: retrieve i chunk rilevanti da una knowledge base, includili nel prompt, genera risposta. (Cap. 7)</p>
+<p><strong>ReAct</strong> — Pattern Reason + Act: il modello alterna ragionamento e tool call. (Cap. 4)</p>
+<p><strong>Reflexion / self-critique</strong> — Pattern in cui l'agente critica e rivede il proprio output prima di consegnare. (Cap. 4)</p>
+<p><strong>Re-ranker</strong> — Modello che riordina i risultati di un retrieval per migliorare la qualità. (Cap. 7)</p>
+<p><strong>Role / system prompt</strong> — Le istruzioni di base che plasmano il comportamento del modello. (Cap. 2, 5)</p>
+<h3 id="s">S</h3>
+<p><strong>Sampling</strong> — Processo di scelta del token successivo da una distribuzione di probabilità. Controllato da temperature, top-p, top-k. (Cap. 2)</p>
+<p><strong>Sandbox</strong> — Ambiente isolato per eseguire codice generato dall'AI senza accesso al sistema host. (Cap. 13)</p>
+<p><strong>SDK</strong> — Software Development Kit, libreria del provider per accedere all'API. (Cap. 10)</p>
+<p><strong>Self-consistency</strong> — Tecnica: chiamare il modello N volte, prendere la risposta più frequente. (Cap. 5)</p>
+<p><strong>Streaming</strong> — Ricezione dei token man mano che il modello li genera, per UX migliore. (Cap. 10)</p>
+<p><strong>Subagent</strong> — Agente lanciato da un altro agente per task delegati. (Cap. 4, 9)</p>
+<p><strong>System prompt</strong> — Vedi <em>role</em>.</p>
+<h3 id="t">T</h3>
+<p><strong>Temperature</strong> — Parametro di sampling che regola creatività vs. determinismo. (Cap. 2)</p>
+<p><strong>Token</strong> — Unità in cui i modelli spezzano il testo. ~4 caratteri o 0.75 parole inglesi. (Cap. 2)</p>
+<p><strong>Tokenizer</strong> — Componente che converte testo in token e viceversa.</p>
+<p><strong>Tool / function</strong> — Funzione che il modello può chiamare. Agente = LLM + tool. (Cap. 6)</p>
+<p><strong>Tool call</strong> — Richiesta del modello di eseguire un tool con specifici parametri. (Cap. 6)</p>
+<p><strong>Tool result</strong> — Output del tool che torna al modello. (Cap. 6)</p>
+<p><strong>Top-p / top-k</strong> — Parametri di sampling alternativi/complementari a temperature. (Cap. 2)</p>
+<p><strong>TTL (Time To Live)</strong> — Quanto tempo un dato resta valido in cache. Per prompt cache: ~5 minuti. (Cap. 10)</p>
+<h3 id="v">V</h3>
+<p><strong>Vector store</strong> — DB ottimizzato per cercare embedding simili. (Cap. 7)</p>
+<h3 id="w">W</h3>
+<p><strong>Web search tool</strong> — Tool che permette all'agente di cercare nel web durante una risposta.</p>
+<hr />
+<h2 id="162-risorse-per-approfondire">16.2 Risorse per approfondire</h2>
+<h3 id="documentazione-ufficiale">Documentazione ufficiale</h3>
+<ul>
+<li><strong>Anthropic</strong> — <a href="https://docs.anthropic.com">docs.anthropic.com</a></li>
+<li><strong>OpenAI</strong> — <a href="https://platform.openai.com/docs">platform.openai.com/docs</a></li>
+<li><strong>Google AI Studio</strong> — <a href="https://ai.google.dev">ai.google.dev</a></li>
+<li><strong>MCP Spec</strong> — <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a></li>
+<li><strong>Claude Code</strong> — <a href="https://docs.claude.com/en/docs/claude-code">docs.claude.com/en/docs/claude-code</a></li>
+</ul>
+<h3 id="corsi-e-tutorial">Corsi e tutorial</h3>
+<ul>
+<li><strong>DeepLearning.AI short courses</strong> (<a href="https://deeplearning.ai/short-courses">deeplearning.ai/short-courses</a>) — Andrew Ng + provider, gratuiti, brevi (1-2 ore), molto pratici. Iniziare da: "ChatGPT Prompt Engineering for Developers", "Building Agentic AI Apps", "AI Agentic Design Patterns with AutoGen".</li>
+<li><strong>Anthropic Cookbook</strong> (<a href="https://github.com/anthropics/anthropic-cookbook">github.com/anthropics/anthropic-cookbook</a>) — Notebook eseguibili con pattern reali.</li>
+<li><strong>OpenAI Cookbook</strong> (<a href="https://cookbook.openai.com">cookbook.openai.com</a>) — Idem in casa OpenAI.</li>
+<li><strong>LangChain Academy</strong> (<a href="https://academy.langchain.com">academy.langchain.com</a>) — Corsi gratuiti sui propri framework.</li>
+<li><strong>Promptingguide.ai</strong> — Riferimento community-driven sul prompt engineering.</li>
+</ul>
+<h3 id="libri">Libri</h3>
+<ul>
+<li><strong>"AI Engineering"</strong> — Chip Huyen (2024). La guida più completa al ciclo di vita di applicazioni AI. Highly recommended.</li>
+<li><strong>"Hands-On Large Language Models"</strong> — Jay Alammar, Maarten Grootendorst (2024). Dalla teoria a uso pratico, illustrato.</li>
+<li><strong>"Designing Machine Learning Systems"</strong> — Chip Huyen. Pre-LLM ma ancora rilevante per l'infra.</li>
+</ul>
+<h3 id="paper-di-riferimento">Paper di riferimento</h3>
+<ul>
+<li><strong>"Attention Is All You Need"</strong> (Vaswani et al., 2017) — il transformer.</li>
+<li><strong>"Language Models are Few-Shot Learners"</strong> (Brown et al., 2020) — GPT-3, few-shot.</li>
+<li><strong>"ReAct: Synergizing Reasoning and Acting"</strong> (Yao et al., 2022).</li>
+<li><strong>"Reflexion"</strong> (Shinn et al., 2023).</li>
+<li><strong>"Toolformer"</strong> (Schick et al., 2023).</li>
+<li><strong>"Constitutional AI"</strong> (Bai et al., 2022) — Anthropic, sicurezza.</li>
+</ul>
+<p>Tutti su <a href="https://arxiv.org">arxiv.org</a> con DOI o ID. Cercali per nome.</p>
+<h3 id="newsletter-e-blog">Newsletter e blog</h3>
+<ul>
+<li><strong>The Batch</strong> (DeepLearning.AI) — Settimanale, panoramica AI. (<a href="https://deeplearning.ai/the-batch">deeplearning.ai/the-batch</a>)</li>
+<li><strong>Import AI</strong> (Jack Clark) — Settimanale, lungo ma profondo.</li>
+<li><strong>Lilian Weng's blog</strong> (lilianweng.github.io) — Articoli tecnici dettagliati su agent, RLHF, ecc. Eccellente.</li>
+<li><strong>Simon Willison's blog</strong> (simonwillison.net) — Pratico, sperimenta tutto, scrive bene.</li>
+<li><strong>Anthropic blog</strong> (<a href="https://anthropic.com/news">anthropic.com/news</a>) — Aggiornamenti sui modelli e ricerca.</li>
+</ul>
+<h3 id="community">Community</h3>
+<ul>
+<li><strong>r/LocalLLaMA</strong> (Reddit) — Comunità self-hosted, modelli aperti.</li>
+<li><strong>r/MachineLearning</strong> (Reddit) — Più accademica.</li>
+<li><strong>Hugging Face</strong> (<a href="https://huggingface.co">huggingface.co</a>) — Hub modelli aperti, dataset, demo.</li>
+<li><strong>Discord di LangChain, LlamaIndex, vari provider</strong> — Domande tecniche, supporto.</li>
+<li><strong>AI Engineer Summit</strong> (conferences.aiengineer.com) — Talks pratici.</li>
+</ul>
+<h3 id="tool-e-piattaforme-da-provare">Tool e piattaforme da provare</h3>
+<ul>
+<li><strong>Modelli e API</strong>: Anthropic Console, OpenAI Playground, Google AI Studio, Together AI (open models hosted), Groq (inferenza velocissima).</li>
+<li><strong>Agenti CLI</strong>: Claude Code, Aider, Cursor.</li>
+<li><strong>Agenti consumer</strong>: ChatGPT, Claude.ai, Gemini, Perplexity.</li>
+<li><strong>Vector store gestiti</strong>: Pinecone, Weaviate Cloud, Qdrant Cloud.</li>
+<li><strong>Vector store self-hosted</strong>: Chroma, Qdrant, pgvector.</li>
+<li><strong>Observability</strong>: Langfuse (OSS), LangSmith, Helicone, Braintrust.</li>
+<li><strong>Eval</strong>: Promptfoo, DeepEval, Ragas.</li>
+<li><strong>Sandbox code execution</strong>: E2B, Modal, Daytona.</li>
+</ul>
+<h3 id="per-restare-aggiornato-2026-e-oltre">Per restare aggiornato (2026 e oltre)</h3>
+<p>Il campo si muove veloce. Strategia che funziona:</p>
+<ol>
+<li><strong>Una newsletter settimanale</strong> seguita seriamente (non 10 a metà).</li>
+<li><strong>Un account Twitter/X</strong> o <strong>Bluesky</strong> con i practitioners di riferimento (Andrej Karpathy, Simon Willison, Hamel Husain, Eugene Yan, ecc.).</li>
+<li><strong>Un hands-on al mese</strong>: prova un nuovo modello, framework, pattern. Costruisci qualcosa.</li>
+<li><strong>Un paper al mese</strong> (o un thread che lo spiega bene). Non per essere ricercatore, per capire la direzione.</li>
+</ol>
+<p>Più importante di "stare aggiornato": <strong>avere una lista di problemi tuoi</strong> che vuoi risolvere con AI. Le novità da quel momento si auto-filtrano.</p>
+<hr />
+<h2 id="163-da-ricordare-alla-fine-di-tutto">16.3 Da ricordare alla fine di tutto</h2>
+<p>Se di tutta questa guida dovessi tenere solo cinque cose:</p>
+<ol>
+<li><strong>Un agente è LLM + tool + loop + obiettivo.</strong> Tutto il resto sono dettagli.</li>
+<li><strong>Il prompt è codice.</strong> Versionalo, testalo, iteralo.</li>
+<li><strong>Senza eval voli al buio.</strong> Costruisci il dataset prima del codice.</li>
+<li><strong>Più piccolo, più semplice, più osservabile.</strong> Il sistema più complesso è quasi sempre il problema, non la soluzione.</li>
+<li><strong>Costruisci qualcosa.</strong> Leggere ti dà vocabolario, costruire ti dà intuito.</li>
+</ol>
+<p>Buon viaggio.</p>
+<hr />
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="15-casi-uso-e-workflow-reali.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 15. Casi d'uso e workflow reali</span></a>
+      <span></span>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 16</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 16 — Glossario e risorse</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="16-glossario-e-risorse" data-chapter-n="16" data-chapter-title="Glossario e risorse">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

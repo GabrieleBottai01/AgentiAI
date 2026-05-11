@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="playground.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../playground.html">
+<title>Guide to AI Agents</title>
+<meta name="description" content="Complete guide, in Italian and English, to AI Agents — by Gabriele Bottai. 16 chapters, interactive exercises, integrated AI tools.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Guide to AI Agents">
+<meta property="og:description" content="Complete guide, in Italian and English, to AI Agents — by Gabriele Bottai. 16 chapters, interactive exercises, integrated AI tools.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guide to AI Agents">
+<meta name="twitter:description" content="Complete guide, in Italian and English, to AI Agents — by Gabriele Bottai. 16 chapters, interactive exercises, integrated AI tools.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app">
+
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html" class=""><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html" class="active"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="page-header">
+  <span class="eyebrow">
+    <i data-icon-replace="flask"></i>
+    <span data-i18n="page.tag"></span>
+  </span>
+  <h1 data-i18n="playground.title"></h1>
+  <p class="lead" data-i18n="playground.lead"></p>
+  <p id="pg-provider" class="provider-line"></p>
+</div>
+
+<div class="playground-layout">
+  <div class="pg-config">
+    <div class="card">
+      <label class="field">
+        <span data-i18n="form.system"></span>
+        <textarea id="pg-system" rows="6" data-i18n-attr="placeholder:pg.placeholder.system"></textarea>
+      </label>
+      <label class="field">
+        <span data-i18n="form.user"></span>
+        <textarea id="pg-user" rows="8" data-i18n-attr="placeholder:pg.placeholder.user"></textarea>
+      </label>
+      <div class="field-row">
+        <label class="field">
+          <span data-i18n="form.model"></span>
+          <select id="pg-model"></select>
+        </label>
+        <label class="field">
+          <span><span data-i18n="form.temperature"></span>: <span id="pg-temp-val">0.7</span></span>
+          <input id="pg-temp" type="range" min="0" max="1.5" step="0.05" value="0.7">
+        </label>
+        <label class="field">
+          <span data-i18n="form.maxtokens"></span>
+          <input id="pg-max" type="number" min="64" max="4096" step="64" value="1024">
+        </label>
+      </div>
+      <details class="presets">
+        <summary>
+          <i data-icon-replace="lightbulb"></i>
+          <span data-i18n="pg.presets"></span>
+        </summary>
+        <div class="preset-grid">
+          <button type="button" class="preset" data-preset="role" data-i18n="pg.preset.role"></button>
+          <button type="button" class="preset" data-preset="few-shot" data-i18n="pg.preset.fewshot"></button>
+          <button type="button" class="preset" data-preset="cot" data-i18n="pg.preset.cot"></button>
+          <button type="button" class="preset" data-preset="json" data-i18n="pg.preset.json"></button>
+          <button type="button" class="preset" data-preset="critic" data-i18n="pg.preset.critic"></button>
+        </div>
+      </details>
+      <div class="actions">
+        <button id="pg-submit" type="button" class="btn btn-accent">
+          <i data-icon-replace="play"></i>
+          <span data-i18n="form.run"></span>
+        </button>
+        <button id="pg-cancel" type="button" class="btn btn-ghost" disabled>
+          <i data-icon-replace="x"></i>
+          <span data-i18n="form.cancel"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="pg-output">
+    <div class="card output-card">
+      <div class="output-header">
+        <span data-i18n="pg.output.title"></span>
+        <span id="pg-stats" class="muted small"></span>
+      </div>
+      <div id="pg-result" class="markdown-output empty" data-i18n="pg.output.empty"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/playground.js"></script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/06-tool-use-e-function-calling.html">
+<title>Cap. 6. Tool use e function calling · Guida agli Agenti AI</title>
+<meta name="description" content="I tool sono ciò che trasforma un LLM in un agente. Senza tool, parla. Con i tool, agisce.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 6. Tool use e function calling · Guida agli Agenti AI">
+<meta property="og:description" content="I tool sono ciò che trasforma un LLM in un agente. Senza tool, parla. Con i tool, agisce.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/06-tool-use-e-function-calling.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 6. Tool use e function calling · Guida agli Agenti AI">
+<meta name="twitter:description" content="I tool sono ciò che trasforma un LLM in un agente. Senza tool, parla. Con i tool, agisce.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/06-tool-use-e-function-calling.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 6. Tool use e function calling · Guida agli Agenti AI", "description": "I tool sono ciò che trasforma un LLM in un agente. Senza tool, parla. Con i tool, agisce.", "url": "https://myfirstaiagent.netlify.app/capitolo/06-tool-use-e-function-calling.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class="current"><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.2"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 6</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="6-tool-use-e-function-calling">6. Tool use e function calling</h1>
+<p>I tool sono ciò che trasforma un LLM in un agente. Senza tool, parla. Con i tool, agisce.</p>
+<h2 id="61-lidea-in-una-metafora">6.1 L'idea, in una metafora</h2>
+<p>Pensa a un consulente che lavora da remoto. Sa molte cose, ma per fare il suo lavoro deve poter:</p>
+<ul>
+<li>Leggere documenti che gli mandi.</li>
+<li>Cercare informazioni online.</li>
+<li>Eseguire calcoli.</li>
+<li>Mandare email.</li>
+</ul>
+<p>Senza questi accessi, può solo darti consigli generici. Con questi accessi, può davvero <strong>fare cose</strong>.</p>
+<p>I tool nei modelli AI funzionano esattamente così: sono <strong>funzioni esterne</strong> che il modello può chiamare quando ne ha bisogno.</p>
+<h2 id="62-come-funziona-in-4-passi">6.2 Come funziona, in 4 passi</h2>
+<div class="codehilite"><pre><span></span><code>1. Tu definisci dei tool, ognuno con: nome, descrizione, parametri.
+2. Includi questi tool nella chiamata al modello.
+3. Il modello, invece di rispondere subito, può &quot;chiedere&quot;: &quot;voglio chiamare X con questi parametri&quot;.
+4. Tu (il tuo codice) esegui la chiamata e rimandi il risultato al modello.
+   Lui prosegue.
+</code></pre></div>
+
+<p>È <strong>il modello che decide</strong> se e quale tool chiamare. Tu non lo forzi. Lui legge la descrizione del tool e decide se è utile.</p>
+<h2 id="63-esempio-in-python-anthropic-sdk">6.3 Esempio in Python (Anthropic SDK)</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anthropic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Anthropic</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Anthropic</span><span class="p">()</span>
+
+<span class="n">tools</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;get_weather&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Restituisce il meteo attuale per una città. Usa quando l&#39;utente chiede del tempo, della temperatura o se piove.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;input_schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Nome della città, es. &#39;Roma&#39; o &#39;New York&#39;&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;city&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Devo uscire a Milano, mi serve l&#39;ombrello?&quot;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">stop_reason</span><span class="p">)</span>   <span class="c1"># &#39;tool_use&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>       <span class="c1"># blocco di tipo tool_use con name e input</span>
+</code></pre></div>
+
+<p>A questo punto il modello <strong>non</strong> ha risposto in testo. Ha detto: "voglio chiamare <code>get_weather</code> con <code>city='Milano'</code>". Spetta a te eseguire la funzione.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_weather</span><span class="p">(</span><span class="n">city</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># qui vera implementazione (chiamata a un&#39;API meteo)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;A </span><span class="si">{</span><span class="n">city</span><span class="si">}</span><span class="s2">: 12°, pioggia leggera&quot;</span>
+
+<span class="c1"># Estrai la tool call dalla risposta</span>
+<span class="n">tool_use_block</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">get_weather</span><span class="p">(</span><span class="o">**</span><span class="n">tool_use_block</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
+
+<span class="c1"># Rimanda il risultato al modello</span>
+<span class="n">follow_up</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-7&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Devo uscire a Milano, mi serve l&#39;ombrello?&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tool_result&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tool_use_id&quot;</span><span class="p">:</span> <span class="n">tool_use_block</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">result</span>
+        <span class="p">}]}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">follow_up</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="c1"># &quot;A Milano c&#39;è pioggia leggera, sì, prendi l&#39;ombrello!&quot;</span>
+</code></pre></div>
+
+<p>Stessa logica con OpenAI SDK, sintassi diversa. I concetti (definire tool con schema, ricevere <code>tool_call</code>, ritornare <code>tool_result</code>) sono identici.</p>
+<h2 id="64-la-cosa-piu-importante-la-descrizione">6.4 La cosa più importante: la descrizione</h2>
+<p>Il modello sceglie quale tool chiamare leggendo la <strong>descrizione</strong>. Se la descrizione è cattiva, sceglierà male.</p>
+<p><strong>Brutto:</strong></p>
+<div class="codehilite"><pre><span></span><code>&quot;description&quot;: &quot;ottiene meteo&quot;
+</code></pre></div>
+
+<p><strong>Buono:</strong></p>
+<div class="codehilite"><pre><span></span><code>&quot;description&quot;: &quot;Restituisce il meteo attuale per una città data. Usalo quando l&#39;utente chiede informazioni meteo, temperatura, pioggia, vento, o pianifica attività che dipendono dal tempo.&quot;
+</code></pre></div>
+
+<p><strong>Eccellente:</strong> aggiungi anche <em>quando NON usarlo</em>:</p>
+<div class="codehilite"><pre><span></span><code>&quot;description&quot;: &quot;Restituisce il meteo attuale per una città. Usalo per: temperatura, pioggia, vento, condizioni meteo correnti.
+Non usarlo per: previsioni a lungo termine (oltre 24 ore), eventi storici, dati climatici medi.
+In caso di città ambigua (es. &#39;Springfield&#39;), chiedi conferma all&#39;utente prima.&quot;
+</code></pre></div>
+
+<p><strong>Regola d'oro:</strong> scrivi la descrizione del tool come se la stessi spiegando a un nuovo dipendente che deve decidere quando usarlo.</p>
+<h2 id="65-schema-dei-parametri-precisione-paga">6.5 Schema dei parametri: precisione paga</h2>
+<p>Lo schema dei parametri (JSON Schema) dice al modello <em>come</em> costruire la chiamata. Sii preciso:</p>
+<ul>
+<li><code>type</code> (string, number, boolean, array, object).</li>
+<li><code>description</code> per ogni parametro: cosa rappresenta, quale formato.</li>
+<li><code>enum</code> se ci sono valori validi limitati.</li>
+<li><code>required</code> con i campi obbligatori.</li>
+</ul>
+<p>Esempio ricco:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;send_email&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invia una email transazionale a un destinatario. Da usare per notifiche all&#39;utente, conferme, password reset. NON usare per email di marketing o spam.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;input_schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;to&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Indirizzo email del destinatario, in formato standard (es. mario@example.com)&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Oggetto dell&#39;email, max 100 caratteri&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;maxLength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;body&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Corpo dell&#39;email in formato Markdown. Sarà convertito in HTML.&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;enum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;low&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;normal&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;high&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Priorità dell&#39;invio. &#39;high&#39; solo per password reset e errori critici.&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;to&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;subject&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;body&quot;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Più lo schema è espressivo, meno il modello sbaglia.</p>
+<h2 id="66-quanti-tool-quali-tool">6.6 Quanti tool? Quali tool?</h2>
+<p><strong>Pochi tool ben fatti &gt; tanti tool generici.</strong></p>
+<p>Errore tipico del principiante: dare 30 tool all'agente. Il modello si confonde, ne sceglie a caso, fa la cosa sbagliata.</p>
+<p>Linee guida:</p>
+<ul>
+<li><strong>5-15 tool</strong> è il range comodo per la maggior parte degli agenti.</li>
+<li>Se ne servono di più, raggruppa: invece di <code>read_user</code>, <code>read_order</code>, <code>read_product</code>, fai un solo <code>query_db(table, filters)</code>.</li>
+<li>Per task molto diversi, considera <strong>sotto-agenti</strong> specializzati con i propri tool (Cap. 4).</li>
+<li>Tool con <strong>nomi simili</strong> confondono il modello. <code>search</code> vs <code>find</code> vs <code>lookup</code> → uno solo, ben definito.</li>
+</ul>
+<h2 id="67-tool-sicuri-tool-pericolosi">6.7 Tool sicuri, tool pericolosi</h2>
+<p>I tool agiscono sul mondo. Categorie tipiche per pericolosità:</p>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Esempi</th>
+<th>Politica consigliata</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Read-only</strong></td>
+<td><code>read_file</code>, <code>web_search</code>, <code>query_db</code></td>
+<td>Lascia libero.</td>
+</tr>
+<tr>
+<td><strong>Write reversibile</strong></td>
+<td><code>create_draft_email</code>, <code>add_to_cart</code></td>
+<td>Lascia libero ma logga.</td>
+</tr>
+<tr>
+<td><strong>Write non reversibile</strong></td>
+<td><code>send_email</code>, <code>delete_file</code>, <code>charge_payment</code></td>
+<td>Conferma umana o whitelist.</td>
+</tr>
+<tr>
+<td><strong>System-level</strong></td>
+<td><code>run_shell_command</code>, <code>exec_python</code></td>
+<td>Solo in sandbox isolato.</td>
+</tr>
+</tbody>
+</table>
+<p>Per i tool pericolosi, il pattern tipico è il <strong>human-in-the-loop</strong>: l'agente propone l'azione, mostra cosa farà, e aspetta conferma.</p>
+<p>In Claude Code questo è gestito automaticamente: ogni Bash/Edit/Write chiede al utente l'autorizzazione, salvo permessi pre-approvati.</p>
+<h2 id="68-tool-che-ritornano-molto-troncamento-e-paginazione">6.8 Tool che ritornano molto: troncamento e paginazione</h2>
+<p>Un tool che ritorna 5MB di output salura il context window. Best practice:</p>
+<ul>
+<li><strong>Tronca</strong> output troppo lunghi (es. solo le prime 2000 righe).</li>
+<li><strong>Riassumi</strong> se ha senso (un altro LLM può sintetizzare prima di rendere al primo).</li>
+<li><strong>Pagina</strong> (cursor-based): il tool ritorna 50 risultati con un <code>next_cursor</code> per i successivi.</li>
+<li><strong>Filtra alla sorgente</strong>: meglio <code>query_db(filters)</code> che torna 100 record giusti, che <code>list_all()</code> + filtraggio in chat.</li>
+</ul>
+<p>Anche le <strong>descrizioni dei limiti</strong> vanno nel tool: "Ritorna max 50 risultati. Per più, usa il parametro <code>cursor</code>."</p>
+<h2 id="69-errori-dai-tool">6.9 Errori dai tool</h2>
+<p>I tool falliscono. Il file non esiste, la rete cade, l'API ritorna 500. Devi decidere come gestirlo:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fetch_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">5000</span><span class="p">]}</span>  <span class="c1"># tronca</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+</code></pre></div>
+
+<p><strong>Restituisci sempre un risultato strutturato</strong>, anche per gli errori. Il modello sa leggere l'errore e ritentare con parametri diversi (es. URL corretto). Lanciare un'eccezione "rompe" l'agente.</p>
+<h2 id="610-mcp-il-usb-c-dei-tool">6.10 MCP: il "USB-C" dei tool</h2>
+<p><strong>Model Context Protocol (MCP)</strong> è uno standard aperto per servire tool a qualsiasi agente compatibile.</p>
+<p>Idea: invece di re-implementare i tool per ogni agente, scrivi un <strong>server MCP</strong> che esporta tool, e qualsiasi client (Claude Code, Claude Desktop, Cursor) li può consumare.</p>
+<p>Esempi di server MCP esistenti:<br />
+- <code>mcp-server-filesystem</code> — accesso file<br />
+- <code>mcp-server-github</code> — issue, PR, repo<br />
+- <code>mcp-server-postgres</code> — query a un Postgres<br />
+- <code>mcp-server-slack</code> — messaggi e canali</p>
+<p>Vantaggi:<br />
+- Riusabilità tra client diversi.<br />
+- Separazione netta tra agente e tool.<br />
+- Ecosistema aperto (puoi pubblicare il tuo server).</p>
+<p>Lo riprenderemo nei capitoli su Claude Code (Cap. 9) e su come costruire agenti (Cap. 10).</p>
+<h2 id="611-pratica-progetta-i-tool-per-un-agente-personal-assistant">6.11 Pratica: progetta i tool per un agente "personal assistant"</h2>
+<p>Esercizio: immagina un agente che ti aiuta a gestire la giornata. Quali 6-8 tool gli daresti?</p>
+<p>Una possibile risposta:</p>
+<ol>
+<li><code>read_calendar(date_range)</code> — legge gli appuntamenti.</li>
+<li><code>create_event(title, start, end, attendees)</code> — crea un appuntamento.</li>
+<li><code>search_emails(query)</code> — cerca nelle email.</li>
+<li><code>compose_email(to, subject, body, send=False)</code> — bozza/invio email (con flag).</li>
+<li><code>list_tasks(status)</code> — task aperte.</li>
+<li><code>add_task(title, due, priority)</code> — aggiunge task.</li>
+<li><code>web_search(query)</code> — info dal web.</li>
+<li><code>ask_user(question)</code> — chiede conferma in caso di ambiguità.</li>
+</ol>
+<p>Nota:<br />
+- Email send con flag <code>send=False</code> di default: l'agente prepara, tu confermi.<br />
+- <code>ask_user</code> è un tool: dà al modello un modo <em>strutturato</em> per fare domande.<br />
+- Niente tool <code>do_anything</code>: scope chiaro.</p>
+<h2 id="612-da-ricordare">6.12 Da ricordare</h2>
+<ul>
+<li><strong>I tool sono ciò che rende l'LLM un agente.</strong></li>
+<li><strong>La descrizione del tool è il prompt più importante.</strong> Spiegala come a un nuovo collega.</li>
+<li><strong>Schema preciso</strong> dei parametri = meno errori del modello.</li>
+<li><strong>Pochi tool ben fatti</strong> &gt; tanti tool generici.</li>
+<li><strong>Per tool rischiosi</strong>, human-in-the-loop o sandbox.</li>
+<li><strong>Errori strutturati</strong> invece di eccezioni: il modello sa gestirli.</li>
+<li><strong>MCP</strong> sta diventando lo standard per esporre tool tra agenti.</li>
+</ul>
+<h2 id="613-errori-tipici">6.13 Errori tipici</h2>
+<ul>
+<li><strong>Descrizioni vaghe.</strong> "Tool per email" → il modello non sa quando usarlo.</li>
+<li><strong>Troppi tool simili.</strong> Il modello sceglie a caso.</li>
+<li><strong>Tool con effetti collaterali nascosti.</strong> "list_users" che in realtà invia anche un'email. Confonde l'agente e il debug.</li>
+<li><strong>Tool senza limiti di output.</strong> Saturano il contesto e il portafoglio.</li>
+<li><strong>Eccezioni invece di errori strutturati.</strong> Il modello non vede l'errore, solo che il loop si è rotto.</li>
+<li><strong>Lasciar tool pericolosi senza supervisione.</strong> "L'agente ha cancellato la tabella di prod" non è una battuta.</li>
+</ul>
+<hr />
+<p>I tool danno mani e occhi. La memoria dà <em>continuità nel tempo</em>. Vediamo come gestirla.</p>
+    </div>
+    <section class="exercise"
+                 data-exercise-id="ex-cap6"
+                 data-exercise-type="design_tool">
+          <div class="exercise-header">
+            <span class="exercise-tag">
+              <i data-icon-replace="edit"></i>
+              <span data-i18n="exercise.tag"></span>
+            </span>
+            <h3>Esercizio: progetta un tool</h3>
+          </div>
+          <p class="exercise-intro">Immagina un agente che prenota voli. Scrivi la <b>definizione di un tool</b> (nome, descrizione, schema parametri) seguendo le linee guida del capitolo.</p>
+          <textarea class="exercise-input mono" rows="14">{
+  "name": "search_flights",
+  "description": "...",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      ...
+    },
+    "required": [...]
+  }
+}</textarea>
+          <div class="exercise-actions">
+            <button class="btn btn-accent exercise-submit" type="button">
+              <i data-icon-replace="check-circle"></i>
+              <span data-i18n="exercise.verify"></span>
+            </button>
+            <span class="exercise-status muted"></span>
+          </div>
+          <div class="exercise-feedback markdown-output" hidden></div>
+        </section>
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="05-prompt-engineering.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 5. Prompt engineering</span></a>
+      <a class="nav-next" href="07-memoria-contesto-e-rag.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 7. Memoria, contesto e RAG</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 6</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 6 — Tool use e function calling</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="06-tool-use-e-function-calling" data-chapter-n="6" data-chapter-title="Tool use e function calling">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

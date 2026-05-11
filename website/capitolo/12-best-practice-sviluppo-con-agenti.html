@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/12-best-practice-sviluppo-con-agenti.html">
+<title>Cap. 12. Best practice di sviluppo · Guida agli Agenti AI</title>
+<meta name="description" content="Sembra nerd, ma è la cosa che separa i pro dai dilettanti.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 12. Best practice di sviluppo · Guida agli Agenti AI">
+<meta property="og:description" content="Sembra nerd, ma è la cosa che separa i pro dai dilettanti.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/12-best-practice-sviluppo-con-agenti.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 12. Best practice di sviluppo · Guida agli Agenti AI">
+<meta name="twitter:description" content="Sembra nerd, ma è la cosa che separa i pro dai dilettanti.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/12-best-practice-sviluppo-con-agenti.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 12. Best practice di sviluppo · Guida agli Agenti AI", "description": "Sembra nerd, ma è la cosa che separa i pro dai dilettanti.", "url": "https://myfirstaiagent.netlify.app/capitolo/12-best-practice-sviluppo-con-agenti.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class="current"><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.5"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 12</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="12-best-practice-di-sviluppo-con-agenti">12. Best practice di sviluppo con agenti</h1>
+<p>Questo capitolo è la condensa di <strong>buone abitudini</strong> raccolte nei capitoli precedenti, più alcuni pattern che valgono trasversalmente. Pensalo come un checklist da rivedere prima di mettere un agente in mano agli utenti.</p>
+<h2 id="121-la-regola-doro-piccolo-semplice-osservabile">12.1 La regola d'oro: piccolo, semplice, osservabile</h2>
+<p>Il singolo principio che riassume tutto:</p>
+<blockquote>
+<p><strong>Inizia piccolo, mantienilo semplice, rendilo osservabile.</strong></p>
+</blockquote>
+<ul>
+<li><strong>Piccolo</strong>: meno tool, meno passi, meno token. Crescere è facile, semplificare è difficile.</li>
+<li><strong>Semplice</strong>: un agente lineare con 5 tool ben fatti supera quasi sempre un sistema multi-agente complesso.</li>
+<li><strong>Osservabile</strong>: senza visibilità su cosa fa l'agente, ogni bug è un mistero.</li>
+</ul>
+<h2 id="122-workflow-di-sviluppo-consigliato">12.2 Workflow di sviluppo consigliato</h2>
+<h3 id="fase-1-dataset-di-valutazione-prima-del-codice">Fase 1 — Dataset di valutazione (PRIMA del codice)</h3>
+<p>Sembra nerd, ma è la cosa che separa i pro dai dilettanti.</p>
+<p>Crea un file (<code>evals.jsonl</code>) con 20-50 esempi rappresentativi:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Trova il CEO di Anthropic&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;expected_contains&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Dario Amodei&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Anthropic&quot;</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Calcola 837 * 924&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;expected_contains&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;773388&quot;</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Riassumi sezione X del documento Y&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;expected_format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;max 3 bullet&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<p>A questo dataset misurerai ogni cambiamento. Vedremo eval più estesi nel Cap. 14.</p>
+<h3 id="fase-2-v1-minima">Fase 2 — V1 minima</h3>
+<p>Un singolo agente, 3-5 tool, prompt semplice. Run sul dataset eval, misura la qualità.</p>
+<h3 id="fase-3-iterazione-mirata">Fase 3 — Iterazione mirata</h3>
+<p>Guarda i casi falliti del dataset. Cerca pattern. Migliora UN cambiamento alla volta:<br />
+- Il prompt? Cambialo, rimisura.<br />
+- I tool? Aggiungi/migliora descrizioni, rimisura.<br />
+- Il modello? Prova uno più capace o uno più piccolo, rimisura.</p>
+<h3 id="fase-4-hardening-per-produzione">Fase 4 — Hardening per produzione</h3>
+<ul>
+<li>Retry, timeout, error handling.</li>
+<li>Limiti di iterazione e budget.</li>
+<li>Logging e tracing.</li>
+<li>Test di carico (latency con N utenti concorrenti).</li>
+<li>Permessi e safety.</li>
+</ul>
+<h3 id="fase-5-rollout-graduale">Fase 5 — Rollout graduale</h3>
+<ul>
+<li>Beta interna.</li>
+<li>Feature flag per attivare con % di utenti.</li>
+<li>Confronto A/B vs. baseline (es. processo manuale).</li>
+<li>Espansione se le metriche lo confermano.</li>
+</ul>
+<h2 id="123-prompt-sotto-controllo-versione">12.3 Prompt sotto controllo versione</h2>
+<p>I prompt sono codice. Trattali come tali:</p>
+<ul>
+<li><strong>In repository git</strong>, non in chat o documenti random.</li>
+<li><strong>Versionati</strong>: <code>prompts/v1.txt</code>, <code>v2.txt</code> o cambialog dentro.</li>
+<li><strong>Testati</strong>: ogni cambio prompt → riesegui eval suite.</li>
+<li><strong>Citati nel codice</strong> come costanti, non hardcoded sparsi.</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># bene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">prompts</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESEARCH_AGENT_SYSTEM</span>
+<span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">RESEARCH_AGENT_SYSTEM</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># male</span>
+<span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="s2">&quot;Sei un agente che...&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>  <span class="c1"># ovunque nel codebase</span>
+</code></pre></div>
+
+<h2 id="124-separare-logica-e-llm">12.4 Separare logica e LLM</h2>
+<p>L'LLM è bravo a <strong>giudicare</strong>, brutto a <strong>calcolare</strong>. Linea guida:</p>
+<table>
+<thead>
+<tr>
+<th>Cosa fa l'LLM</th>
+<th>Cosa fa il codice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Capire intento</td>
+<td>Validare formati</td>
+</tr>
+<tr>
+<td>Generare testo</td>
+<td>Calcolare numeri</td>
+</tr>
+<tr>
+<td>Classificare</td>
+<td>Fare regex precise</td>
+</tr>
+<tr>
+<td>Riassumere</td>
+<td>Database query</td>
+</tr>
+<tr>
+<td>Decidere quale tool</td>
+<td>Eseguire transazioni</td>
+</tr>
+</tbody>
+</table>
+<p>Se ti accorgi che stai chiedendo all'LLM di fare aritmetica, regex, o lookup esatti — <strong>dagli un tool</strong>, non un prompt.</p>
+<h2 id="125-idempotenza-dei-tool">12.5 Idempotenza dei tool</h2>
+<p>Tool con effetti collaterali (write su DB, invio email) dovrebbero essere <strong>idempotenti</strong> o <strong>deduplicabili</strong>.</p>
+<p>L'agente può ritentare. Senza idempotenza, ritenta = duplicare.</p>
+<p>Pattern:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">send_email</span><span class="p">(</span><span class="n">to</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">idempotency_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">idempotency_key</span> <span class="ow">and</span> <span class="n">already_sent</span><span class="p">(</span><span class="n">idempotency_key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;already_sent&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">idempotency_key</span><span class="p">}</span>
+    <span class="c1"># invia</span>
+    <span class="n">record_sent</span><span class="p">(</span><span class="n">idempotency_key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;sent&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">idempotency_key</span><span class="p">}</span>
+</code></pre></div>
+
+<p>Anche per le API esterne, prediligi quelle con idempotency key (Stripe, ecc.).</p>
+<h2 id="126-human-in-the-loop-dove-serve">12.6 Human-in-the-loop dove serve</h2>
+<p>Per azioni costose o irreversibili:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process_refund</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">amount</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ask_human</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Rimborso di €</span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2"> a user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">. Confermare? (sì/no)&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">execute_refund</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+</code></pre></div>
+
+<p>L'agente capisce che <code>ask_human</code> è un tool come gli altri, lo chiama, e riceve la decisione.</p>
+<p>Pattern per varie soglie:</p>
+<ul>
+<li><strong>Read-only</strong>: nessuna conferma.</li>
+<li><strong>Write reversibile</strong>: log + alert in caso di anomalia.</li>
+<li><strong>Write costosa o irreversibile</strong>: conferma esplicita.</li>
+<li><strong>Bulk operation</strong>: dry-run obbligatorio prima dell'esecuzione vera.</li>
+</ul>
+<h2 id="127-test-e-tipi-di-test">12.7 Test e tipi di test</h2>
+<p>Test comuni per un sistema basato su agenti:</p>
+<h3 id="unit-test-sui-tool">Unit test sui tool</h3>
+<p>Tool pure, senza LLM. Test classici.</p>
+<h3 id="eval-test-sul-comportamento-dellagente">Eval test sul comportamento dell'agente</h3>
+<p>Dato un input, verifica che la risposta soddisfi criteri (contiene parole chiave, formato corretto, fa la cosa giusta). Vedremo come scriverli nel Cap. 14.</p>
+<h3 id="test-di-regressione-su-prompt">Test di regressione su prompt</h3>
+<p>Quando cambi un prompt, riesegui la suite. Output diverso dalla baseline → review.</p>
+<h3 id="smoke-test-in-produzione">Smoke test in produzione</h3>
+<p>Un canary che gira ogni 5 minuti con un input noto. Se la risposta è strana, alert.</p>
+<h3 id="test-di-costi">Test di costi</h3>
+<p>Limite massimo di token per richiesta. Se superato, errore. Evita esplosioni in produzione.</p>
+<h2 id="128-determinismo-e-riproducibilita">12.8 Determinismo e riproducibilità</h2>
+<p>Gli LLM non sono deterministici. Per debug e test:</p>
+<ul>
+<li><strong>Temperature 0</strong> + seed (dove disponibile) → output (quasi) stabile.</li>
+<li><strong>Caching delle chiamate</strong> durante test (es. VCR.py per Python): registri una volta, poi rieseguì offline.</li>
+<li><strong>Snapshot testing</strong>: salvi l'output di una run e segnali differenze rispetto a baseline.</li>
+</ul>
+<p>Mai fare test che dipendono da output testuale esatto: piccole variazioni rompono test sani. Usa pattern matching, contains, validazione strutturale.</p>
+<h2 id="129-sicurezza-dei-prompt">12.9 Sicurezza dei prompt</h2>
+<p>I prompt possono essere attaccati (Cap. 13). Difese principali:</p>
+<ul>
+<li><strong>Separa istruzioni da dati</strong>: usa delimitatori chiari (<code>&lt;doc&gt;...&lt;/doc&gt;</code>).</li>
+<li><strong>Whitelist dei tool</strong>: l'agente non deve poter chiamare tool non esplicitamente abilitati.</li>
+<li><strong>Validazione output</strong>: se output JSON, valida con schema. Se output libero, controlla che non contenga comandi (PII, SQL, codice).</li>
+<li><strong>Privilege separation</strong>: l'agente che parla con l'utente esterno non deve avere gli stessi tool di quello interno.</li>
+</ul>
+<h2 id="1210-costi-sotto-controllo">12.10 Costi sotto controllo</h2>
+<ul>
+<li><strong>Budget per richiesta</strong>: cap di token.</li>
+<li><strong>Budget giornaliero/mensile</strong> sul provider, con alert.</li>
+<li><strong>Modello adattivo</strong>: per richieste semplici, modello piccolo. Per complesse, grande. Decidi tu o lascia decidere a un router (LLM piccolo che classifica la difficoltà).</li>
+<li><strong>Caching aggressivo</strong>: prompt caching, cache di tool result deterministici, cache di embedding.</li>
+</ul>
+<p>Esempio router semplice:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">route_model</span><span class="p">(</span><span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;summarize&quot;</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;translate&quot;</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;claude-haiku-4-5&quot;</span>   <span class="c1"># economico</span>
+    <span class="k">if</span> <span class="s2">&quot;design&quot;</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;architect&quot;</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;claude-opus-4-7&quot;</span>    <span class="c1"># capace</span>
+    <span class="k">return</span> <span class="s2">&quot;claude-sonnet-4-6&quot;</span>      <span class="c1"># default</span>
+</code></pre></div>
+
+<h2 id="1211-pair-programming-con-ai">12.11 Pair programming con AI</h2>
+<p>Per coding personale (con Claude Code, Cursor, ecc.) ci sono pattern che fanno la differenza:</p>
+<h3 id="spec-prima-codice-poi">Spec prima, codice poi</h3>
+<p>Dedica i primi 5-10 minuti a spiegare <em>cosa</em> vuoi e <em>perché</em>. L'agente codifica meglio con un buon brief che con dieci correzioni successive.</p>
+<h3 id="diff-piccoli-review-veri">Diff piccoli, review veri</h3>
+<p>Lascia che l'agente faccia 3-4 cambi mirati, poi rivedi <code>git diff</code>. Resistere alla tentazione di "lascialo andare per un'ora" — quando torni, hai 800 righe da capire.</p>
+<h3 id="testare-insieme">Testare insieme</h3>
+<p>Chiedi all'agente di scrivere il test prima dell'implementazione. Anche se non sei un purista TDD, in coding con AI funziona benissimo: il test fissa l'intento.</p>
+<h3 id="rifiuta-il-codice-cattivo">Rifiuta il codice cattivo</h3>
+<p>Se la diff è gonfia o aggiunge complessità inutile, dì "no, semplifica, rifai". Non accettare per non offendere — il modello non si offende.</p>
+<h3 id="investi-nei-file-di-contesto">Investi nei file di contesto</h3>
+<p><code>CLAUDE.md</code>, hook, slash command: l'investimento nelle "infrastrutture" del tuo workflow paga in produttività esponenziale.</p>
+<h3 id="pensa-con-voce">"Pensa con voce"</h3>
+<p>Per problemi difficili, chiedigli di <strong>ragionare prima di agire</strong>. "Spiegami il piano in 5 punti, poi procedi." Spesso la pianificazione esplicita rivela errori nel suo ragionamento prima che li esegua.</p>
+<h2 id="1212-evita-il-cargo-cult">12.12 Evita il "cargo cult"</h2>
+<p>Il campo è giovane. Tante "best practice" su Twitter sono ipotesi non testate. Mantieni scetticismo:</p>
+<ul>
+<li><strong>Le frasi magiche</strong> ("you are a 10x engineer", "take a deep breath") di solito non aiutano nei modelli moderni.</li>
+<li><strong>Catene di pensiero forzate</strong> sui modelli che già fanno CoT internamente → token sprecati.</li>
+<li><strong>Multi-agent ovunque</strong> è una moda che si sta ridimensionando: nei test, un agente solo con buon reflection vince spesso.</li>
+<li><strong>RAG di default</strong> non sempre serve: se il dataset entra in 1M token e la query è una sola, il context lungo è più semplice.</li>
+</ul>
+<p><strong>Test prima di credere.</strong> Una linea base senza X, una con X, misura.</p>
+<h2 id="1213-documentare-lagente">12.13 Documentare l'agente</h2>
+<p>L'agente in produzione è un sistema. Va documentato:</p>
+<ul>
+<li><strong>Cosa fa</strong> (scope chiaro, cosa NON fa).</li>
+<li><strong>Tool che può chiamare</strong> e cosa fanno.</li>
+<li><strong>Permessi e limiti</strong> (chi può usarlo, su quali dati, con che SLA).</li>
+<li><strong>Failure mode noti</strong> (cosa succede se X fallisce, dove guardare).</li>
+<li><strong>Come si valuta</strong> (link al dataset eval, metriche di riferimento).</li>
+<li><strong>Come si modifica</strong> (dove sono i prompt, come si testa una modifica).</li>
+</ul>
+<p>Un README a fianco del codice, semplice. Quando arriva una persona nuova nel team, ti ringrazia.</p>
+<h2 id="1214-da-ricordare">12.14 Da ricordare</h2>
+<ul>
+<li><strong>Piccolo, semplice, osservabile.</strong> Una sola frase per riassumere tutto.</li>
+<li><strong>Eval dataset prima del codice.</strong> Senza, voli alla cieca.</li>
+<li><strong>Prompt come codice</strong>: versionati, testati.</li>
+<li><strong>Logica/calcoli al codice, giudizio all'LLM.</strong></li>
+<li><strong>Idempotenza dei tool</strong>, <strong>human-in-the-loop</strong> dove costa caro.</li>
+<li><strong>Test multipli</strong>: unit, eval, regressione, smoke, costi.</li>
+<li><strong>Pair programming AI</strong>: spec prima, diff piccoli, test insieme.</li>
+<li><strong>Scetticismo sulle mode</strong>. Misura, non credere.</li>
+</ul>
+<h2 id="1215-errori-tipici">12.15 Errori tipici</h2>
+<ul>
+<li><strong>Lanciare in produzione senza eval suite.</strong> Cambierai cose senza saper se peggiorano.</li>
+<li><strong>Lasciare prompt sparsi nel codebase.</strong> Diventano impossibili da auditare.</li>
+<li><strong>Tool non idempotenti</strong> + retry attivo = doppio invio, doppio addebito.</li>
+<li><strong>Niente <code>ask_user</code> per casi ambigui.</strong> L'agente inventa.</li>
+<li><strong>Multi-agent come default</strong> = 3x i costi senza guadagno qualità.</li>
+<li><strong>Fidarsi del modello senza test.</strong> "Va bene quando provo", e poi in produzione fa una cosa strana.</li>
+</ul>
+<hr />
+<p>Buone pratiche di sviluppo coprono il "come". Adesso parliamo del "cosa può andare storto": sicurezza, costi, limiti.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="11-framework-langchain-autogen-crewai.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 11. Framework: LangChain, AutoGen, CrewAI</span></a>
+      <a class="nav-next" href="13-sicurezza-costi-e-limiti.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 13. Sicurezza, costi, limiti</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 12</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 12 — Best practice di sviluppo</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="12-best-practice-sviluppo-con-agenti" data-chapter-n="12" data-chapter-title="Best practice di sviluppo">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

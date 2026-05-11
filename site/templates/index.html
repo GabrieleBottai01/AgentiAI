@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Guida completa · in italiano · 16 capitoli</span>
+    <h1>Impara gli <span class="accent">Agenti AI</span> da zero — e provali sul posto.</h1>
+    <p class="lead">Una guida didattica con teoria, codice runnable e <b>tre strumenti AI integrati</b> per testare quello che leggi: tutor, playground prompt, demo agente con tool use.</p>
+    <div class="hero-cta">
+      <a href="/capitolo/01-cosa-sono-gli-agenti-ai" class="btn btn-primary btn-lg">Inizia dal Cap. 1 →</a>
+      <a href="/playground" class="btn btn-ghost btn-lg">Apri il Playground</a>
+    </div>
+    <div class="hero-meta">
+      <span>· scritta da Gabriele Bottai</span>
+      <span>· edizione 2026</span>
+      <span>· <a href="/Guida-Agenti-AI.pdf">scarica PDF</a></span>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-card">
+    <div class="feature-icon">📖</div>
+    <h3>Tutor AI</h3>
+    <p>Chatti con un tutor che conosce la guida. Spiegazioni alternative, esempi su misura, chiarimenti.</p>
+    <a href="/tutor" class="link-arrow">Apri il tutor →</a>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🧪</div>
+    <h3>Playground prompt</h3>
+    <p>System + user prompt → risposta del modello, in streaming. Vedi token, costi, latency.</p>
+    <a href="/playground" class="link-arrow">Apri il playground →</a>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🤖</div>
+    <h3>Demo agente</h3>
+    <p>Un agente con 4 tool reali (calculator, web search, fetch, time). Vedi il loop ReAct dal vivo.</p>
+    <a href="/agente-demo" class="link-arrow">Apri la demo →</a>
+  </div>
+</section>
+
+<section class="toc">
+  <h2>Indice della guida</h2>
+  <p class="muted">Capitoli brevi, autonomi, pensati per essere letti in ordine la prima volta.</p>
+
+  {% set parts = ["Parte 1 — Fondamenti", "Parte 2 — Tecniche", "Parte 3 — Usare gli agenti", "Parte 4 — Costruire", "Parte 5 — Lavorare bene", "Parte 6 — Applicazioni"] %}
+  {% for part in parts %}
+    <div class="part">
+      <h3>{{ part }}</h3>
+      <div class="part-grid">
+        {% for ch in chapters %}
+          {% if ch.part == part %}
+            <a class="ch-card" href="/capitolo/{{ ch.slug }}">
+              <span class="ch-num">{{ "%02d"|format(ch.n) }}</span>
+              <span class="ch-title">{{ ch.title }}</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

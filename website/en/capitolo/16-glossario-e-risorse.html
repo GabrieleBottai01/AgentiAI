@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/16-glossario-e-risorse.html">
+<title>Ch. 16. Glossary and Resources · Guide to AI Agents</title>
+<meta name="description" content="If of this whole guide you had to keep just five things:">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 16. Glossary and Resources · Guide to AI Agents">
+<meta property="og:description" content="If of this whole guide you had to keep just five things:">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/16-glossario-e-risorse.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 16. Glossary and Resources · Guide to AI Agents">
+<meta name="twitter:description" content="If of this whole guide you had to keep just five things:">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/16-glossario-e-risorse.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 16. Glossary and Resources · Guide to AI Agents", "description": "If of this whole guide you had to keep just five things:", "url": "https://myfirstaiagent.netlify.app/en/capitolo/16-glossario-e-risorse.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class="current"><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.6"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 16</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="16-glossary-and-resources">16. Glossary and Resources</h1>
+<h2 id="161-glossary">16.1 Glossary</h2>
+<h3 id="a">A</h3>
+<p><strong>AI Agent</strong> — Software system that uses an LLM to decide actions, executes them via tools, observes the result and repeats in a loop until a goal or stop. (Ch. 1, 3)</p>
+<p><strong>Hallucination</strong> — Plausible but false statement generated by an LLM. Caused by the fact the model predicts plausible tokens, not verified ones. (Ch. 13)</p>
+<p><strong>API key</strong> — Credential to authenticate calls to provider APIs (OpenAI, Anthropic, etc.). Must be kept secret.</p>
+<p><strong>Agentic architecture</strong> — Structural pattern of an agent: ReAct, Plan-and-Execute, multi-agent, etc. (Ch. 4)</p>
+<p><strong>Assistant message</strong> — Message produced by the model in a conversation, both textual and with tool calls. (Ch. 2)</p>
+<h3 id="b">B</h3>
+<p><strong>Exponential backoff</strong> — Retry strategy that doubles the wait at each attempt (1s, 2s, 4s, 8s). Standard for rate limits. (Ch. 10)</p>
+<h3 id="c">C</h3>
+<p><strong>Cache (prompt caching)</strong> — Mechanism that allows you to pay less for prompt parts reused across calls. (Ch. 10)</p>
+<p><strong>Chain-of-Thought (CoT)</strong> — Prompting technique that asks the model to reason step by step before answering. (Ch. 5)</p>
+<p><strong>Chunking</strong> — Splitting a document into pieces (chunks) for indexing in a vector store. Typically 200-500 words with overlap. (Ch. 7)</p>
+<p><strong>Claude</strong> — LLM model family from Anthropic. Main models: Opus (powerful), Sonnet (balanced), Haiku (fast/cheap).</p>
+<p><strong>Claude Code</strong> — Anthropic's CLI, terminal-based agent for developers. (Ch. 9)</p>
+<p><strong>Compaction</strong> — Automatic compression of history when approaching the context window limit. (Ch. 7)</p>
+<p><strong>Context window</strong> — Maximum number of tokens the model can "see" in one call. (Ch. 2)</p>
+<h3 id="d">D</h3>
+<p><strong>Evaluation dataset (eval set)</strong> — Set of representative examples used to measure an agent's quality. (Ch. 14)</p>
+<p><strong>Determinism</strong> — Property of a system that, given the same input, always produces the same output. LLMs are <em>not</em> deterministic by default. (Ch. 12)</p>
+<h3 id="e">E</h3>
+<p><strong>Embedding</strong> — Numeric representation (vector) of a text's meaning. Similar texts have close embeddings. (Ch. 7)</p>
+<p><strong>Eval / evaluation</strong> — Structured measurement of an agent on a test dataset. (Ch. 14)</p>
+<p><strong>Extended thinking / reasoning mode</strong> — Mode of some modern models where they do internal chain-of-thought before responding. (Ch. 2, 5)</p>
+<h3 id="f">F</h3>
+<p><strong>Few-shot prompting</strong> — Prompting technique that includes input/output examples to guide the model. (Ch. 5)</p>
+<p><strong>Fine-tuning</strong> — Additional training of a model on a specific dataset to specialize it. Expensive, static (not real-time).</p>
+<p><strong>Function calling</strong> — See <em>tool use</em>. (Ch. 6)</p>
+<h3 id="g">G</h3>
+<p><strong>GPT</strong> — LLM model family from OpenAI (Generative Pre-trained Transformer).</p>
+<p><strong>Gemini</strong> — LLM model family from Google.</p>
+<p><strong>GDPR</strong> — European regulation on personal data protection. Relevant for agents processing EU user data. (Ch. 13)</p>
+<p><strong>Guardrails</strong> — Constraints and validations to prevent the agent from doing unwanted things (e.g. PII filtering, toxic check).</p>
+<h3 id="h">H</h3>
+<p><strong>Hallucination</strong> — See above.</p>
+<p><strong>Hook</strong> — In Claude Code (and other systems), script automatically run in response to events (e.g. after an edit). (Ch. 9)</p>
+<p><strong>Human-in-the-loop (HITL)</strong> — Pattern in which the human intervenes to approve or decide at critical agent steps. (Ch. 12)</p>
+<h3 id="i">I</h3>
+<p><strong>Idempotency</strong> — Property of an operation that, repeated multiple times with the same parameters, produces the same result. Important for tools with side effects. (Ch. 12)</p>
+<p><strong>Inference</strong> — Execution of a pre-trained model to generate output. The "runtime" part you pay for via the API.</p>
+<h3 id="j">J</h3>
+<p><strong>JSON mode / structured output</strong> — API mode that guarantees valid JSON output conforming to a schema. (Ch. 5, 10)</p>
+<h3 id="k">K</h3>
+<p><strong>Knowledge cutoff</strong> — Date of the model's last training. Beyond, the model doesn't know events/facts without tools. (Ch. 2)</p>
+<p><strong>Knowledge base</strong> — Set of documents on which an agent does RAG.</p>
+<h3 id="l">L</h3>
+<p><strong>LangChain / LangGraph</strong> — Python framework for building LLM applications and agents. (Ch. 11)</p>
+<p><strong>LLM (Large Language Model)</strong> — Large language model (Claude, GPT, Gemini, Llama, etc.). (Ch. 2)</p>
+<p><strong>Loop (agent loop)</strong> — The cycle perceive → reason → act → observe → repeat that defines an agent. (Ch. 3)</p>
+<p><strong>Lost-in-the-middle</strong> — Effect by which models "forget" information in the middle of very long prompts. (Ch. 2)</p>
+<h3 id="m">M</h3>
+<p><strong>MCP (Model Context Protocol)</strong> — Open standard for exposing tools to compatible agents. (Ch. 6, 9)</p>
+<p><strong>Long-term memory</strong> — Information saved outside the context to persist across sessions. (Ch. 7)</p>
+<p><strong>Episodic memory</strong> — Log of the agent's past actions, for debugging and learning. (Ch. 7)</p>
+<p><strong>Multi-agent</strong> — Architecture with multiple cooperating agents (orchestrator-worker, debate, swarm). (Ch. 4)</p>
+<h3 id="n">N</h3>
+<p><strong>Non-determinism</strong> — See <em>determinism</em>.</p>
+<h3 id="o">O</h3>
+<p><strong>Observability</strong> — Ability to see what the system does in production (logs, traces, metrics). (Ch. 11, 12)</p>
+<p><strong>Orchestrator</strong> — Component coordinating an agent's subsystems (model, tools, memory). (Ch. 3, 4)</p>
+<h3 id="p">P</h3>
+<p><strong>Pairwise comparison</strong> — Evaluation technique: instead of absolute scoring, "between A and B which is better." (Ch. 14)</p>
+<p><strong>Plan-and-Execute</strong> — Agentic architecture: first a complete plan, then execution. (Ch. 4)</p>
+<p><strong>Prompt</strong> — All the text the model sees before generating: system, user, history, tool result. (Ch. 5)</p>
+<p><strong>Prompt caching</strong> — See <em>cache</em>.</p>
+<p><strong>Prompt engineering</strong> — Discipline of writing effective prompts. (Ch. 5)</p>
+<p><strong>Prompt injection</strong> — Attack in which malicious instructions in text read by the agent hijack it. (Ch. 13)</p>
+<p><strong>Privilege separation</strong> — Security pattern: powerful tools separated from contexts that read untrusted external data. (Ch. 13)</p>
+<h3 id="r">R</h3>
+<p><strong>RAG (Retrieval-Augmented Generation)</strong> — Pattern: retrieve relevant chunks from a knowledge base, include them in the prompt, generate the response. (Ch. 7)</p>
+<p><strong>ReAct</strong> — Reason + Act pattern: the model alternates reasoning and tool calls. (Ch. 4)</p>
+<p><strong>Reflexion / self-critique</strong> — Pattern in which the agent criticizes and revises its own output before delivering. (Ch. 4)</p>
+<p><strong>Re-ranker</strong> — Model that re-orders retrieval results to improve quality. (Ch. 7)</p>
+<p><strong>Role / system prompt</strong> — Base instructions that shape the model's behavior. (Ch. 2, 5)</p>
+<h3 id="s">S</h3>
+<p><strong>Sampling</strong> — Process of picking the next token from a probability distribution. Controlled by temperature, top-p, top-k. (Ch. 2)</p>
+<p><strong>Sandbox</strong> — Isolated environment for executing AI-generated code without access to the host system. (Ch. 13)</p>
+<p><strong>SDK</strong> — Software Development Kit, provider library to access the API. (Ch. 10)</p>
+<p><strong>Self-consistency</strong> — Technique: call the model N times, take the most frequent answer. (Ch. 5)</p>
+<p><strong>Streaming</strong> — Receiving tokens as the model generates them, for better UX. (Ch. 10)</p>
+<p><strong>Subagent</strong> — Agent launched by another agent for delegated tasks. (Ch. 4, 9)</p>
+<p><strong>System prompt</strong> — See <em>role</em>.</p>
+<h3 id="t">T</h3>
+<p><strong>Temperature</strong> — Sampling parameter regulating creativity vs. determinism. (Ch. 2)</p>
+<p><strong>Token</strong> — Unit in which models split text. ~4 characters or 0.75 English words. (Ch. 2)</p>
+<p><strong>Tokenizer</strong> — Component that converts text to tokens and vice versa.</p>
+<p><strong>Tool / function</strong> — Function the model can call. Agent = LLM + tools. (Ch. 6)</p>
+<p><strong>Tool call</strong> — Model's request to execute a tool with specific parameters. (Ch. 6)</p>
+<p><strong>Tool result</strong> — Tool's output that returns to the model. (Ch. 6)</p>
+<p><strong>Top-p / top-k</strong> — Sampling parameters alternative/complementary to temperature. (Ch. 2)</p>
+<p><strong>TTL (Time To Live)</strong> — How long data stays valid in cache. For prompt cache: ~5 minutes. (Ch. 10)</p>
+<h3 id="v">V</h3>
+<p><strong>Vector store</strong> — DB optimized for searching similar embeddings. (Ch. 7)</p>
+<h3 id="w">W</h3>
+<p><strong>Web search tool</strong> — Tool allowing the agent to search the web during a response.</p>
+<hr />
+<h2 id="162-resources-to-go-deeper">16.2 Resources to go deeper</h2>
+<h3 id="official-documentation">Official documentation</h3>
+<ul>
+<li><strong>Anthropic</strong> — <a href="https://docs.anthropic.com">docs.anthropic.com</a></li>
+<li><strong>OpenAI</strong> — <a href="https://platform.openai.com/docs">platform.openai.com/docs</a></li>
+<li><strong>Google AI Studio</strong> — <a href="https://ai.google.dev">ai.google.dev</a></li>
+<li><strong>MCP Spec</strong> — <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a></li>
+<li><strong>Claude Code</strong> — <a href="https://docs.claude.com/en/docs/claude-code">docs.claude.com/en/docs/claude-code</a></li>
+</ul>
+<h3 id="courses-and-tutorials">Courses and tutorials</h3>
+<ul>
+<li><strong>DeepLearning.AI short courses</strong> (<a href="https://deeplearning.ai/short-courses">deeplearning.ai/short-courses</a>) — Andrew Ng + providers, free, brief (1-2 hours), very practical. Start with: "ChatGPT Prompt Engineering for Developers", "Building Agentic AI Apps", "AI Agentic Design Patterns with AutoGen".</li>
+<li><strong>Anthropic Cookbook</strong> (<a href="https://github.com/anthropics/anthropic-cookbook">github.com/anthropics/anthropic-cookbook</a>) — Runnable notebooks with real patterns.</li>
+<li><strong>OpenAI Cookbook</strong> (<a href="https://cookbook.openai.com">cookbook.openai.com</a>) — Same on OpenAI side.</li>
+<li><strong>LangChain Academy</strong> (<a href="https://academy.langchain.com">academy.langchain.com</a>) — Free courses on their frameworks.</li>
+<li><strong>Promptingguide.ai</strong> — Community-driven reference on prompt engineering.</li>
+</ul>
+<h3 id="books">Books</h3>
+<ul>
+<li><strong>"AI Engineering"</strong> — Chip Huyen (2024). The most complete guide to the lifecycle of AI applications. Highly recommended.</li>
+<li><strong>"Hands-On Large Language Models"</strong> — Jay Alammar, Maarten Grootendorst (2024). From theory to practice, illustrated.</li>
+<li><strong>"Designing Machine Learning Systems"</strong> — Chip Huyen. Pre-LLM but still relevant for infrastructure.</li>
+</ul>
+<h3 id="reference-papers">Reference papers</h3>
+<ul>
+<li><strong>"Attention Is All You Need"</strong> (Vaswani et al., 2017) — the transformer.</li>
+<li><strong>"Language Models are Few-Shot Learners"</strong> (Brown et al., 2020) — GPT-3, few-shot.</li>
+<li><strong>"ReAct: Synergizing Reasoning and Acting"</strong> (Yao et al., 2022).</li>
+<li><strong>"Reflexion"</strong> (Shinn et al., 2023).</li>
+<li><strong>"Toolformer"</strong> (Schick et al., 2023).</li>
+<li><strong>"Constitutional AI"</strong> (Bai et al., 2022) — Anthropic, safety.</li>
+</ul>
+<p>All on <a href="https://arxiv.org">arxiv.org</a> with DOI or ID. Search by name.</p>
+<h3 id="newsletters-and-blogs">Newsletters and blogs</h3>
+<ul>
+<li><strong>The Batch</strong> (DeepLearning.AI) — Weekly, AI overview. (<a href="https://deeplearning.ai/the-batch">deeplearning.ai/the-batch</a>)</li>
+<li><strong>Import AI</strong> (Jack Clark) — Weekly, long but deep.</li>
+<li><strong>Lilian Weng's blog</strong> (lilianweng.github.io) — Detailed technical articles on agents, RLHF, etc. Excellent.</li>
+<li><strong>Simon Willison's blog</strong> (simonwillison.net) — Practical, experiments with everything, writes well.</li>
+<li><strong>Anthropic blog</strong> (<a href="https://anthropic.com/news">anthropic.com/news</a>) — Updates on models and research.</li>
+</ul>
+<h3 id="community">Community</h3>
+<ul>
+<li><strong>r/LocalLLaMA</strong> (Reddit) — Self-hosted community, open models.</li>
+<li><strong>r/MachineLearning</strong> (Reddit) — More academic.</li>
+<li><strong>Hugging Face</strong> (<a href="https://huggingface.co">huggingface.co</a>) — Open model hub, datasets, demos.</li>
+<li><strong>Discord of LangChain, LlamaIndex, various providers</strong> — Technical questions, support.</li>
+<li><strong>AI Engineer Summit</strong> (conferences.aiengineer.com) — Practical talks.</li>
+</ul>
+<h3 id="tools-and-platforms-to-try">Tools and platforms to try</h3>
+<ul>
+<li><strong>Models and APIs</strong>: Anthropic Console, OpenAI Playground, Google AI Studio, Together AI (open models hosted), Groq (very fast inference).</li>
+<li><strong>CLI agents</strong>: Claude Code, Aider, Cursor.</li>
+<li><strong>Consumer agents</strong>: ChatGPT, Claude.ai, Gemini, Perplexity.</li>
+<li><strong>Managed vector stores</strong>: Pinecone, Weaviate Cloud, Qdrant Cloud.</li>
+<li><strong>Self-hosted vector stores</strong>: Chroma, Qdrant, pgvector.</li>
+<li><strong>Observability</strong>: Langfuse (OSS), LangSmith, Helicone, Braintrust.</li>
+<li><strong>Eval</strong>: Promptfoo, DeepEval, Ragas.</li>
+<li><strong>Code execution sandbox</strong>: E2B, Modal, Daytona.</li>
+</ul>
+<h3 id="to-stay-updated-2026-and-beyond">To stay updated (2026 and beyond)</h3>
+<p>The field moves fast. Strategy that works:</p>
+<ol>
+<li><strong>One weekly newsletter</strong> seriously followed (not 10 half-read).</li>
+<li><strong>One Twitter/X account</strong> or <strong>Bluesky</strong> with reference practitioners (Andrej Karpathy, Simon Willison, Hamel Husain, Eugene Yan, etc.).</li>
+<li><strong>One hands-on per month</strong>: try a new model, framework, pattern. Build something.</li>
+<li><strong>One paper per month</strong> (or a thread that explains it well). Not to be a researcher, but to understand the direction.</li>
+</ol>
+<p>More important than "staying updated": <strong>having a list of your problems</strong> you want to solve with AI. From there, news auto-filters.</p>
+<hr />
+<h2 id="163-to-remember-at-the-end-of-everything">16.3 To remember at the end of everything</h2>
+<p>If of this whole guide you had to keep just five things:</p>
+<ol>
+<li><strong>An agent is LLM + tools + loop + goal.</strong> Everything else is details.</li>
+<li><strong>The prompt is code.</strong> Version it, test it, iterate it.</li>
+<li><strong>Without evals you fly blind.</strong> Build the dataset before the code.</li>
+<li><strong>Smaller, simpler, more observable.</strong> The most complex system is almost always the problem, not the solution.</li>
+<li><strong>Build something.</strong> Reading gives you vocabulary, building gives you intuition.</li>
+</ol>
+<p>Have a good journey.</p>
+<hr />
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="15-casi-uso-e-workflow-reali.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 15. Real Use Cases and Workflows</span></a>
+      <span></span>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 16</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 16 — Glossary and Resources</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="16-glossario-e-risorse" data-chapter-n="16" data-chapter-title="Glossary and Resources">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

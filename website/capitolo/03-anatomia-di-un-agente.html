@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/03-anatomia-di-un-agente.html">
+<title>Cap. 3. Anatomia di un agente · Guida agli Agenti AI</title>
+<meta name="description" content="Sappiamo cos'è un agente (Cap. 1) e come funziona il suo motore (Cap. 2). Ora apriamo il cofano: di quali pezzi è fatto un agente, e come si combinano.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 3. Anatomia di un agente · Guida agli Agenti AI">
+<meta property="og:description" content="Sappiamo cos'è un agente (Cap. 1) e come funziona il suo motore (Cap. 2). Ora apriamo il cofano: di quali pezzi è fatto un agente, e come si combinano.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/03-anatomia-di-un-agente.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 3. Anatomia di un agente · Guida agli Agenti AI">
+<meta name="twitter:description" content="Sappiamo cos'è un agente (Cap. 1) e come funziona il suo motore (Cap. 2). Ora apriamo il cofano: di quali pezzi è fatto un agente, e come si combinano.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/03-anatomia-di-un-agente.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 3. Anatomia di un agente · Guida agli Agenti AI", "description": "Sappiamo cos'è un agente (Cap. 1) e come funziona il suo motore (Cap. 2). Ora apriamo il cofano: di quali pezzi è fatto un agente, e come si combinano.", "url": "https://myfirstaiagent.netlify.app/capitolo/03-anatomia-di-un-agente.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class="current"><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.1"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 3</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="3-anatomia-di-un-agente">3. Anatomia di un agente</h1>
+<p>Sappiamo cos'è un agente (Cap. 1) e come funziona il suo motore (Cap. 2). Ora apriamo il cofano: di quali pezzi è fatto un agente, e come si combinano.</p>
+<h2 id="31-lo-schema-mentale">3.1 Lo schema mentale</h2>
+<p>Tieni in mente questo schema. È letteralmente l'intero capitolo in un disegno.</p>
+<div class="codehilite"><pre><span></span><code>                ┌──────────────────────────────────────┐
+                │            AGENT LOOP                │
+                │                                      │
+   obiettivo ──▶│   1. PERCEPIRE   (cosa è successo)   │
+                │           │                          │
+                │           ▼                          │
+                │   2. RAGIONARE  (cosa fare adesso)   │  ◀── LLM
+                │           │                          │
+                │           ▼                          │
+                │   3. AGIRE       (chiamo un tool)    │  ◀── Tool
+                │           │                          │
+                │           ▼                          │
+                │   4. OSSERVARE   (cosa è cambiato)   │
+                │           │                          │
+                │           └──── back to 1 ───────────┤
+                │                                      │
+                │   5. STOP    (obiettivo raggiunto?)  │
+                └──────────────────────────────────────┘
+                              │
+                              ▼
+                       risposta finale
+</code></pre></div>
+
+<p><strong>Il loop è il cuore di tutto.</strong> Tutto il resto sono dettagli su come implementare ogni passo.</p>
+<h2 id="32-le-quattro-componenti-fondamentali">3.2 Le quattro componenti fondamentali</h2>
+<h3 id="a-il-modello-cervello">a. Il modello (cervello)</h3>
+<p>È l'LLM. Riceve in input lo stato corrente (tutto quello che è successo finora) e produce un output: una risposta finale, oppure la richiesta di chiamare un tool.</p>
+<h3 id="b-i-tool-mani-e-occhi">b. I tool (mani e occhi)</h3>
+<p>Sono le funzioni che l'agente può chiamare per <strong>agire</strong> (scrivere file, fare richieste HTTP) o <strong>percepire</strong> (leggere file, cercare nel web). Senza tool, l'agente è cieco e immobile — può solo parlare.</p>
+<p>Esempi tipici di tool:<br />
+- <code>read_file(path)</code> — leggere un file<br />
+- <code>web_search(query)</code> — cercare nel web<br />
+- <code>run_python(code)</code> — eseguire codice Python<br />
+- <code>send_email(to, subject, body)</code> — inviare email<br />
+- <code>query_database(sql)</code> — interrogare un DB</p>
+<p>I tool sono dichiarati con uno <strong>schema</strong> (di solito JSON Schema) che descrive nome, parametri e descrizione. Il modello legge lo schema e decide quando e come chiamarli (Cap. 6).</p>
+<h3 id="c-la-memoria-taccuino">c. La memoria (taccuino)</h3>
+<p>L'agente ha bisogno di ricordare cosa ha fatto. Ci sono diversi livelli:</p>
+<ul>
+<li><strong>Memoria di breve termine</strong> = il context window. Tutta la conversazione in corso viene rimandata al modello a ogni passo. È la memoria "di lavoro".</li>
+<li><strong>Memoria di lungo termine</strong> = informazioni salvate fuori dal contesto (file, database, vector store) e richiamate quando servono. Permette all'agente di "ricordare" cose tra sessioni diverse (es. preferenze utente, fatti del progetto).</li>
+<li><strong>Memoria episodica</strong> = log delle azioni passate. Utile per il debug e per evitare di rifare le stesse cose.</li>
+</ul>
+<p>Vedremo memoria e RAG in dettaglio nel Cap. 7.</p>
+<h3 id="d-lorchestratore-regista">d. L'orchestratore (regista)</h3>
+<p>Il pezzo di codice che tiene insieme tutto: prende l'output del modello, esegue i tool richiesti, raccoglie i risultati, li rimanda al modello, controlla la condizione di stop. È quello che scrivi tu (o usa un framework — Cap. 11).</p>
+<h2 id="33-esempio-passo-passo-un-agente-che-cerca-informazioni">3.3 Esempio passo-passo: un agente che cerca informazioni</h2>
+<p>Vediamo il loop in azione. Obiettivo: <strong>"Trova chi è il CEO di Anthropic e quando è nata l'azienda"</strong>.</p>
+<p><strong>Turno 1</strong></p>
+<div class="codehilite"><pre><span></span><code>Stato: messaggio utente &quot;Trova chi è il CEO di Anthropic e quando è nata l&#39;azienda&quot;
+
+LLM pensa: &quot;Mi serve fare una ricerca.&quot;
+LLM produce: tool_call(&quot;web_search&quot;, query=&quot;CEO Anthropic founding year&quot;)
+
+Orchestratore: esegue web_search → riceve risultati (snippet di pagine)
+</code></pre></div>
+
+<p><strong>Turno 2</strong></p>
+<div class="codehilite"><pre><span></span><code>Stato: tutto il turno 1 + risultato della ricerca
+
+LLM pensa: &quot;Ho info parziali, mi serve aprire un link affidabile.&quot;
+LLM produce: tool_call(&quot;fetch_url&quot;, url=&quot;https://www.anthropic.com/company&quot;)
+
+Orchestratore: esegue fetch_url → riceve HTML
+</code></pre></div>
+
+<p><strong>Turno 3</strong></p>
+<div class="codehilite"><pre><span></span><code>Stato: tutti i turni precedenti + contenuto della pagina
+
+LLM pensa: &quot;Ho l&#39;info che serve.&quot;
+LLM produce: risposta finale &quot;Il CEO di Anthropic è Dario Amodei. L&#39;azienda è stata fondata nel 2021.&quot;
+
+Orchestratore: nessun tool da eseguire → STOP, ritorna la risposta.
+</code></pre></div>
+
+<p>Tre turni di LLM, due chiamate tool, una risposta. <strong>Questo è un agente.</strong></p>
+<h2 id="34-lo-stato-dellagente-cosa-contiene">3.4 Lo "stato" dell'agente: cosa contiene</h2>
+<p>A ogni turno, il modello riceve in input uno stato che cresce. Tipicamente:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">state</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Sei un agente di ricerca...&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Trova il CEO di Anthropic&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;web_search&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">}]},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Risultati: ...&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;fetch_url&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">}]},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;html&gt;...&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Il CEO è Dario Amodei...&quot;</span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>Notare due cose:</p>
+<ol>
+<li><strong>Lo stato è la storia completa.</strong> Ogni turno il modello rivede tutto.</li>
+<li><strong>Cresce velocemente.</strong> 10 turni con tool che ritornano HTML possono saturare il context window. La gestione del contesto è una skill cruciale (Cap. 7).</li>
+</ol>
+<h2 id="35-la-condizione-di-stop">3.5 La condizione di stop</h2>
+<p>Quando l'agente smette? Quattro casi tipici:</p>
+<ol>
+<li><strong>Stop naturale</strong>: il modello non chiama più tool e produce una risposta finale.</li>
+<li><strong>Limite di iterazioni</strong>: l'orchestratore ferma l'agente dopo N turni (es. 25). Salvavita contro loop infiniti.</li>
+<li><strong>Limite di budget</strong>: l'agente ha consumato troppi token / soldi → stop.</li>
+<li><strong>Stop esplicito dell'utente</strong>: in CLI come Claude Code, un <code>Esc</code> interrompe.</li>
+</ol>
+<p><strong>Importante</strong>: senza un limite di iterazioni, un agente può loopare per sempre (es. continua a chiamare lo stesso tool perché interpreta male un errore). Mettilo <em>sempre</em>.</p>
+<h2 id="36-planning-pensare-prima-di-agire">3.6 Planning: pensare prima di agire</h2>
+<p>Gli agenti più sofisticati separano due fasi:</p>
+<ul>
+<li><strong>Planning</strong>: il modello produce un piano in linguaggio naturale ("Per rispondere farò questi passi: 1. cerco X, 2. analizzo Y, 3. confronto").</li>
+<li><strong>Execution</strong>: l'agente esegue il piano un passo alla volta, con i tool.</li>
+</ul>
+<p>Vantaggi del planning esplicito:<br />
+- L'utente può <strong>rivedere il piano</strong> prima di lasciar agire l'agente (utile per azioni rischiose).<br />
+- L'agente è meno propenso a divagare.<br />
+- Si può parallelizzare l'esecuzione di passi indipendenti.</p>
+<p>Svantaggi:<br />
+- Più lento (un passo in più di LLM).<br />
+- Se il piano è sbagliato, l'agente esegue cose inutili.</p>
+<p>Vedremo l'architettura "Plan-and-Execute" nel Cap. 4.</p>
+<h2 id="37-pratica-un-loop-minimale-in-python-pseudo-codice">3.7 Pratica: un loop minimale in Python (pseudo-codice)</h2>
+<p>Per fissare l'idea, ecco lo scheletro di un agente in pseudo-Python. Non è ancora codice runnable (lo vedremo nel Cap. 10), ma legge come prosa.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">agent_loop</span><span class="p">(</span><span class="n">goal</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tools</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">):</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Sei un agente. Usa i tool quando servono.&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">goal</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
+        <span class="c1"># 1. Chiama il modello con tutto lo stato</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">history</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">tools</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+        <span class="c1"># 2. Aggiorna la storia con la risposta del modello</span>
+        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># 3. Se non ci sono tool da chiamare, abbiamo finito</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
+
+        <span class="c1"># 4. Esegui i tool richiesti</span>
+        <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">tool_calls</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">tools</span><span class="p">[</span><span class="n">call</span><span class="o">.</span><span class="n">name</span><span class="p">](</span><span class="o">**</span><span class="n">call</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
+            <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span> <span class="s2">&quot;tool_call_id&quot;</span><span class="p">:</span> <span class="n">call</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Limite di iterazioni raggiunto.&quot;</span>
+</code></pre></div>
+
+<p>Questo è davvero il 90% di quello che serve sapere per costruire un agente da zero. Il resto è migliorare i tool, gestire errori, aggiungere memoria.</p>
+<h2 id="38-da-ricordare">3.8 Da ricordare</h2>
+<ul>
+<li><strong>Loop = anima dell'agente.</strong> Percepire → ragionare → agire → osservare → ripetere.</li>
+<li><strong>Quattro componenti</strong>: modello, tool, memoria, orchestratore.</li>
+<li><strong>Lo stato è la storia.</strong> Tutto il dialogo viene rimandato al modello a ogni turno.</li>
+<li><strong>Definisci sempre un limite di iterazioni.</strong> Evita loop infiniti.</li>
+<li><strong>Planning esplicito</strong> è utile per task complessi e per la trasparenza con l'utente.</li>
+</ul>
+<h2 id="39-errori-tipici">3.9 Errori tipici</h2>
+<ul>
+<li><strong>Loop senza limite.</strong> L'agente entra in spirale, brucia 10€ di token in 5 minuti.</li>
+<li><strong>Tool senza descrizione.</strong> Se non spieghi al modello <em>quando</em> usare un tool, sceglierà a caso.</li>
+<li><strong>Tool che restituiscono troppo.</strong> Un tool che torna 10MB di HTML satura il contesto. Tronca, riassumi, paginazione.</li>
+<li><strong>Mischiare logica e LLM.</strong> Tutto ciò che è deterministico (validazioni, calcoli precisi) tienilo nel codice; lascia all'LLM solo ciò che richiede giudizio.</li>
+<li><strong>Cambiare comportamento solo nel system prompt.</strong> A volte un tool ben progettato è più efficace di tre paragrafi di istruzioni.</li>
+</ul>
+<hr />
+<p>Adesso che sai com'è fatto un agente, vediamo le <strong>diverse forme</strong> che può prendere: ReAct, Plan-and-Execute, multi-agente. Ognuna risolve problemi diversi.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="02-come-funzionano-gli-llm.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 2. Come funzionano gli LLM</span></a>
+      <a class="nav-next" href="04-tipi-di-agenti-e-architetture.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 4. Tipi di agenti e architetture</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 3</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 3 — Anatomia di un agente</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="03-anatomia-di-un-agente" data-chapter-n="3" data-chapter-title="Anatomia di un agente">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

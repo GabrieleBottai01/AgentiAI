@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/about.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/about.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/playground.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/playground.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/playground.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/agente.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/agente.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/agente.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/tutor.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/tutor.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/tutor.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/01-cosa-sono-gli-agenti-ai.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/01-cosa-sono-gli-agenti-ai.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/01-cosa-sono-gli-agenti-ai.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/02-come-funzionano-gli-llm.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/02-come-funzionano-gli-llm.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/02-come-funzionano-gli-llm.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/03-anatomia-di-un-agente.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/03-anatomia-di-un-agente.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/03-anatomia-di-un-agente.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/04-tipi-di-agenti-e-architetture.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/04-tipi-di-agenti-e-architetture.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/04-tipi-di-agenti-e-architetture.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/05-prompt-engineering.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/05-prompt-engineering.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/05-prompt-engineering.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/06-tool-use-e-function-calling.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/06-tool-use-e-function-calling.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/06-tool-use-e-function-calling.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/07-memoria-contesto-e-rag.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/07-memoria-contesto-e-rag.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/07-memoria-contesto-e-rag.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/08-usare-i-chatbot-ai.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/08-usare-i-chatbot-ai.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/08-usare-i-chatbot-ai.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/09-claude-code-per-sviluppatori.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/09-claude-code-per-sviluppatori.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/09-claude-code-per-sviluppatori.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/10-costruire-agenti-con-api-sdk.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/10-costruire-agenti-con-api-sdk.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/10-costruire-agenti-con-api-sdk.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/11-framework-langchain-autogen-crewai.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/11-framework-langchain-autogen-crewai.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/11-framework-langchain-autogen-crewai.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/12-best-practice-sviluppo-con-agenti.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/12-best-practice-sviluppo-con-agenti.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/12-best-practice-sviluppo-con-agenti.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/13-sicurezza-costi-e-limiti.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/13-sicurezza-costi-e-limiti.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/13-sicurezza-costi-e-limiti.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/14-valutazione-e-miglioramento.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/14-valutazione-e-miglioramento.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/14-valutazione-e-miglioramento.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/15-casi-uso-e-workflow-reali.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/15-casi-uso-e-workflow-reali.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/15-casi-uso-e-workflow-reali.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/capitolo/16-glossario-e-risorse.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/16-glossario-e-risorse.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/16-glossario-e-risorse.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/about.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/about.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/playground.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/playground.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/playground.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/agente.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/agente.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/agente.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/tutor.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/tutor.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/tutor.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/01-cosa-sono-gli-agenti-ai.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/01-cosa-sono-gli-agenti-ai.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/01-cosa-sono-gli-agenti-ai.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/02-come-funzionano-gli-llm.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/02-come-funzionano-gli-llm.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/02-come-funzionano-gli-llm.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/03-anatomia-di-un-agente.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/03-anatomia-di-un-agente.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/03-anatomia-di-un-agente.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/04-tipi-di-agenti-e-architetture.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/04-tipi-di-agenti-e-architetture.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/04-tipi-di-agenti-e-architetture.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/05-prompt-engineering.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/05-prompt-engineering.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/05-prompt-engineering.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/06-tool-use-e-function-calling.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/06-tool-use-e-function-calling.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/06-tool-use-e-function-calling.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/07-memoria-contesto-e-rag.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/07-memoria-contesto-e-rag.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/07-memoria-contesto-e-rag.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/08-usare-i-chatbot-ai.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/08-usare-i-chatbot-ai.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/08-usare-i-chatbot-ai.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/09-claude-code-per-sviluppatori.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/09-claude-code-per-sviluppatori.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/09-claude-code-per-sviluppatori.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/10-costruire-agenti-con-api-sdk.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/10-costruire-agenti-con-api-sdk.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/10-costruire-agenti-con-api-sdk.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/11-framework-langchain-autogen-crewai.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/11-framework-langchain-autogen-crewai.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/11-framework-langchain-autogen-crewai.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/12-best-practice-sviluppo-con-agenti.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/12-best-practice-sviluppo-con-agenti.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/12-best-practice-sviluppo-con-agenti.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/13-sicurezza-costi-e-limiti.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/13-sicurezza-costi-e-limiti.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/13-sicurezza-costi-e-limiti.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/14-valutazione-e-miglioramento.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/14-valutazione-e-miglioramento.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/14-valutazione-e-miglioramento.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/15-casi-uso-e-workflow-reali.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/15-casi-uso-e-workflow-reali.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/15-casi-uso-e-workflow-reali.html"/>
+  </url>
+  <url>
+    <loc>https://myfirstaiagent.netlify.app/en/capitolo/16-glossario-e-risorse.html</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="it" href="https://myfirstaiagent.netlify.app/capitolo/16-glossario-e-risorse.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://myfirstaiagent.netlify.app/en/capitolo/16-glossario-e-risorse.html"/>
+  </url>
+</urlset>

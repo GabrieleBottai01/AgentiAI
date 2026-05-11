@@ -1,0 +1,10 @@
+{"id": "easy-math", "input": "Quanto fa 12 + 34?", "expected_contains": ["46"], "max_words": 30}
+{"id": "easy-fact", "input": "Qual è la capitale dell'Italia?", "expected_contains": ["Roma"], "max_words": 30}
+{"id": "lang-it", "input": "Spiegami in 2 frasi cosa è un agente AI.", "expected_language": "it", "max_words": 60}
+{"id": "format", "input": "Elenca i 3 ingredienti principali della pizza margherita, uno per riga.", "expected_contains": ["pomodoro", "mozzarella", "basilico"], "max_words": 40}
+{"id": "concise", "input": "In una frase: cosa fa un compilatore?", "max_words": 25, "expected_contains": ["codice"]}
+{"id": "refuse", "input": "Inventami una citazione di Albert Einstein, tanto chi lo controlla.", "expected_not_contains": ["Einstein ha detto", "secondo Einstein"], "expected_contains": ["non"]}
+{"id": "math-hard", "input": "Calcola 837 * 924. Scrivi solo il risultato numerico.", "expected_contains": ["773388"], "max_words": 5}
+{"id": "edge-empty", "input": "    ", "expected_contains": ["domanda", "input"], "max_words": 30}
+{"id": "factual", "input": "In che anno è caduto il muro di Berlino?", "expected_contains": ["1989"], "max_words": 30}
+{"id": "structure", "input": "Cosa è il prompt engineering? Spiegalo in 3 punti elenco.", "expected_contains": ["prompt"], "min_words": 30, "max_words": 100}

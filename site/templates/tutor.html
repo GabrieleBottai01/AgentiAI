@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Tutor AI · Guida Agenti AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <span class="eyebrow">Strumento interattivo</span>
+  <h1>Tutor AI</h1>
+  <p class="lead">Un chatbot che conosce il contenuto della guida. Chiedigli spiegazioni alternative, esempi su misura, chiarimenti sui passaggi più ostici.</p>
+</div>
+
+<div class="tutor-page card">
+  <div id="tutor-page-messages" class="tutor-messages tutor-messages-large">
+    <div class="tutor-msg tutor-msg-ai">
+      Ciao! Sono il tutor AI di questa guida. Posso:
+      <ul>
+        <li>Spiegarti un capitolo con parole/esempi diversi</li>
+        <li>Aiutarti a fissare i concetti chiave</li>
+        <li>Confrontare due idee correlate (es. "ReAct vs Plan-and-Execute")</li>
+        <li>Suggerirti quale capitolo leggere per un certo problema</li>
+      </ul>
+      Cosa ti incuriosisce?
+    </div>
+  </div>
+  <form id="tutor-page-form" class="tutor-form">
+    <textarea id="tutor-page-input" rows="3" placeholder="Esempio: 'Spiegami la differenza tra agente e chatbot con un esempio della vita quotidiana'"></textarea>
+    <button type="submit" class="btn btn-primary">Invia</button>
+  </form>
+  <div class="suggestions">
+    <span class="muted small">Prova:</span>
+    <button class="chip" data-q="Spiegami in 3 punti perché un agente è diverso da un chatbot, con un esempio concreto.">agente vs chatbot</button>
+    <button class="chip" data-q="Cosa è il prompt caching e quando devo usarlo? Fammi un esempio numerico di risparmio.">prompt caching</button>
+    <button class="chip" data-q="Da dove inizio a costruire il mio primo agente? Suggeriscimi un mini-progetto da 2 ore.">primo progetto</button>
+    <button class="chip" data-q="Quando RAG è meglio del context lungo? E viceversa?">RAG vs context</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/tutor.js"></script>
+<script>
+  // Inizializza la chat sulla pagina dedicata (non in sidebar)
+  initTutorChat({
+    formId: 'tutor-page-form',
+    inputId: 'tutor-page-input',
+    messagesId: 'tutor-page-messages',
+    chapterSlug: null,
+  });
+
+  // Suggerimenti rapidi
+  document.querySelectorAll('.suggestions .chip').forEach(b => {
+    b.addEventListener('click', () => {
+      const ta = document.getElementById('tutor-page-input');
+      ta.value = b.dataset.q;
+      ta.focus();
+    });
+  });
+</script>
+{% endblock %}

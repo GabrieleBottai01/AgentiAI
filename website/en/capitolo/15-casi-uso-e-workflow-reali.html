@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/15-casi-uso-e-workflow-reali.html">
+<title>Ch. 15. Real Use Cases and Workflows · Guide to AI Agents</title>
+<meta name="description" content="Realistic result: 2-4x productivity on standard tasks, marginal on truly new problems.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 15. Real Use Cases and Workflows · Guide to AI Agents">
+<meta property="og:description" content="Realistic result: 2-4x productivity on standard tasks, marginal on truly new problems.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/15-casi-uso-e-workflow-reali.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 15. Real Use Cases and Workflows · Guide to AI Agents">
+<meta name="twitter:description" content="Realistic result: 2-4x productivity on standard tasks, marginal on truly new problems.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/15-casi-uso-e-workflow-reali.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 15. Real Use Cases and Workflows · Guide to AI Agents", "description": "Realistic result: 2-4x productivity on standard tasks, marginal on truly new problems.", "url": "https://myfirstaiagent.netlify.app/en/capitolo/15-casi-uso-e-workflow-reali.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class="current"><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.6"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 15</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="15-real-use-cases-and-workflows">15. Real Use Cases and Workflows</h1>
+<p>In this chapter no new theory. Just <strong>where agents are changing real work</strong>, with patterns you can adopt. Think of it as a menu to pick your next project from.</p>
+<h2 id="151-coding-and-software-development">15.1 Coding and software development</h2>
+<h3 id="intensive-pair-programming">Intensive pair programming</h3>
+<p>Tools: Claude Code, Cursor, Aider, Windsurf.</p>
+<p>What changes: the speed of writing "boilerplate" code (CRUD, integrations, mechanical refactors) plummets. Devs focus on <strong>architecture, edge cases, code review</strong>.</p>
+<p>Typical pattern:<br />
+1. Write a spec (the "what" and "why").<br />
+2. The agent proposes plan + diff.<br />
+3. You review, correct, iterate.<br />
+4. Tests run automatically.<br />
+5. Commit.</p>
+<p>Realistic result: 2-4x productivity on standard tasks, marginal on truly new problems.</p>
+<h3 id="automatic-code-review">Automatic code review</h3>
+<p>Agent that runs on every PR and comments on:<br />
+- Potential bugs.<br />
+- Patterns inconsistent with the rest of the codebase.<br />
+- Missing tests.<br />
+- Security issues (SQL injection, hardcoded secrets).</p>
+<p>Examples: GitHub Copilot Code Review, Anthropic <code>/ultrareview</code>, CodeRabbit.</p>
+<h3 id="debug-and-incident-response">Debug and incident response</h3>
+<p>Agent that, given a log or stack trace:<br />
+- Identifies the probable cause.<br />
+- Searches relevant code.<br />
+- Proposes a fix.</p>
+<p>In on-call, reduces "time to first hypothesis" from 30 minutes to 1.</p>
+<h3 id="migration-and-refactor">Migration and refactor</h3>
+<p>Real examples: Python 2 → 3, AngularJS → React migration, monolith → microservices.</p>
+<p>Approach:<br />
+1. The agent analyzes the codebase, maps patterns.<br />
+2. Proposes a migration strategy.<br />
+3. Executes small steps, with tests at each step.<br />
+4. Human reviews, approves.</p>
+<p>For big projects, agents like Devin, Coursive, or dedicated frameworks can work autonomously for days.</p>
+<h2 id="152-customer-support">15.2 Customer support</h2>
+<h3 id="automatic-tier-1">Automatic Tier-1</h3>
+<p>Agent handling ~70% of standard questions:<br />
+- FAQ.<br />
+- Order status.<br />
+- Password reset.<br />
+- Data change.</p>
+<p>When it doesn't know, <strong>escalate</strong> to a human with context already prepared.</p>
+<p>Pattern:<br />
+- RAG on the company knowledge base.<br />
+- Tools for CRM, order system, billing.<br />
+- Conversation memory for continuity.<br />
+- Confidence threshold: below X, escalate.</p>
+<h3 id="triage-and-classification">Triage and classification</h3>
+<p>Agent reading incoming tickets and:<br />
+- Classifying (billing, tech support, sales).<br />
+- Assigning priority.<br />
+- Routing to the right team.<br />
+- Suggesting the first response to the human agent.</p>
+<p>Reduces triage time by 80-90%.</p>
+<h3 id="conversation-summary">Conversation summary</h3>
+<p>After a long conversation, the agent produces:<br />
+- Summary.<br />
+- Action items.<br />
+- Customer sentiment.<br />
+- Follow-up suggestions.</p>
+<h2 id="153-research-and-analysis">15.3 Research and analysis</h2>
+<h3 id="deep-research">Deep research</h3>
+<p>Tools like ChatGPT Deep Research, Perplexity Pro, Gemini with Workspace.</p>
+<p>Pattern:<br />
+1. Complex question ("analyze the X market over the last 5 years").<br />
+2. Agent navigates the web, reads dozens of sources, cross-checks.<br />
+3. Produces a structured report with citations.</p>
+<p>Work that required 1-2 days of a junior analyst is done in 30 minutes, with quality sufficient for first draft.</p>
+<h3 id="data-analysis">Data analysis</h3>
+<p>ChatGPT Code Interpreter, Claude with <code>code_execution</code> tool, Hex Magic, Julius AI.</p>
+<p>Pattern:<br />
+1. Upload a CSV/Excel.<br />
+2. Explain what you want to understand.<br />
+3. The agent writes Python, executes, produces charts.<br />
+4. Continue the conversation: "now segment by region", "do statistical test", "export Excel".</p>
+<p>For exploratory analysis it's a revolution.</p>
+<h3 id="document-review">Document review</h3>
+<p>For legal, finance, due diligence:<br />
+- Upload a set of contracts / documents.<br />
+- Agent extracts specific clauses, flags anomalies, compares with templates.<br />
+- Produces a checklist to review.</p>
+<p>Tools: Harvey, Hebbia, Legora (legal); Hebbia, Anvilogic (finance/security).</p>
+<h2 id="154-writing-and-content">15.4 Writing and content</h2>
+<h3 id="long-form-writing">Long-form writing</h3>
+<p>Pattern that works:<br />
+1. Clear brief: topic, audience, tone, length.<br />
+2. Outline before text.<br />
+3. Iterations on the outline.<br />
+4. Section-by-section expansion.<br />
+5. Final editing (human or assisted).</p>
+<p>For blog posts, articles, guides: half a day of human work reduces to an hour of review.</p>
+<h3 id="newsletter-and-periodic-briefs">Newsletter and periodic briefs</h3>
+<p>Agent that every morning:<br />
+- Reads the sources you follow.<br />
+- Synthesizes into 5 bullets.<br />
+- Sends via email.</p>
+<p>Basic setup: 100 lines + cron + LLM.</p>
+<h3 id="localization">Localization</h3>
+<p>Translation + cultural adaptation of web content, manuals, e-commerce. Specialized agents with corporate glossaries reach final-editing quality, no longer rebuilding.</p>
+<h2 id="155-operations-and-automation">15.5 Operations and automation</h2>
+<h3 id="email-management">Email management</h3>
+<p>Always-on agent (Ch. 4) that:<br />
+- Classifies incoming emails.<br />
+- Replies to repetitive ones (automatic or with draft).<br />
+- Extracts action items into a task manager.<br />
+- Flags urgent ones.</p>
+<p>Tools: Superhuman AI, Shortwave, custom agents on Gmail API.</p>
+<h3 id="calendar-and-scheduling">Calendar and scheduling</h3>
+<p>Agent that, given a goal ("meeting with Marco and Giulia by Friday"), finds slots, sends invites, manages conflicts, reschedules.</p>
+<p>Consumer tools: Reclaim, Motion. For companies: custom agents on Outlook/Google Calendar.</p>
+<h3 id="process-automation">Process automation</h3>
+<p>Business-as-usual workflows with agents that orchestrate heterogeneous steps:<br />
+- Customer onboarding: read docs, validate them, create account, send welcome.<br />
+- Procurement: request → quotes → comparison → order.<br />
+- Reporting: collect data from N sources, format, send.</p>
+<p>Pattern: orchestrator + specific tools for each system.</p>
+<h2 id="156-sales-and-marketing">15.6 Sales and marketing</h2>
+<h3 id="lead-enrichment">Lead enrichment</h3>
+<p>Agent that, given a raw lead (email, company):<br />
+- Searches public info.<br />
+- Profiles the company (sector, size, buy signals).<br />
+- Suggests outreach angle.</p>
+<p>Tools: Clay, Apollo, Crystal.</p>
+<h3 id="personalized-outreach">Personalized outreach</h3>
+<p>Generation of 1:1 messages based on:<br />
+- Prospect profile.<br />
+- Your product.<br />
+- Applicable use case.</p>
+<p>Caution: without human touch, falls into spam. Best practice: AI does the draft, human refines.</p>
+<h3 id="content-velocity">Content velocity</h3>
+<p>From one cue, the agent produces: LinkedIn post, X thread, blog post, newsletter. Each channel with adapted tone.</p>
+<h2 id="157-education-and-training">15.7 Education and training</h2>
+<h3 id="personalized-tutors">Personalized tutors</h3>
+<p>Khanmigo (Khan Academy), Duolingo Max, corporate GPT-tutors.</p>
+<p>Pattern:<br />
+- Student asks.<br />
+- The agent doesn't give the answer, asks Socratic questions.<br />
+- Adapts difficulty to the level.<br />
+- Keeps memory of progress.</p>
+<h3 id="corporate-onboarding">Corporate onboarding</h3>
+<p>New hires chat with an agent that has access to all internal documentation. Typical questions ("how do you do X?") answered 24/7 without bothering colleagues.</p>
+<h3 id="simulated-training">Simulated training</h3>
+<p>Agents impersonating difficult customers, candidates in interview, crisis situations. Trainees practice safely.</p>
+<h2 id="158-healthcare-with-caution">15.8 Healthcare (with caution)</h2>
+<p>Cases that work today:<br />
+- <strong>Clinical documentation</strong>: listening to a consultation, generating SOAP notes, ICD coding. Tools: Abridge, Suki, Nuance DAX.<br />
+- <strong>Primary triage</strong>: chatbot directing to specialist or ER. Under clinical supervision.<br />
+- <strong>Paper research</strong>: synthesis of medical literature for the clinician.</p>
+<p>Cases that don't work today:<br />
+- <strong>Autonomous diagnosis</strong>: huge risks, complex regulation.<br />
+- <strong>Therapeutic decisions</strong>: AI assists, doctor decides.</p>
+<p>Rules: in EU the AI Act classifies many medical applications as "high risk" → requires specific certifications.</p>
+<h2 id="159-legal-and-compliance-with-caution">15.9 Legal and compliance (with caution)</h2>
+<p>Cases that work:<br />
+- <strong>Contract review</strong>: clause extraction, comparison with templates, flag anomalies.<br />
+- <strong>E-discovery</strong>: analysis of large document volumes for litigation.<br />
+- <strong>Legal research</strong>: case law search, judgment summaries.<br />
+- <strong>Drafting standard clauses</strong>: lawyer refines.</p>
+<p>Caveat: AI can invent case law. Mandatory verification. Famous cases of lawyers sanctioned for presenting non-existent rulings generated by ChatGPT.</p>
+<h2 id="1510-more-agentic-cases">15.10 More "agentic" cases</h2>
+<p>Examples of products pushing the autonomy level:</p>
+<ul>
+<li><strong>Devin</strong> (Cognition): coding agent that works autonomously for hours, completing complex tasks.</li>
+<li><strong>OpenAI Operator</strong> / <strong>Anthropic Computer Use</strong>: agents that use browser/desktop like a human (see screen, click, type).</li>
+<li><strong>Replit Agent</strong>: build full-stack apps from prompts.</li>
+<li><strong>AutoGPT, BabyAGI</strong> (early): first attempts at generalist agents, with results more demonstrative than productive.</li>
+<li><strong>Aria</strong> (Opera), <strong>Arc Search</strong>: native-AI browsers.</li>
+</ul>
+<p>They are often still <strong>impressive demos</strong> that betray fragility in production. The direction is clear, the maturation speed isn't.</p>
+<h2 id="1511-cross-cutting-patterns">15.11 Cross-cutting patterns</h2>
+<p>Regardless of domain, winning workflows share:</p>
+<ol>
+<li><strong>Human-in-the-loop on costly decisions.</strong> AI does most, human validates the critical.</li>
+<li><strong>Structured briefs</strong> instead of free prompts.</li>
+<li><strong>Concrete tools</strong> to talk to real systems (CRM, DB, API).</li>
+<li><strong>RAG</strong> to make the agent speak with authority on specific data.</li>
+<li><strong>Context memory</strong> so as not to repeat setup every time.</li>
+<li><strong>Measurement</strong> of output and outcome.</li>
+<li><strong>Disclosure</strong> that it's AI-generated when relevant.</li>
+</ol>
+<h2 id="1512-when-not-to-add-agents">15.12 When NOT to add agents</h2>
+<p>Worth remembering:</p>
+<ul>
+<li>If the workflow is simple and codified, traditional automation is better.</li>
+<li>If the error is unacceptable and there's no human verification, careful.</li>
+<li>If the data is too sensitive and you don't have dedicated infra, wait.</li>
+<li>If costs aren't justified, don't scale.</li>
+</ul>
+<p>AI is a multiplier, not a replacement of judgment.</p>
+<h2 id="1513-to-pick-as-your-next-project">15.13 To pick as your next project</h2>
+<p>If you're starting and want a project to do to learn, here's a list in order of ease:</p>
+<ol>
+<li><strong>Q&amp;A bot on your PDF</strong> (RAG + chat). 1-2 hours. Ch. 7, 10.</li>
+<li><strong>Automatic summary of your day's emails</strong>. 2-3 hours. Email tool + LLM.</li>
+<li><strong>CSV analysis agent</strong>. 3-4 hours. Code interpreter pattern.</li>
+<li><strong>Customer support on company FAQ</strong>. 1-2 days. RAG + dev deploy.</li>
+<li><strong>Coding agent specialized for your stack</strong>. 1-2 weeks. Claude Agent SDK + custom tools.</li>
+</ol>
+<p>Starting to do &gt; reading another 100 pages.</p>
+<h2 id="1514-key-takeaways">15.14 Key takeaways</h2>
+<ul>
+<li><strong>Coding, support, research, writing, ops, sales, education</strong>: agents are changing everything.</li>
+<li><strong>Cross-cutting patterns</strong>: structured brief, tools, RAG, human-in-the-loop, measurement.</li>
+<li><strong>High-stakes domains (health, law, finance)</strong>: assistance yes, autonomy no.</li>
+<li><strong>Impressive demo ≠ robust production.</strong> Always verify.</li>
+<li><strong>Start from a small, personal project.</strong> Living an end-to-end agent is more formative than 10 courses.</li>
+</ul>
+<h2 id="1515-common-mistakes">15.15 Common mistakes</h2>
+<ul>
+<li><strong>"AI will solve X."</strong> Without concrete patterns and workflows, it doesn't.</li>
+<li><strong>Building the most ambitious agent on the first try.</strong> Frustration guaranteed.</li>
+<li><strong>Neglecting integration</strong>. Agent quality depends on the quality of tools and data you give it.</li>
+<li><strong>Launching without measuring real impact.</strong> "The user is happy" without data.</li>
+<li><strong>Not capitalizing on existing workflows.</strong> AI shines when it slips into processes you already do, not when you have to reinvent them.</li>
+</ul>
+<hr />
+<p>Last chapter: the glossary to remember terms, and a list of resources to go beyond the guide.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="14-valutazione-e-miglioramento.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 14. Evaluation and Improvement</span></a>
+      <a class="nav-next" href="16-glossario-e-risorse.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 16. Glossary and Resources</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 15</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 15 — Real Use Cases and Workflows</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="15-casi-uso-e-workflow-reali" data-chapter-n="15" data-chapter-title="Real Use Cases and Workflows">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

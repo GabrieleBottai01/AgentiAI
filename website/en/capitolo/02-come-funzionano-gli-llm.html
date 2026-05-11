@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/02-come-funzionano-gli-llm.html">
+<title>Ch. 2. How LLMs Work · Guide to AI Agents</title>
+<meta name="description" content="Given a piece of text, it predicts the most probable next piece of text.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 2. How LLMs Work · Guide to AI Agents">
+<meta property="og:description" content="Given a piece of text, it predicts the most probable next piece of text.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/02-come-funzionano-gli-llm.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 2. How LLMs Work · Guide to AI Agents">
+<meta name="twitter:description" content="Given a piece of text, it predicts the most probable next piece of text.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/02-come-funzionano-gli-llm.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 2. How LLMs Work · Guide to AI Agents", "description": "Given a piece of text, it predicts the most probable next piece of text.", "url": "https://myfirstaiagent.netlify.app/en/capitolo/02-come-funzionano-gli-llm.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class="current"><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.1"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 2</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="2-how-llms-work-the-engine">2. How LLMs Work (the engine)</h1>
+<p>To use an agent well, you need to know what's happening <em>inside</em> its engine — the LLM. You don't need the math, you need the <strong>right intuition</strong>.</p>
+<h2 id="21-what-an-llm-does-in-one-sentence">2.1 What an LLM does, in one sentence</h2>
+<blockquote>
+<p>Given a piece of text, it predicts the most probable next piece of text.</p>
+</blockquote>
+<p>That's it. Literally. A model like GPT-5, Claude 4 or Gemini 2 has one super-power: given an input, predict what comes next.</p>
+<div class="codehilite"><pre><span></span><code>Input:  &quot;The sun rises in the...&quot;
+Model:  predicts &quot;east&quot;
+</code></pre></div>
+
+<p>When it seems to "reason," "write poems," "explain code," it's actually always doing the same thing: predicting subsequent tokens, one at a time, with calculated probability.</p>
+<p>The magic is that, trained on billions of documents, the pattern "what's the plausible next word" covers almost everything: translation, summary, reasoning, code. Not because it truly understands, but because it has seen a vast number of examples of "how a text starting like this continues."</p>
+<h2 id="22-tokens-the-llm-currency">2.2 Tokens: the LLM currency</h2>
+<p>An LLM doesn't work with characters or words, but with <strong>tokens</strong>. A token is a piece of text, usually 3-4 characters or a short word.</p>
+<div class="codehilite"><pre><span></span><code>&quot;Hello, how are you?&quot;  →  [&quot;Hello&quot;, &quot;,&quot;, &quot; how&quot;, &quot; are&quot;, &quot; you&quot;, &quot;?&quot;]   (6 tokens)
+&quot;Antidisestablishment&quot; →  [&quot;Anti&quot;, &quot;dis&quot;, &quot;establ&quot;, &quot;ishment&quot;]          (4 tokens)
+</code></pre></div>
+
+<p>Why does this matter to you?</p>
+<ol>
+<li><strong>Everything is measured in tokens.</strong> API costs are calculated in tokens (input + output). A model's "context window" is measured in tokens.</li>
+<li><strong>Tokens ≠ words.</strong> A non-English text "occupies" more tokens than English at equal word count, because tokenizers are optimized on English. Rule of thumb: 1 English word ≈ 1.3 tokens; 1 Italian word ≈ 1.5-2 tokens.</li>
+<li><strong>The model only sees tokens.</strong> If you change even a comma, the input changes. In prompt-engineering tricks (Ch. 5) this matters.</li>
+</ol>
+<p>Practical tool: <a href="https://platform.openai.com/tokenizer">OpenAI's tokenizer</a> shows you how a text is "split" into tokens.</p>
+<h2 id="23-the-context-window">2.3 The context window</h2>
+<p>The <strong>context window</strong> is the maximum number of tokens the model can "see" in a single turn: input + output combined.</p>
+<p>Typical numbers in 2026:<br />
+- Claude 4.7 Opus: <strong>1M tokens</strong> (≈ 750,000 words, roughly two copies of <em>War and Peace</em>).<br />
+- GPT-5: in the order of 200K-400K tokens depending on the plan.<br />
+- Gemini 2: up to 2M tokens in specific versions.</p>
+<p>What does this mean for you?</p>
+<ul>
+<li>You can put an entire book, codebase, month of chat into the prompt.</li>
+<li><strong>More context ≠ always better</strong>. Beyond a certain threshold the model "loses attention" on parts of the prompt (effect known as <em>lost-in-the-middle</em>).</li>
+<li><strong>More context = more cost and slower.</strong> Every input token must be processed.</li>
+</ul>
+<p>Practical rule: use the context you need, not all you have available.</p>
+<h2 id="24-sampling-why-the-same-prompt-gives-different-answers">2.4 Sampling: why the same prompt gives different answers</h2>
+<p>When the model predicts the next token, it actually computes a <strong>probability distribution</strong> over all possible tokens. E.g.:</p>
+<div class="codehilite"><pre><span></span><code>Input: &quot;The color of the sky is...&quot;
+   &quot;blue&quot;   → 38%
+   &quot;azure&quot;  → 35%
+   &quot;gray&quot;   → 8%
+   &quot;pink&quot;   → 0.1%
+   ...
+</code></pre></div>
+
+<p>At this point one of the candidates must be <strong>picked</strong>. The main sampling parameters are:</p>
+<ul>
+<li><strong>Temperature</strong> (0.0 - 2.0): how "creative" the model is.</li>
+<li><code>0.0</code> = always picks the most probable (deterministic, repetitive).</li>
+<li><code>0.7-1.0</code> = balanced (typical default).</li>
+<li>
+<p><code>&gt;1.2</code> = bold choices, sometimes ungrammatical.</p>
+</li>
+<li>
+<p><strong>Top-p</strong> (0-1): considers only the tokens that cumulatively reach p% probability. E.g. top-p=0.9 = ignores tokens in the "long tail" of improbabilities.</p>
+</li>
+<li>
+<p><strong>Top-k</strong>: considers only the top k most probable tokens.</p>
+</li>
+<li>
+<p><strong>Seed</strong>: some models accept a seed to make sampling reproducible (useful in tests).</p>
+</li>
+</ul>
+<p><strong>Practical implication for agents:</strong> when you want decisive, structured behavior (e.g. the agent picks a tool to call), lower the temperature (<code>0.0-0.3</code>). When you want creativity (brainstorming, writing), raise it (<code>0.7-1.0</code>).</p>
+<h2 id="25-the-structure-of-an-interaction-chat">2.5 The structure of an interaction (chat)</h2>
+<p>Modern APIs use a <strong>message</strong> format with roles:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">[</span>
+  <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are an expert assistant on Italian cuisine.&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;How do you make carbonara?&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You&#39;ll need guanciale, pecorino...&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Can I use pancetta?&quot;</span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>Three main roles:</p>
+<ul>
+<li><strong>system</strong>: the base instructions, "who you are and how to behave." They persist throughout the conversation. The system prompt is where you shape the agent's behavior.</li>
+<li><strong>user</strong>: the user's messages.</li>
+<li><strong>assistant</strong>: the model's responses (also historical, to give it memory of the conversation).</li>
+</ul>
+<p>When you add <strong>tool use</strong> (Ch. 6), other roles/structures are added: <code>tool_use</code> (the model calls a function) and <code>tool_result</code> (result returned to the model).</p>
+<h2 id="26-what-an-llm-does-well">2.6 What an LLM does well</h2>
+<ul>
+<li>Summarize, rephrase, translate.</li>
+<li>Extract structured information from unstructured text.</li>
+<li>Write code (with limits — see below).</li>
+<li>Classify ("is this spam? is it positive or negative?").</li>
+<li>Follow complex multi-step instructions when well-formulated.</li>
+<li>Reason step by step (especially models with "thinking" / chain-of-thought).</li>
+</ul>
+<h2 id="27-what-it-does-not-do-well-limits-to-know">2.7 What it does NOT do well (limits to know)</h2>
+<ul>
+<li><strong>Complex arithmetic.</strong> It doesn't have a calculator inside: sometimes guesses, sometimes doesn't. For serious numbers, give it a tool with Python.</li>
+<li><strong>Rare or recent factual truths.</strong> The model has a <em>knowledge cutoff</em> (date of last training). For up-to-date or niche facts, you need RAG (Ch. 7) or web search.</li>
+<li><strong>Coherence over very long contexts.</strong> Even with 1M tokens it can lose details.</li>
+<li><strong>Precise counts.</strong> "How many 'r' are in strawberry?" is famously hard for them — because they see tokens, not letters.</li>
+<li><strong>Saying "I don't know".</strong> Often it prefers to invent (the phenomenon called <strong>hallucination</strong>). See Ch. 13.</li>
+<li><strong>Rigorous causal reasoning.</strong> It's good at <em>seeming</em> to reason, but on novel problems outside training it often fails.</li>
+</ul>
+<h2 id="28-models-and-families-2026-overview">2.8 Models and families (2026 overview)</h2>
+<p>The main LLM "providers":</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Companies</th>
+<th>Strengths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude</strong> (Anthropic)</td>
+<td>Opus, Sonnet, Haiku</td>
+<td>Coding, long-form reasoning, safety, long contexts</td>
+</tr>
+<tr>
+<td><strong>GPT</strong> (OpenAI)</td>
+<td>GPT-5, GPT-5 Mini</td>
+<td>Ecosystem, mature tool use, ChatGPT plugins</td>
+</tr>
+<tr>
+<td><strong>Gemini</strong> (Google)</td>
+<td>Gemini 2 Pro/Flash</td>
+<td>Multimodality (audio/video), huge context windows</td>
+</tr>
+<tr>
+<td><strong>Llama</strong> (Meta)</td>
+<td>Llama 4, various sizes</td>
+<td>Open weights, self-hosted</td>
+</tr>
+<tr>
+<td><strong>Mistral</strong> (Mistral AI)</td>
+<td>Mistral Large, Mixtral</td>
+<td>Open weights, excellent European models</td>
+</tr>
+<tr>
+<td><strong>Qwen, DeepSeek</strong></td>
+<td>various</td>
+<td>Open models, very competitive</td>
+</tr>
+</tbody>
+</table>
+<p>Each family has different-sized models, with the classic tradeoff:<br />
+- <strong>Large models</strong> (Opus, GPT-5, Gemini Ultra): more capable, more expensive, slower.<br />
+- <strong>Small models</strong> (Haiku, Mini, Flash): less capable but much cheaper and faster. Often enough.</p>
+<p>Practical agent rule: <strong>prototype with the most capable model, in production switch to the smallest one that maintains acceptable quality</strong>. You save 5-10x on costs.</p>
+<h2 id="29-practice-feel-the-difference">2.9 Practice: feel the difference</h2>
+<p>Go to <a href="https://chat.openai.com">chat.openai.com</a> or <a href="https://claude.ai">claude.ai</a> and try these three experiments:</p>
+<ol>
+<li><strong>Count the 'a's in "abracadabra".</strong> If the model gets it wrong, you've seen the token problem.</li>
+<li><strong>Ask: "Calculate 837 × 924 without using tools."</strong> Compare with the actual result (773,388). They often get it wrong.</li>
+<li><strong>Ask the same thing twice:</strong> "Invent a name for a literary café." You'll see different answers — that's sampling at work.</li>
+</ol>
+<p>It will give you intuition no chart could.</p>
+<h2 id="210-key-takeaways">2.10 Key takeaways</h2>
+<ul>
+<li><strong>The LLM predicts tokens, one at a time.</strong> Everything else flows from this simple thing.</li>
+<li><strong>Token = unit of measurement.</strong> Costs, context, performance: everything is in tokens.</li>
+<li><strong>Temperature regulates creativity.</strong> Low for decision-making agents, high for writing.</li>
+<li><strong>System prompt &gt; user prompt</strong> for shaping baseline behavior.</li>
+<li><strong>Big models aren't always needed.</strong> Start big, optimize small.</li>
+<li><strong>Knowing the limits</strong> (math, recent facts, counts) saves you from nasty surprises.</li>
+</ul>
+<h2 id="211-common-mistakes">2.11 Common mistakes</h2>
+<ul>
+<li><strong>Thinking the model "knows" something.</strong> It knows patterns, not facts. For facts, give it sources (RAG, tools).</li>
+<li><strong>Using high temperature for decision-making agents.</strong> Result: the agent changes its mind, picks wrong tools, loops.</li>
+<li><strong>Filling the context window for safety.</strong> More context = more noise. Put only what's essential.</li>
+<li><strong>Sticking to one model "because it works".</strong> Different models are good at different things. Test more than one for your use case.</li>
+</ul>
+<hr />
+<p>Now that you know what the engine looks like, let's see how the agent's <strong>chassis</strong> is built around it.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="01-cosa-sono-gli-agenti-ai.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 1. What AI Agents Are</span></a>
+      <a class="nav-next" href="03-anatomia-di-un-agente.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 3. Anatomy of an Agent</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 2</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 2 — How LLMs Work</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="02-come-funzionano-gli-llm" data-chapter-n="2" data-chapter-title="How LLMs Work">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>

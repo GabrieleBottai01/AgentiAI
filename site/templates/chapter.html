@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Cap. {{ chapter.n }}. {{ chapter.title }} · Guida Agenti AI{% endblock %}
+
+{% block content %}
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Capitoli</div>
+      <ol class="sidebar-list">
+        {% for ch in chapters %}
+          <li class="{{ 'current' if ch.n == chapter.n else '' }}">
+            <a href="/capitolo/{{ ch.slug }}">
+              <span class="num">{{ "%02d"|format(ch.n) }}</span>
+              <span class="title">{{ ch.title }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="/">Home</a> ·
+      <span>{{ chapter.part }}</span> ·
+      <span>Cap. {{ chapter.n }}</span>
+    </div>
+    <div class="chapter-content">
+      {{ content | safe }}
+    </div>
+
+    {% if exercise %}
+      <section class="exercise"
+               data-exercise-id="{{ exercise.id }}"
+               data-exercise-type="{{ exercise.type }}">
+        <div class="exercise-header">
+          <span class="exercise-tag">✏️ Esercizio interattivo</span>
+          <h3>{{ exercise.title }}</h3>
+        </div>
+        <p class="exercise-intro">{{ exercise.intro | safe }}</p>
+
+        {% if exercise.type == "classify" %}
+          <ol class="exercise-items">
+            {% for item in exercise.cases %}
+              <li>
+                <p>{{ item }}</p>
+                <div class="choice-row">
+                  <label><input type="radio" name="item-{{ loop.index0 }}" value="agente"> Agente</label>
+                  <label><input type="radio" name="item-{{ loop.index0 }}" value="chatbot"> Chatbot</label>
+                  <label><input type="radio" name="item-{{ loop.index0 }}" value="automazione"> Automazione con AI</label>
+                </div>
+              </li>
+            {% endfor %}
+          </ol>
+        {% elif exercise.type == "improve_prompt" %}
+          <textarea class="exercise-input" rows="8" placeholder="Riscrivi qui il prompt migliorato…">{{ exercise.starter }}</textarea>
+        {% elif exercise.type == "design_tool" %}
+          <textarea class="exercise-input mono" rows="14" placeholder="Definizione tool in JSON">{{ exercise.starter }}</textarea>
+        {% endif %}
+
+        <div class="exercise-actions">
+          <button class="btn btn-primary exercise-submit" type="button">Verifica con il tutor AI</button>
+          <span class="exercise-status muted"></span>
+        </div>
+        <div class="exercise-feedback markdown-output" hidden></div>
+      </section>
+    {% endif %}
+
+    <nav class="chapter-nav">
+      {% if prev_ch %}
+        <a class="nav-prev" href="/capitolo/{{ prev_ch.slug }}">
+          <span class="nav-label">← Precedente</span>
+          <span class="nav-title">Cap. {{ prev_ch.n }}. {{ prev_ch.title }}</span>
+        </a>
+      {% else %}<span></span>{% endif %}
+      {% if next_ch %}
+        <a class="nav-next" href="/capitolo/{{ next_ch.slug }}">
+          <span class="nav-label">Successivo →</span>
+          <span class="nav-title">Cap. {{ next_ch.n }}. {{ next_ch.title }}</span>
+        </a>
+      {% else %}<span></span>{% endif %}
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <span class="tutor-icon">💬</span>
+      <span class="tutor-title">Tutor AI</span>
+      <span class="muted small">contesto: cap. {{ chapter.n }}</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">
+        Ciao! Sto guardando con te il <b>Cap. {{ chapter.n }} — {{ chapter.title }}</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.
+      </div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="{{ chapter.slug }}">
+      <textarea id="tutor-input" rows="2" placeholder="Fai una domanda…"></textarea>
+      <button type="submit" class="btn btn-primary">Invia</button>
+    </form>
+  </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/tutor.js"></script>
+<script src="/static/exercise.js"></script>
+{% endblock %}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Guida agli Agenti AI{% endblock %}</title>
+  <meta name="description" content="Guida completa, in italiano, agli Agenti AI — di Gabriele Bottai">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/" class="brand">
+        <span class="brand-mark">⌬</span>
+        <span class="brand-text">Guida Agenti AI</span>
+      </a>
+      <nav class="topnav">
+        <a href="/" class="{{ 'active' if active=='home' }}">Home</a>
+        <a href="/capitolo/01-cosa-sono-gli-agenti-ai" class="{{ 'active' if active=='chapters' }}">Capitoli</a>
+        <a href="/playground" class="{{ 'active' if active=='playground' }}">Playground</a>
+        <a href="/agente-demo" class="{{ 'active' if active=='agent' }}">Demo Agente</a>
+        <a href="/tutor" class="{{ 'active' if active=='tutor' }}">Tutor AI</a>
+      </nav>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status">🔑 API key</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Modal API key -->
+  <div id="api-key-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <h2>API key Anthropic</h2>
+      <p>Per usare le funzionalità AI del sito serve una <b>API key Anthropic</b> tua. La key viene salvata <b>solo nel tuo browser</b> (localStorage) e inviata al backend solo per inoltrare la richiesta a Anthropic. Non viene mai loggata né persistita lato server.</p>
+      <p>Crea una key gratuitamente su <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a> (sezione "API Keys").</p>
+      <label>
+        <span>API key</span>
+        <input id="api-key-input" type="password" placeholder="sk-ant-...">
+      </label>
+      <div class="modal-actions">
+        <button id="api-key-clear" type="button" class="btn btn-ghost">Rimuovi</button>
+        <div style="flex:1"></div>
+        <button id="api-key-cancel" type="button" class="btn btn-ghost">Annulla</button>
+        <button id="api-key-save" type="button" class="btn btn-primary">Salva</button>
+      </div>
+      <p class="hint">Suggerimento: imposta un <b>budget limit</b> mensile sulla console Anthropic (es. €10) per evitare sorprese.</p>
+    </div>
+  </div>
+
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2026 Gabriele Bottai · Guida agli Agenti AI · Tutti i diritti riservati</span>
+      <span class="footer-links">
+        <a href="/playground">Playground</a> ·
+        <a href="/agente-demo">Demo Agente</a> ·
+        <a href="/tutor">Tutor</a>
+      </span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

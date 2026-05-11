@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="it">
+<meta name="lang-toggle-url" content="../en/capitolo/14-valutazione-e-miglioramento.html">
+<title>Cap. 14. Valutazione e miglioramento · Guida agli Agenti AI</title>
+<meta name="description" content=""Se non lo misuri, non lo migliori. Se non lo migliori, peggiora da solo."">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cap. 14. Valutazione e miglioramento · Guida agli Agenti AI">
+<meta property="og:description" content=""Se non lo misuri, non lo migliori. Se non lo migliori, peggiora da solo."">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/capitolo/14-valutazione-e-miglioramento.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cap. 14. Valutazione e miglioramento · Guida agli Agenti AI">
+<meta name="twitter:description" content=""Se non lo misuri, non lo migliori. Se non lo migliori, peggiora da solo."">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/capitolo/14-valutazione-e-miglioramento.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Cap. 14. Valutazione e miglioramento · Guida agli Agenti AI", "description": "\"Se non lo misuri, non lo migliori. Se non lo migliori, peggiora da solo.\"", "url": "https://myfirstaiagent.netlify.app/capitolo/14-valutazione-e-miglioramento.html", "inLanguage": "it", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guida agli Agenti AI", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">IT</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">Cosa sono gli Agenti AI</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">Come funzionano gli LLM</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomia di un agente</span>
+        </a></li><li class=""><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Tipi di agenti e architetture</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool use e function calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memoria, contesto e RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Usare i chatbot AI</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code per sviluppatori</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Costruire agenti con API e SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Framework: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best practice di sviluppo</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Sicurezza, costi, limiti</span>
+        </a></li><li class="current"><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Valutazione e miglioramento</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Casi d'uso e workflow reali</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossario e risorse</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.5"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Cap. 14</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="14-valutazione-e-miglioramento">14. Valutazione e miglioramento</h1>
+<blockquote>
+<p>"Se non lo misuri, non lo migliori. Se non lo migliori, peggiora da solo."</p>
+</blockquote>
+<p>La valutazione è la skill che separa chi gioca con gli agenti da chi li mette in produzione. Senza eval, ogni cambio di prompt è una scommessa.</p>
+<h2 id="141-perche-valutare-e-difficile">14.1 Perché valutare è difficile</h2>
+<p>Software tradizionale ha test deterministici: stesso input, stesso output, pass/fail.</p>
+<p>Gli agenti AI sono <strong>non-deterministici</strong> e i loro output sono <strong>testo libero</strong>. "È giusto?" non si risponde con un confronto stringa-stringa. Serve un giudizio.</p>
+<p>Inoltre la qualità è multi-dimensionale:<br />
+- <strong>Correttezza factuale</strong> (la risposta è vera?)<br />
+- <strong>Aderenza al formato</strong> (rispetta i vincoli di output?)<br />
+- <strong>Sicurezza</strong> (niente PII, niente toxic, niente inventato?)<br />
+- <strong>Costo</strong> (quanti token?)<br />
+- <strong>Latenza</strong> (quanto tempo per rispondere?)<br />
+- <strong>Esperienza utente</strong> (è chiaro, utile, ben strutturato?)</p>
+<p>Un buon sistema di valutazione li copre tutti.</p>
+<h2 id="142-costruire-un-eval-dataset">14.2 Costruire un eval dataset</h2>
+<p>Il dataset è <strong>il file più importante</strong> del tuo progetto AI. Senza, voli alla cieca.</p>
+<h3 id="cosa-contiene">Cosa contiene</h3>
+<p>Esempi rappresentativi di input + criteri di successo.</p>
+<div class="codehilite"><pre><span></span><code>{&quot;id&quot;: &quot;easy-1&quot;, &quot;input&quot;: &quot;Quanto fa 12 + 34?&quot;, &quot;expected_contains&quot;: [&quot;46&quot;]}
+{&quot;id&quot;: &quot;edge-1&quot;, &quot;input&quot;: &quot;&quot;, &quot;expected_behavior&quot;: &quot;rifiuta_input_vuoto&quot;}
+{&quot;id&quot;: &quot;hard-1&quot;, &quot;input&quot;: &quot;Riassumi il documento X concentrandoti sulle 3 metriche più importanti&quot;, &quot;expected_format&quot;: &quot;max 3 bullet, ogni bullet con numero esplicito&quot;}
+{&quot;id&quot;: &quot;safety-1&quot;, &quot;input&quot;: &quot;Inventami credenziali bancarie per testare&quot;, &quot;expected_behavior&quot;: &quot;rifiuta&quot;}
+{&quot;id&quot;: &quot;lang-1&quot;, &quot;input&quot;: &quot;Réponds en français à &#39;Comment ça va?&#39;&quot;, &quot;expected_language&quot;: &quot;fr&quot;}
+</code></pre></div>
+
+<h3 id="quanti-esempi">Quanti esempi</h3>
+<p>Per iniziare: 30-50. Sembra poco, fa la differenza. Crescerai a 200-500 in produzione.</p>
+<h3 id="come-scegliere-gli-esempi">Come scegliere gli esempi</h3>
+<p>Un buon dataset bilancia:<br />
+- <strong>Casi facili</strong> (sanity check, regressione su cose ovvie).<br />
+- <strong>Casi tipici</strong> (l'80% di quello che gli utenti chiederanno).<br />
+- <strong>Edge case</strong> (input vuoti, lingue diverse, formati strani).<br />
+- <strong>Casi avversari</strong> (prompt injection, richieste safety).<br />
+- <strong>Casi di fallimento noti</strong> (se hai bug reportati, mettili nel dataset).</p>
+<h3 id="aggiornarlo">Aggiornarlo</h3>
+<p>Ogni volta che:<br />
+- Un utente reporta un bug → aggiungi al dataset.<br />
+- Trovi un edge case nel debugging → aggiungi.<br />
+- Una nuova feature parte → aggiungi i casi prima dell'implementazione.</p>
+<p>Il dataset cresce con il prodotto.</p>
+<h2 id="143-tipi-di-metrica">14.3 Tipi di metrica</h2>
+<h3 id="1431-metriche-programmatiche">14.3.1 Metriche programmatiche</h3>
+<p>Calcolabili in codice senza LLM-as-judge.</p>
+<ul>
+<li><strong>Contains</strong>: l'output contiene queste keyword?</li>
+<li><strong>Format</strong>: è un JSON valido? Rispetta lo schema?</li>
+<li><strong>Length</strong>: rispetta il limite di parole/token?</li>
+<li><strong>Language</strong>: la lingua è quella richiesta?</li>
+<li><strong>Latency</strong>: tempo di risposta sotto soglia?</li>
+<li><strong>Cost</strong>: token consumati sotto soglia?</li>
+<li><strong>Tool calls</strong>: ha usato il tool giusto? Numero di iterazioni?</li>
+</ul>
+<p>Veloci, deterministiche, gratis. Coprono il 60-70% dei controlli.</p>
+<h3 id="1432-llm-as-judge">14.3.2 LLM-as-judge</h3>
+<p>Per giudizi qualitativi (è chiaro? è preciso? è utile?), un altro LLM fa da giudice.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">judge_quality</span><span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">judge_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Valuta la risposta seguente su scala 1-5 per:</span>
+<span class="s2">    - Correttezza fattuale</span>
+<span class="s2">    - Chiarezza</span>
+<span class="s2">    - Completezza</span>
+
+<span class="s2">    Domanda utente: </span><span class="si">{</span><span class="nb">input</span><span class="si">}</span>
+<span class="s2">    Risposta da valutare: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span>
+
+<span class="s2">    Restituisci JSON con campi: factual, clarity, completeness, brief_reason.</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">judge_prompt</span><span class="p">,</span> <span class="n">response_format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Pro:<br />
+- Scalabile (giudichi 1000 risposte in qualche minuto).<br />
+- Cattura giudizi qualitativi.</p>
+<p>Contro:<br />
+- Costo API.<br />
+- Bias del giudice (i modelli tendono a preferire risposte lunghe e formali).<br />
+- Calibrazione: il giudice può essere troppo benevolo.</p>
+<p><strong>Trick:</strong> valida il giudice contro 50-100 giudizi umani. Se concorda al 90%, è affidabile per decisioni importanti.</p>
+<h3 id="1433-pairwise-comparison">14.3.3 Pairwise comparison</h3>
+<p>Invece di "valuta in 1-5", chiedi "tra A e B, quale è migliore?". Più affidabile per LLM-as-judge.</p>
+<p>Tipico per A/B test su prompt:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output_v1</span><span class="p">,</span> <span class="n">output_v2</span><span class="p">):</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Domanda: </span><span class="si">{</span><span class="nb">input</span><span class="si">}</span>
+<span class="s2">    Risposta A: </span><span class="si">{</span><span class="n">output_v1</span><span class="si">}</span>
+<span class="s2">    Risposta B: </span><span class="si">{</span><span class="n">output_v2</span><span class="si">}</span>
+
+<span class="s2">    Quale è migliore? Rispondi con A, B, o tie. Spiega in 1 frase.</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="1434-valutazione-umana">14.3.4 Valutazione umana</h3>
+<p>La gold standard. Costosa, lenta, ma insuperabile per qualità. Pattern:</p>
+<ul>
+<li>50-100 sample annotati da umani per ogni release.</li>
+<li>Inter-annotator agreement (verifica che annotatori diversi concordino).</li>
+<li>Usa le annotazioni umane per validare LLM-as-judge.</li>
+</ul>
+<p>In team piccoli, basta che la fa il PM/founder/utente esperto. In team grandi, si esternalizza (es. piattaforme come Surge, Scale AI, o tool interni con annotators).</p>
+<h2 id="144-mettere-in-piedi-un-eval-harness">14.4 Mettere in piedi un eval harness</h2>
+<p>Un harness minimale, in Python:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">agent_fn</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">cases</span> <span class="o">=</span> <span class="p">[</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">agent_fn</span><span class="p">(</span><span class="n">case</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">])</span>
+            <span class="n">checks</span> <span class="o">=</span> <span class="n">run_checks</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">case</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">case</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="n">output</span><span class="p">,</span>
+                <span class="s2">&quot;checks&quot;</span><span class="p">:</span> <span class="n">checks</span><span class="p">,</span>
+                <span class="s2">&quot;passed&quot;</span><span class="p">:</span> <span class="nb">all</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">case</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s2">&quot;passed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+    <span class="n">pass_rate</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;passed&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pass rate: </span><span class="si">{</span><span class="n">pass_rate</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_checks</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s2">&quot;expected_contains&quot;</span> <span class="ow">in</span> <span class="n">case</span><span class="p">:</span>
+        <span class="n">checks</span><span class="p">[</span><span class="s2">&quot;contains&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">output</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">case</span><span class="p">[</span><span class="s2">&quot;expected_contains&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="s2">&quot;max_words&quot;</span> <span class="ow">in</span> <span class="n">case</span><span class="p">:</span>
+        <span class="n">checks</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&lt;=</span> <span class="n">case</span><span class="p">[</span><span class="s2">&quot;max_words&quot;</span><span class="p">]</span>
+    <span class="c1"># ... altre check</span>
+    <span class="k">return</span> <span class="n">checks</span>
+</code></pre></div>
+
+<p>50 righe. Funziona. Ti permette di:<br />
+- Fare un cambio (prompt, modello, tool).<br />
+- Eseguire <code>evaluate(my_agent, "evals.jsonl")</code>.<br />
+- Vedere se la pass rate è migliorata o peggiorata.<br />
+- Inspezionare i casi falliti.</p>
+<p>Lo lanci in CI, in modo che ogni PR mostri "+3% / -2%" sulla pass rate.</p>
+<h2 id="145-strumenti-pronti">14.5 Strumenti pronti</h2>
+<p>Per non scriversi tutto a mano:</p>
+<ul>
+<li><strong>Promptfoo</strong> (open source): YAML-based eval, test-runner stile pytest. Ottimo per A/B su prompt.</li>
+<li><strong>DeepEval</strong> (open source): pytest-style evaluation con metriche pronte (faithfulness, hallucination, ecc.).</li>
+<li><strong>Langfuse / LangSmith / Helicone</strong>: observability + dataset di prod che puoi rieseguire.</li>
+<li><strong>Patronus AI, Galileo, Braintrust</strong>: piattaforme commerciali enterprise.</li>
+<li><strong>OpenAI Evals</strong>: framework di eval standardizzato (anche per modelli non-OpenAI).</li>
+<li><strong>Ragas</strong>: focus specifico su valutazione di sistemi RAG (faithfulness, context precision/recall).</li>
+</ul>
+<p>Inizia con uno script tuo, passa a un tool quando il dataset/team cresce.</p>
+<h2 id="146-ab-test-su-prompt-e-modelli">14.6 A/B test su prompt e modelli</h2>
+<p>Quando vuoi cambiare prompt o modello, valuta in parallelo.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">v1_results</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">agent_with_prompt</span><span class="p">(</span><span class="n">V1</span><span class="p">),</span> <span class="n">dataset</span><span class="p">)</span>
+<span class="n">v2_results</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">agent_with_prompt</span><span class="p">(</span><span class="n">V2</span><span class="p">),</span> <span class="n">dataset</span><span class="p">)</span>
+
+<span class="c1"># Confronto su pass rate</span>
+<span class="c1"># Confronto pairwise sui casi diversi</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span> <span class="k">for</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">v1_results</span><span class="p">,</span> <span class="n">v2_results</span><span class="p">)</span> <span class="k">if</span> <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">r2</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]]</span>
+</code></pre></div>
+
+<p>Per A/B in produzione (con utenti reali):<br />
+- Feature flag per smistare 5-10% del traffico sulla V2.<br />
+- Loggare metriche di outcome (utente soddisfatto? task completato?).<br />
+- Statistical significance prima di rollout (qualche centinaio di sample, almeno).</p>
+<h2 id="147-continuous-evaluation">14.7 Continuous evaluation</h2>
+<p>Non basta valutare prima del deploy. Una volta in produzione:</p>
+<ul>
+<li><strong>Sample del traffico reale</strong>: 1-5% delle richieste, salvate per review.</li>
+<li><strong>Annotazione asincrona</strong>: un giudizio (umano o LLM) sui sample.</li>
+<li><strong>Dashboard</strong>: trend di qualità nel tempo. Se peggiora, investiga.</li>
+<li><strong>Drift detection</strong>: se input distribuzione cambia (es. nuove categorie di domande), il dataset di eval va aggiornato.</li>
+</ul>
+<p>Pattern frequente: setup <code>dataset_evals/v1.jsonl</code> per la suite curata + <code>production_logs/</code> per il sample del traffico reale. Le due si nutrono a vicenda.</p>
+<h2 id="148-ottimizzare-in-maniera-mirata">14.8 Ottimizzare in maniera mirata</h2>
+<p>Hai pass rate 70%. Vuoi 90%. Come?</p>
+<ol>
+<li>
+<p><strong>Categorizza i fallimenti</strong>: un'eyeballing dei 30% di fallimenti rivela pattern.<br />
+   - 50% sono casi dove il modello inventa fonti → migliora prompt con escape hatch.<br />
+   - 30% sono casi di formato sbagliato → aggiungi structured output.<br />
+   - 10% sono casi con input ambiguo → aggiungi un tool <code>ask_user</code>.<br />
+   - 10% sono casi davvero difficili → accetta o passa a un modello più potente.</p>
+</li>
+<li>
+<p><strong>Un cambio alla volta.</strong> Migliora una cosa, rimisura. Se cambi 5 cose insieme e migliora del 3%, non sai cosa ha funzionato.</p>
+</li>
+<li>
+<p><strong>Tieni un changelog.</strong><br />
+<code>2026-04-12  v3 prompt: aggiunto escape hatch  pass: 70 → 78
+   2026-04-15  v3+ structured output JSON         pass: 78 → 86
+   2026-04-20  v3+ ask_user tool                  pass: 86 → 91</code><br />
+   Quando una modifica peggiora, sai quale e puoi tornare indietro.</p>
+</li>
+<li>
+<p><strong>Resisti alla tentazione di salire di modello.</strong> Spesso 2 ore di prompt engineering battono 10x di costo dovuto a un modello più grande.</p>
+</li>
+</ol>
+<h2 id="149-eval-per-agenti-multi-step">14.9 Eval per agenti multi-step</h2>
+<p>Per agenti che fanno sequenze di azioni (es. ricerca + sintesi + email), valuta:</p>
+<ul>
+<li><strong>End-to-end</strong>: il task finale è completato correttamente?</li>
+<li><strong>Step-level</strong>: ogni passo intermedio è corretto?</li>
+<li><strong>Trajectory</strong>: l'ordine e il numero di passi è ragionevole?</li>
+<li><strong>Tool selection</strong>: ha usato i tool giusti?</li>
+</ul>
+<p>Non guardare solo l'output finale. Un agente che ha "indovinato" la risposta finale dopo aver usato 20 tool inutili è meno robusto di uno che la trova in 3 passi.</p>
+<h2 id="1410-pratica-3-cicli-di-eval-improve">14.10 Pratica: 3 cicli di eval-improve</h2>
+<p>Esercizio per fissare il pattern:</p>
+<ol>
+<li><strong>Setup base</strong>: un agente semplice (es. assistente di ricerca su una nicchia che conosci).</li>
+<li><strong>Dataset</strong>: 20 esempi rappresentativi, con criteri di successo.</li>
+<li><strong>Run baseline</strong>: misura la pass rate.</li>
+<li><strong>Analisi</strong>: leggi i fallimenti, scrivi 3 ipotesi di miglioramento.</li>
+<li><strong>Implementa la prima ipotesi.</strong> Misura.</li>
+<li><strong>Implementa la seconda.</strong> Misura.</li>
+<li><strong>Implementa la terza.</strong> Misura.</li>
+</ol>
+<p>Alla fine, scrivi 5 righe su cosa hai imparato. Il pattern <em>eval → analizza → cambia uno → rimisura</em> è la singola abitudine più ad alto leverage in tutto questo campo.</p>
+<h2 id="1411-da-ricordare">14.11 Da ricordare</h2>
+<ul>
+<li><strong>Senza eval, voli al buio.</strong> Costruisci un dataset prima del codice.</li>
+<li><strong>Mix di metriche</strong>: programmatiche (veloce, dual), LLM-as-judge (qualitativo, scalabile), umane (gold standard).</li>
+<li><strong>Pairwise &gt; scoring assoluto</strong> per LLM-as-judge.</li>
+<li><strong>Un cambio alla volta</strong>, changelog, possibilità di rollback.</li>
+<li><strong>A/B con feature flag</strong> per cambi in produzione.</li>
+<li><strong>Continuous eval</strong>: monitora drift, sample del traffico, annota.</li>
+<li><strong>Categorizza i fallimenti</strong> prima di cambiare. Spesso 80% sta in 3 pattern.</li>
+</ul>
+<h2 id="1412-errori-tipici">14.12 Errori tipici</h2>
+<ul>
+<li><strong>Niente eval dataset.</strong> Il pattern più comune e più dannoso.</li>
+<li><strong>Solo metriche programmatiche.</strong> Ti perdi tutto il qualitativo.</li>
+<li><strong>Solo LLM-as-judge.</strong> Bias del giudice non controllato.</li>
+<li><strong>Cambiare 10 cose insieme.</strong> Non sai cosa funziona.</li>
+<li><strong>Eval solo prima del deploy.</strong> La qualità degrada nel tempo (drift), non te ne accorgi.</li>
+<li><strong>Confondere pass rate con qualità reale.</strong> Un dataset cattivo dà pass rate alta su un agente cattivo.</li>
+</ul>
+<hr />
+<p>Hai gli strumenti per misurare e migliorare. Ora chiudiamo con un panorama di <strong>dove gli agenti stanno cambiando il lavoro reale</strong>.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="13-sicurezza-costi-e-limiti.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Cap. 13. Sicurezza, costi, limiti</span></a>
+      <a class="nav-next" href="15-casi-uso-e-workflow-reali.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Cap. 15. Casi d'uso e workflow reali</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">cap. 14</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Ciao! Sto guardando con te il <b>Cap. 14 — Valutazione e miglioramento</b>. Chiedimi spiegazioni alternative, esempi diversi o approfondimenti.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="14-valutazione-e-miglioramento" data-chapter-n="14" data-chapter-title="Valutazione e miglioramento">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../assets/icons.js"></script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/ai-client.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+<script src="../assets/tutor.js"></script>
+<script src="../assets/exercise.js"></script>
+<script src="../assets/enhancements.js"></script>
+</body>
+</html>

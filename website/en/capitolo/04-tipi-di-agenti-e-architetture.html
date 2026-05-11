@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="i18n-title" content="site.title">
+<meta name="page-lang" content="en">
+<meta name="lang-toggle-url" content="../../capitolo/04-tipi-di-agenti-e-architetture.html">
+<title>Ch. 4. Types of Agents and Architectures · Guide to AI Agents</title>
+<meta name="description" content="A "director" agent coordinates several specialized agents. Example: a product management agent that delegates to a backend agent, a frontend one, a QA one.">
+<meta name="author" content="Gabriele Bottai">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ch. 4. Types of Agents and Architectures · Guide to AI Agents">
+<meta property="og:description" content="A "director" agent coordinates several specialized agents. Example: a product management agent that delegates to a backend agent, a frontend one, a QA one.">
+<meta property="og:url" content="https://myfirstaiagent.netlify.app/en/capitolo/04-tipi-di-agenti-e-architetture.html">
+<meta property="og:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<meta property="og:site_name" content="Guida agli Agenti AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ch. 4. Types of Agents and Architectures · Guide to AI Agents">
+<meta name="twitter:description" content="A "director" agent coordinates several specialized agents. Example: a product management agent that delegates to a backend agent, a frontend one, a QA one.">
+<meta name="twitter:image" content="https://myfirstaiagent.netlify.app/og-image.png">
+<link rel="canonical" href="https://myfirstaiagent.netlify.app/en/capitolo/04-tipi-di-agenti-e-architetture.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ch. 4. Types of Agents and Architectures · Guide to AI Agents", "description": "A \"director\" agent coordinates several specialized agents. Example: a product management agent that delegates to a backend agent, a frontend one, a QA one.", "url": "https://myfirstaiagent.netlify.app/en/capitolo/04-tipi-di-agenti-e-architetture.html", "inLanguage": "en", "author": {"@type": "Person", "name": "Gabriele Bottai", "url": "https://myfirstaiagent.netlify.app/about.html"}, "publisher": {"@type": "Person", "name": "Gabriele Bottai"}, "datePublished": "2026-05-01", "dateModified": "2026-05-07", "isPartOf": {"@type": "Book", "name": "Guide to AI Agents", "author": "Gabriele Bottai"}}</script>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem("site_theme");
+  if (t) document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html" class="brand">
+      <span class="brand-mark"><i data-icon-replace="hexagon"></i></span>
+      <span class="brand-text" data-i18n="site.title">Guida agli Agenti AI</span>
+    </a>
+    <nav class="topnav"><a href="../index.html" class=""><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html" class="active"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html" class=""><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html" class=""><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html" class=""><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a></nav>
+    <div class="topbar-actions">
+      <button id="search-btn" class="icon-btn" type="button" aria-label="Search" title="⌘K">
+        <i data-icon-replace="search"></i>
+      </button>
+      <button id="theme-btn" class="icon-btn" type="button" aria-label="Toggle theme"></button>
+      <button id="lang-btn" class="icon-btn lang-btn" type="button" aria-label="Toggle language">EN</button>
+      <button id="api-key-btn" class="key-btn" type="button">
+        <span id="key-status"></span>
+      </button>
+      <button id="mobile-menu-btn" class="icon-btn mobile-menu-btn" type="button" aria-label="Menu">
+        <i data-icon-replace="menu"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-drawer" class="mobile-drawer">
+  <div class="mobile-drawer-inner">
+    <a href="../index.html"><i data-icon-replace="home"></i><span data-i18n="nav.home"></span></a><a href="../capitolo/01-cosa-sono-gli-agenti-ai.html"><i data-icon-replace="book-open"></i><span data-i18n="nav.chapters"></span></a><a href="../playground.html"><i data-icon-replace="flask"></i><span data-i18n="nav.playground"></span></a><a href="../agente.html"><i data-icon-replace="bot"></i><span data-i18n="nav.agent"></span></a><a href="../tutor.html"><i data-icon-replace="message-circle"></i><span data-i18n="nav.tutor"></span></a>
+  </div>
+</div>
+
+<div id="api-key-modal" class="modal-overlay" hidden>
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <h2 data-i18n="modal.title">Configura il provider AI</h2>
+        <p class="modal-sub" data-i18n="modal.subtitle"></p>
+      </div>
+      <button id="modal-close" type="button" class="modal-x" aria-label="Close">
+        <i data-icon-replace="x"></i>
+      </button>
+    </div>
+    <div id="provider-cards" class="provider-cards"></div>
+    <p class="hint">
+      <i data-icon-replace="lightbulb"></i>
+      <span data-i18n="modal.hint"></span>
+    </p>
+  </div>
+</div>
+
+<div id="search-modal" class="modal-overlay" hidden>
+  <div class="modal search-modal">
+    <div class="search-input-wrap">
+      <i data-icon-replace="search"></i>
+      <input id="search-input" type="text" placeholder="" autocomplete="off">
+      <kbd class="kbd-esc">esc</kbd>
+    </div>
+    <div id="search-results" class="search-results"></div>
+    <div class="search-footer">
+      <span class="muted small">
+        <span data-i18n="search.hint"></span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+<div class="chapter-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title" data-i18n="chapter.sidebar.title"></div>
+      <ol class="sidebar-list"><li class=""><a href="01-cosa-sono-gli-agenti-ai.html">
+          <span class="num">01</span><span class="title">What AI Agents Are</span>
+        </a></li><li class=""><a href="02-come-funzionano-gli-llm.html">
+          <span class="num">02</span><span class="title">How LLMs Work</span>
+        </a></li><li class=""><a href="03-anatomia-di-un-agente.html">
+          <span class="num">03</span><span class="title">Anatomy of an Agent</span>
+        </a></li><li class="current"><a href="04-tipi-di-agenti-e-architetture.html">
+          <span class="num">04</span><span class="title">Types of Agents and Architectures</span>
+        </a></li><li class=""><a href="05-prompt-engineering.html">
+          <span class="num">05</span><span class="title">Prompt Engineering</span>
+        </a></li><li class=""><a href="06-tool-use-e-function-calling.html">
+          <span class="num">06</span><span class="title">Tool Use and Function Calling</span>
+        </a></li><li class=""><a href="07-memoria-contesto-e-rag.html">
+          <span class="num">07</span><span class="title">Memory, Context and RAG</span>
+        </a></li><li class=""><a href="08-usare-i-chatbot-ai.html">
+          <span class="num">08</span><span class="title">Using AI Chatbots</span>
+        </a></li><li class=""><a href="09-claude-code-per-sviluppatori.html">
+          <span class="num">09</span><span class="title">Claude Code for Developers</span>
+        </a></li><li class=""><a href="10-costruire-agenti-con-api-sdk.html">
+          <span class="num">10</span><span class="title">Building Agents with API and SDK</span>
+        </a></li><li class=""><a href="11-framework-langchain-autogen-crewai.html">
+          <span class="num">11</span><span class="title">Frameworks: LangChain, AutoGen, CrewAI</span>
+        </a></li><li class=""><a href="12-best-practice-sviluppo-con-agenti.html">
+          <span class="num">12</span><span class="title">Best Practices for Development</span>
+        </a></li><li class=""><a href="13-sicurezza-costi-e-limiti.html">
+          <span class="num">13</span><span class="title">Security, Costs, Limits</span>
+        </a></li><li class=""><a href="14-valutazione-e-miglioramento.html">
+          <span class="num">14</span><span class="title">Evaluation and Improvement</span>
+        </a></li><li class=""><a href="15-casi-uso-e-workflow-reali.html">
+          <span class="num">15</span><span class="title">Real Use Cases and Workflows</span>
+        </a></li><li class=""><a href="16-glossario-e-risorse.html">
+          <span class="num">16</span><span class="title">Glossary and Resources</span>
+        </a></li></ol>
+    </div>
+  </aside>
+
+  <article class="chapter">
+    <div class="breadcrumb">
+      <a href="../index.html" data-i18n="nav.home">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span data-i18n="toc.part.1"></span>
+      <span class="breadcrumb-sep">/</span>
+      <span>Ch. 4</span>
+    </div>
+    <div class="chapter-content">
+      <h1 id="4-types-of-agents-and-architectures">4. Types of Agents and Architectures</h1>
+<p>The basic schema from Ch. 3 is just the start. In recent years, <strong>architectural patterns</strong> have emerged that fit different tasks. Knowing them lets you pick the right form instead of reinventing the wheel.</p>
+<h2 id="41-react-thought-action">4.1 ReAct: thought + action</h2>
+<p><strong>ReAct</strong> (Reasoning + Acting) is the simplest pattern and is what you saw in Ch. 3. At each turn the agent:</p>
+<ol>
+<li><strong>Reason</strong> — thinks about what to do, writing (even just internally) a brief reasoning.</li>
+<li><strong>Act</strong> — calls a tool.</li>
+<li><strong>Observe</strong> — receives the result.</li>
+</ol>
+<p>Literal prompt pattern:</p>
+<div class="codehilite"><pre><span></span><code>Question: {goal}
+
+Thought: I need to search X
+Action: web_search(&quot;X&quot;)
+Observation: ...
+
+Thought: now I compare Y and Z
+Action: ...
+Observation: ...
+
+...
+
+Final answer: ...
+</code></pre></div>
+
+<p><strong>When to use it:</strong> linear tasks where each step depends on the previous. Search, simple debugging, q&amp;a on documents.</p>
+<p><strong>Limit:</strong> if the task requires coordinating multiple sub-tasks, ReAct struggles because it reasons "one step at a time" without overall vision.</p>
+<h2 id="42-plan-and-execute">4.2 Plan-and-Execute</h2>
+<p>Variant: first the model produces a <strong>complete plan</strong>, then an executor (sometimes the same model, sometimes a smaller one) executes it.</p>
+<div class="codehilite"><pre><span></span><code>Planner:
+  1. Search articles about &quot;X&quot;
+  2. Extract the 5 most cited
+  3. Summarize each one
+  4. Compare viewpoints
+  5. Produce final synthesis
+
+Executor: runs 1 → runs 2 → runs 3 → ...
+</code></pre></div>
+
+<p><strong>When to use it:</strong><br />
+- Tasks with many independent steps (you can parallelize).<br />
+- When the user wants to <strong>see and approve the plan</strong> before execution (e.g. risky actions).<br />
+- When execution is expensive and you want to avoid "discovering" mid-way that the approach was wrong.</p>
+<p><strong>Limit:</strong> if the plan is wrong, the agent executes it blindly. Often a <strong>re-planning</strong> mechanism is added: if a step fails, return to the planner.</p>
+<h2 id="43-reflexion-self-critique">4.3 Reflexion / Self-critique</h2>
+<p>The agent, after producing a response or action, <strong>criticizes itself</strong> before delivering it. Often done with a second prompt:</p>
+<div class="codehilite"><pre><span></span><code>[First turn]
+Proposed solution: ...
+
+[Second turn: critique]
+Review the solution above. Find errors, unconsidered cases, debatable assumptions?
+
+[Third turn: revision]
+Based on the critique, revise the solution.
+</code></pre></div>
+
+<p><strong>When to use it:</strong> writing code, drafting important texts, quantitative analysis. Improves quality at the cost of more tokens.</p>
+<p><strong>Limit:</strong> not magic. If the model is wrong on the concept, the critique will be too.</p>
+<h2 id="44-multi-agent-orchestrator-worker">4.4 Multi-agent: orchestrator + worker</h2>
+<p>A "director" agent coordinates several specialized agents. Example: a product management agent that delegates to a backend agent, a frontend one, a QA one.</p>
+<div class="codehilite"><pre><span></span><code>                ┌─────────────────┐
+                │   ORCHESTRATOR  │
+                │ (decides who)   │
+                └────────┬────────┘
+            ┌───────────┼───────────┐
+            ▼           ▼           ▼
+       ┌────────┐  ┌────────┐  ┌────────┐
+       │  Web   │  │ Coder  │  │ Writer │
+       │researcher│ │       │  │        │
+       └────────┘  └────────┘  └────────┘
+</code></pre></div>
+
+<p><strong>When to use it:</strong><br />
+- Highly heterogeneous tasks where different "skills" are needed.<br />
+- When you want a <strong>specialized system prompt</strong> for each role (a coder is more effective with a coder prompt).<br />
+- When you want to parallelize independent work.</p>
+<p><strong>Limit:</strong> coordination complexity. More agents = more tokens = more time = more failure points.</p>
+<p>In Claude Code, for example, the main agent can launch <strong>subagents</strong> for delegated tasks (Explore, Plan, etc.). It's the orchestrator-worker pattern applied to coding.</p>
+<h2 id="45-multi-agent-debate-consensus">4.5 Multi-agent: debate / consensus</h2>
+<p>Multiple agents propose independent solutions, then compare. Useful when uncertainty is high and you want more "viewpoints":</p>
+<div class="codehilite"><pre><span></span><code>Agent A proposes: &quot;Let&#39;s use PostgreSQL&quot;
+Agent B proposes: &quot;Let&#39;s use MongoDB&quot;
+Agent C (judge): &quot;A is right because the data is relational...&quot;
+</code></pre></div>
+
+<p><strong>When to use it:</strong> design decisions, critical analyses, evaluations where multiple perspectives help.</p>
+<p><strong>Limit:</strong> "consensus" often converges on mediocre answers (AI tends to accommodate). It works better if the roles are <em>really</em> different.</p>
+<h2 id="46-swarm-market-based">4.6 Swarm / market-based</h2>
+<p>Many smaller agents, each with a sub-goal, competing or collaborating in a decentralized way. Fascinating pattern in research, rare in production because it's hard to debug.</p>
+<h2 id="47-tool-using-agent-vs-code-generating-agent">4.7 Tool-using agent vs. Code-generating agent</h2>
+<p>An important practical distinction.</p>
+<ul>
+<li>
+<p><strong>Tool-using agent</strong>: the agent calls predefined tools. You have fine control over available tools, simple audit. Example: a customer support agent that uses <code>search_kb()</code>, <code>create_ticket()</code>, <code>send_email()</code>.</p>
+</li>
+<li>
+<p><strong>Code-generating agent</strong>: the agent <em>writes code</em> (usually Python) and runs it in a sandbox. Extremely flexible — anything Python can do, the agent can do. Extremely dangerous if not properly sandboxed.</p>
+</li>
+</ul>
+<p>Well-known examples of the second type: ChatGPT with Code Interpreter, Claude with the <code>code_execution</code> tool, Open Interpreter.</p>
+<p><strong>Tradeoff:</strong><br />
+- Tool-using = safe, predictable, limited.<br />
+- Code-generating = flexible, powerful, risky.</p>
+<p>For many real-world cases, code-generating solves in 1 step what a tool-using solves in 10. But you only want it running in isolated environments.</p>
+<h2 id="48-ambient-agent-always-on">4.8 Ambient agent / always-on</h2>
+<p>Agents that run in the background, monitoring events and acting only when needed. Examples:</p>
+<ul>
+<li>An agent that watches your email inbox and automatically archives/labels.</li>
+<li>An agent that monitors production logs and opens a ticket when it spots an anomaly.</li>
+<li>An agent that observes a Git repo and proposes refactors.</li>
+</ul>
+<p>Technically they are agents that get "woken up" by a trigger (cron, webhook, event) and then follow the normal loop.</p>
+<p><strong>When to use them:</strong> monitoring, automation of repetitive workflows.</p>
+<p><strong>Caution:</strong> since they act when you're not present, <strong>authorizations</strong> must be defined with great care. An always-on agent that can write to Slack or delete files needs human review on critical steps.</p>
+<h2 id="49-quick-comparison-which-pattern-do-i-pick">4.9 Quick comparison: which pattern do I pick?</h2>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Recommended pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q&amp;A with multi-step search</td>
+<td>ReAct</td>
+</tr>
+<tr>
+<td>Task with long plan, you want visibility</td>
+<td>Plan-and-Execute</td>
+</tr>
+<tr>
+<td>Important code or text, you want quality</td>
+<td>ReAct + Reflexion</td>
+</tr>
+<tr>
+<td>Highly heterogeneous tasks</td>
+<td>Orchestrator + worker</td>
+</tr>
+<tr>
+<td>Difficult design decision</td>
+<td>Multi-agent debate</td>
+</tr>
+<tr>
+<td>Arbitrary data calculations/transformations</td>
+<td>Code-generating agent</td>
+</tr>
+<tr>
+<td>Background monitoring</td>
+<td>Ambient agent (event-driven)</td>
+</tr>
+</tbody>
+</table>
+<p>They're not mutually exclusive: a real system often combines two or three.</p>
+<h2 id="410-practice-identify-the-architecture">4.10 Practice: identify the architecture</h2>
+<p>Open these products and try to recognize the pattern (it's a mental exercise, there's no single right answer):</p>
+<ul>
+<li><strong>ChatGPT with "Deep Research"</strong>: produces a plan, then browses the web for hours, then synthesizes. → Plan-and-Execute, code-generating on results.</li>
+<li><strong>Claude Code</strong>: main agent with subagents for exploration/planning. → Orchestrator + worker, ReAct.</li>
+<li><strong>Cursor / Aider</strong>: autocomplete + code edit in real time. → More tool than "real" agent (little loop).</li>
+<li><strong>Devin</strong>: autonomous coding agent. → Plan-and-Execute, code-generating.</li>
+<li><strong>Zapier AI</strong>: scripted workflow that calls LLMs in some steps. → Automation with AI, not agent.</li>
+</ul>
+<h2 id="411-key-takeaways">4.11 Key takeaways</h2>
+<ul>
+<li><strong>ReAct</strong> is the starting pattern, simple and powerful.</li>
+<li><strong>Plan-and-Execute</strong> when you want plan visibility or parallelization.</li>
+<li><strong>Reflexion</strong> when quality matters more than speed.</li>
+<li><strong>Multi-agent</strong> when tasks are heterogeneous or you want role specialization.</li>
+<li><strong>Code-generating</strong> is maximum flexibility but requires serious sandboxes.</li>
+<li><strong>Ambient agent</strong> = agent triggered by events instead of prompts.</li>
+<li><strong>Combining patterns is normal and often better than picking just one.</strong></li>
+</ul>
+<h2 id="412-common-mistakes">4.12 Common mistakes</h2>
+<ul>
+<li><strong>Starting multi-agent before single.</strong> Almost always a single well-built agent is enough. Multi-agent is a conscious choice, not a default.</li>
+<li><strong>Plan-and-Execute with overly detailed plans.</strong> If the plan has 30 steps, you're back in ReAct. Keep plans of 3-7 steps.</li>
+<li><strong>Infinite Reflexion.</strong> "Critique and revise" can loop. Force <em>one</em> round of critique only.</li>
+<li><strong>Ignoring the "ambient" pattern</strong> when actually only standard automation is needed. Not everything must have a loop.</li>
+</ul>
+<hr />
+<p>We've covered the architectural fundamentals. Now let's move on to <strong>practical techniques</strong> for getting the most out of agents, starting with the most important: prompt engineering.</p>
+    </div>
+    
+
+    <nav class="chapter-nav">
+      <a class="nav-prev" href="03-anatomia-di-un-agente.html"><span class="nav-label"><i data-icon-replace="arrow-left"></i> <span data-i18n="chapter.nav.prev"></span></span><span class="nav-title">Ch. 3. Anatomy of an Agent</span></a>
+      <a class="nav-next" href="05-prompt-engineering.html"><span class="nav-label"><span data-i18n="chapter.nav.next"></span> <i data-icon-replace="arrow-right"></i></span><span class="nav-title">Ch. 5. Prompt Engineering</span></a>
+    </nav>
+  </article>
+
+  <aside class="tutor-pane">
+    <div class="tutor-header">
+      <i data-icon-replace="message-circle"></i>
+      <span class="tutor-title" data-i18n="features.tutor.title"></span>
+      <span class="muted small">ch. 4</span>
+    </div>
+    <div class="tutor-messages" id="tutor-messages">
+      <div class="tutor-msg tutor-msg-ai">Hi! I'm with you on <b>Ch. 4 — Types of Agents and Architectures</b>. Ask me for alternative explanations, different examples or deeper dives.</div>
+    </div>
+    <form class="tutor-form" id="tutor-form" data-chapter-slug="04-tipi-di-agenti-e-architetture" data-chapter-n="4" data-chapter-title="Types of Agents and Architectures">
+      <textarea id="tutor-input" rows="2" data-i18n-attr="placeholder:chapter.tutor.placeholder"></textarea>
+      <button type="submit" class="btn btn-primary" aria-label="Send"><i data-icon-replace="send"></i></button>
+    </form>
+  </aside>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span data-i18n="footer.copyright"></span>
+    <span class="footer-links">
+      <a href="../../about.html" data-i18n="footer.about">About</a> ·
+      <a href="https://gabrielebottai.netlify.app/" target="_blank" rel="noopener">Portfolio</a> ·
+      <a href="https://github.com/GabrieleBottai01" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+<script src="../../assets/icons.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/ai-client.js"></script>
+<script src="../../assets/app.js"></script>
+<script src="../../assets/search.js"></script>
+<script src="../../assets/tutor.js"></script>
+<script src="../../assets/exercise.js"></script>
+<script src="../../assets/enhancements.js"></script>
+</body>
+</html>
