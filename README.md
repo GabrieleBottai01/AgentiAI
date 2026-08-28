@@ -53,6 +53,28 @@ Ogni capitolo è strutturato così:
 15. [Casi d'uso e workflow reali](15-casi-uso-e-workflow-reali.md)
 16. [Glossario e risorse](16-glossario-e-risorse.md)
 
+## Oltre ai capitoli
+
+Il repository contiene anche:
+
+- **Sito statico bilingue** in `website/` — versione navigabile della guida (IT + EN) con ricerca, tutor e playground. Generato da `build_site.py`; per leggerlo in locale apri `website/index.html`.
+- **PDF** — `Guida-Agenti-AI.pdf` (IT) e `Guide-AI-Agents-EN.pdf` (EN), generati da `build_pdf.py`.
+- **Esempi di codice runnable** in [`examples/`](examples/README.md) — 5 progetti Python autonomi: agent loop minimale, tool use, RAG, prompt caching, eval harness.
+- **Versione inglese** dei 16 capitoli in [`en/`](en/).
+- **Istruzioni di deploy** in [`DEPLOY.md`](DEPLOY.md) — Netlify, Vercel o GitHub Pages.
+- **Registro di avanzamento** in [`docs/AVANZAMENTO.md`](docs/AVANZAMENTO.md) — struttura del progetto, come rigenerare sito e PDF, decisioni prese.
+
+### Rigenerare sito e PDF
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install markdown beautifulsoup4 pygments reportlab
+python3 build_site.py
+python3 build_pdf.py
+```
+
+I file `.md` (in root e in `en/`) sono la fonte di verità: `website/` è output di build e non va modificato a mano.
+
 ## Come usare la guida al meglio
 
 - **Non leggerla passivamente.** Apri ChatGPT, Claude o un terminale di fianco e prova ogni esempio.
