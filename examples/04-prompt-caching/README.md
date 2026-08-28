@@ -1,24 +1,26 @@
-# 04 — Agente production-grade con prompt caching
+# 04 — Production-grade agent with prompt caching
 
-Riferimento: **Capitolo 10** della guida.
+Reference: **Chapter 10** of the guide.
 
-## Cosa imparerai
+> 🇮🇹 [Versione italiana](README.it.md)
 
-- **Prompt caching**: come marcare il system prompt come cacheable e tracciare il cache hit.
-- **Retry con backoff esponenziale** su rate limit / errori 5xx.
-- **Loop detection** — protezione minima contro spirale di tool calls.
-- **Token / cost / latency tracking** dettagliato per ogni run.
+## What you'll learn
 
-## Cosa fa
+- **Prompt caching**: how to mark the system prompt as cacheable and track cache hits.
+- **Retry with exponential backoff** on rate limits and 5xx errors.
+- **Loop detection** — a minimal guard against a spiral of tool calls.
+- Detailed **token / cost / latency tracking** for every run.
 
-L'agente di research:
-1. Legge la query (CLI arg o default).
-2. Per ogni iterazione, chiama Anthropic con `LARGE_SYSTEM` cacheable (~6KB).
-3. Usa `web_search` (mock) e `fetch_url` (mock) per simulare ricerca.
-4. Produce un brief con citazioni.
-5. Stampa metriche: token usati, cache hit, costo stimato, risparmio.
+## What it does
 
-## Esegui
+The research agent:
+1. Reads the query (CLI argument, or a default).
+2. On every iteration, calls Anthropic with a cacheable `LARGE_SYSTEM` prompt (~6 KB).
+3. Uses `web_search` (mock) and `fetch_url` (mock) to simulate research.
+4. Produces a brief with citations.
+5. Prints metrics: tokens used, cache hits, estimated cost, savings.
+
+## Run it
 
 ```bash
 pip install -r requirements.txt
@@ -27,11 +29,13 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 # Default query
 python main.py
 
-# Tua query
-python main.py "Quali sono i 3 cambiamenti principali in Python 3.13?"
+# Your own query
+python main.py "What are the 3 main changes in Python 3.13?"
 ```
 
-## Output atteso (estratto)
+## Expected output (excerpt)
+
+The metric labels are in Italian (`Costo stimato` = estimated cost, `Risparmio cache` = cache savings):
 
 ```
 → Iter 1
@@ -39,11 +43,10 @@ python main.py "Quali sono i 3 cambiamenti principali in Python 3.13?"
   • web_search({"query": "..."})
 
 → Iter 2
-  in: 198 tok, out: 156 tok, cache_read: 6342     ← cache hit, -90% costo input
-  • fetch_url({"url": "..."})
+  in: 198 tok, out: 156 tok, cache_read: 6342     ← cache hit, -90% input cost
 
 === BRIEF ===
-Anthropic è stata fondata nel 2021 da Dario Amodei e Daniela Amodei [1][2]...
+...
 
 --- METRICHE ---
 Iterazioni:        3
@@ -52,16 +55,16 @@ Costo stimato:     $0.0028
 Risparmio cache:   $0.0091   (vs no-cache)
 ```
 
-## Da notare nel codice
+## What to notice in the code
 
-- `system=[{"type":"text", "text":..., "cache_control":{"type":"ephemeral"}}]` — il blocco viene cachato.
-- Cache read viene fatturato a ~10% del prezzo di input. Su agenti con system grandi e molte iterazioni, il risparmio è enorme.
-- TTL della cache: 5 minuti. Si rinnova ad ogni hit.
-- `call_with_retry` gestisce 429 (rate limit), 5xx, errori di connessione.
+- `system=[{"type":"text", "text":..., "cache_control":{"type":"ephemeral"}}]` — that block gets cached.
+- Cache reads are billed at ~10% of the input price. On agents with a large system prompt and many iterations, the saving is enormous.
+- Cache TTL: 5 minutes, refreshed on every hit.
+- `call_with_retry` handles 429 (rate limit), 5xx, and connection errors.
 
-## Esercizio per te
+## Exercise for you
 
-1. Aumenta `* 4` a `* 10` su `LARGE_SYSTEM` e osserva il costo della prima iterazione (cache write) e delle successive (cache read).
-2. Sostituisci i tool mock con tool reali (Tavily API per web search).
-3. Aggiungi un secondo livello di cache_control sui tool definitions per cachare anche quelli.
-4. Implementa il loop detection vero con un counter (3 chiamate identiche consecutive → stop).
+1. Change `* 4` to `* 10` on `LARGE_SYSTEM` and compare the cost of the first iteration (cache write) with the following ones (cache read).
+2. Replace the mock tools with real ones (e.g. the Tavily API for web search).
+3. Add a second level of `cache_control` on the tool definitions so those get cached too.
+4. Implement real loop detection with a counter (3 identical consecutive calls → stop).

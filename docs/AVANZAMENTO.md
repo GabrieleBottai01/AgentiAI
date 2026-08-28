@@ -102,6 +102,19 @@ python3 build_pdf.py      # → PDF IT + EN
 - README allineato al contenuto reale del repo (sito, PDF, esempi, deploy).
 - Repository reso **pubblico**; aggiunti description e topics su GitHub.
 
+### Step 8 — Presentazione internazionale (2026-08-28)
+- **Decisione:** la landing page del repo (`README.md`) è ora in **inglese**, perché il repo è pubblico e il pubblico potenziale è internazionale. L'italiano non è stato perso: è in `README.it.md`, linkato in cima.
+- Schema bilingue applicato a tutti i README: `README.md` (EN) + `README.it.md` (IT), con link incrociato 🇬🇧/🇮🇹 in testa a ciascuno.
+  - root: `README.md` (nuovo, EN) / `README.it.md` (ex README italiano, arricchito)
+  - `examples/README.md` (EN) / `examples/README.it.md`
+  - i 5 `examples/*/README.md` (EN) / `README.it.md`
+- Il nuovo README EN contiene: badge, link al sito live, "what this is", indice dei 16 capitoli EN, tabella esempi runnable, quick start, struttura del repo, istruzioni di build, sezione autore.
+- **Scoperta:** il sito è **già live** su https://myfirstaiagent.netlify.app/ (IT) e `/en/` (EN) — HTTP 200 verificato. Ora è linkato in evidenza da README e dai metadati GitHub (homepage).
+- Description GitHub riscritta in inglese.
+- Verifica: script di controllo su tutti i link relativi dei README → 0 link rotti.
+
+**Non fatto di proposito:** le stringhe `print()` dentro `examples/*/main.py` restano in italiano (`OBIETTIVO`, `Iterazione`, `METRICHE`…). I README EN lo dichiarano esplicitamente e traducono le etichette. Tradurre il codice richiederebbe di riallineare anche gli output di esempio dei README IT: valutare come step separato.
+
 ## 6. Problemi noti e come sono stati risolti
 
 | Problema | Soluzione |
@@ -110,6 +123,7 @@ python3 build_pdf.py      # → PDF IT + EN
 | `.DS_Store` sparsi nelle cartelle (macOS) | Già in `.gitignore`; verificato che nessuno sia tracciato |
 | Rischio divergenza tra `.md` e `website/` | I `.md` sono la fonte di verità: dopo ogni modifica **rilanciare i due build** e committare anche `website/` |
 | Il repo era privato → guida non condivisibile | Reso pubblico il 2026-08-28 |
+| Repo pubblico ma vetrina solo in italiano → illeggibile per stranieri | README EN come landing page + schema bilingue EN/IT su tutti i README (Step 8) |
 | MCP GitHub non connesso in sessione (`Authorization header is badly formatted`) | Usato il `gh` CLI (account `GabrieleBottai01` autenticato) |
 
 ## 7. Prossimi passi possibili (non ancora fatti)
@@ -122,4 +136,4 @@ python3 build_pdf.py      # → PDF IT + EN
 
 ---
 
-_Ultimo aggiornamento: 2026-08-28_
+_Ultimo aggiornamento: 2026-08-28 (Step 8)_

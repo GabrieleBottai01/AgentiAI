@@ -1,25 +1,27 @@
-# 02 — Tool design completo
+# 02 — Complete tool design
 
-Riferimento: **Capitolo 6** della guida.
+Reference: **Chapter 6** of the guide.
 
-## Cosa imparerai
+> 🇮🇹 [Versione italiana](README.it.md)
 
-- Come scrivere descrizioni di tool che il modello capisce davvero (incluso "quando NON usarli").
-- Schema JSON Schema preciso con `enum`, `maxLength`, `required`.
-- **Error handling strutturato**: i tool ritornano sempre `{ok: true/false, ...}`, mai eccezioni.
-- **Idempotency key** per tool con effetti collaterali (invio email).
-- **Truncation** dell'output dei tool per non saturare il contesto.
+## What you'll learn
 
-## Cosa fa
+- How to write tool descriptions the model actually understands (including "when NOT to use them").
+- Precise JSON Schema with `enum`, `maxLength`, `required`.
+- **Structured error handling**: tools always return `{ok: true/false, ...}`, never raise.
+- **Idempotency keys** for tools with side effects (sending email).
+- **Truncating** tool output so it doesn't flood the context window.
 
-L'agente riceve un compito di outreach: trova tutti gli utenti enterprise, manda a ognuno una email personalizzata, riassume.
+## What it does
 
-Vedrai:
-1. `search_users(tier="enterprise")` → ritorna lista filtrata.
-2. Per ogni utente, `send_email(to=..., subject=..., body=..., idempotency_key=...)`.
-3. Riassunto finale con numero di email inviate.
+The agent is given an outreach task: find every enterprise user, send each of them a personalised email, then summarise.
 
-## Esegui
+You'll see:
+1. `search_users(tier="enterprise")` → returns the filtered list.
+2. For each user, `send_email(to=..., subject=..., body=..., idempotency_key=...)`.
+3. A final summary with the number of emails sent.
+
+## Run it
 
 ```bash
 pip install -r requirements.txt
@@ -27,15 +29,15 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 python main.py
 ```
 
-## Da notare nel codice
+## What to notice in the code
 
-- `search_users.description` cita esplicitamente cosa fare e cosa NON fare. Questo è **il** prompt più importante per il tool.
-- `send_email` ha `idempotency_key` opzionale ma il system prompt obbliga il modello a passarlo.
-- `execute_tool()` cattura `TypeError` e ritorna errore strutturato — l'agente legge l'errore e può ritentare con argomenti corretti.
-- Output truncato a 4000 caratteri per evitare saturazione del context window.
+- `search_users.description` explicitly states what to do and what NOT to do. This is **the** most important prompt for a tool.
+- `send_email` takes an optional `idempotency_key`, but the system prompt forces the model to pass it.
+- `execute_tool()` catches `TypeError` and returns a structured error — the agent reads the error and can retry with corrected arguments.
+- Output is truncated at 4000 characters to avoid saturating the context window.
 
-## Esercizio per te
+## Exercise for you
 
-1. Aggiungi un tool `get_user_by_id(id)` con uso preciso (lookup esatto, non ricerca).
-2. Modifica il system prompt per chiedere all'agente di **mostrare un dry-run** prima di inviare (chiede conferma in testo).
-3. Estendi `_USERS` con 50 utenti e osserva come l'agente gestisce volumi maggiori.
+1. Add a `get_user_by_id(id)` tool with a precise purpose (exact lookup, not search).
+2. Change the system prompt to make the agent **show a dry run** before sending (ask for confirmation in text).
+3. Extend `_USERS` to 50 users and watch how the agent handles the larger volume.

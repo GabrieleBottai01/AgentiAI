@@ -1,39 +1,41 @@
 # 05 — Eval harness
 
-Riferimento: **Capitolo 14** della guida.
+Reference: **Chapter 14** of the guide.
 
-## Cosa imparerai
+> 🇮🇹 [Versione italiana](README.it.md)
 
-- Come strutturare un dataset di eval (`evals.jsonl`).
+## What you'll learn
+
+- How to structure an eval dataset (`evals.jsonl`).
 - Programmatic checks (contains, length, language detection).
-- LLM-as-judge per valutazioni qualitative.
-- A/B test tra due prompt diversi (`v1` vs `v2`).
-- Salvataggio dei run per analisi successiva e regressioni.
+- LLM-as-judge for qualitative scoring.
+- A/B testing between two different prompts (`v1` vs `v2`).
+- Saving runs so you can analyse them later and catch regressions.
 
-## Cosa fa
+## What it does
 
-1. Carica `evals.jsonl` (10 casi di test).
-2. Per ogni caso, genera la risposta con il prompt selezionato (`v1` o `v2`).
-3. Esegue programmatic checks (contains, max_words, ecc.).
-4. (Opzionale) Chiama un LLM-as-judge per qualità su 3 dimensioni (factual / clarity / conciseness).
-5. Stampa pass rate, casi falliti, salva tutto in `results-v1.json`.
+1. Loads `evals.jsonl` (10 test cases).
+2. For each case, generates the answer with the selected prompt (`v1` or `v2`).
+3. Runs programmatic checks (contains, max_words, …).
+4. (Optional) Calls an LLM-as-judge scoring 3 dimensions (factual / clarity / conciseness).
+5. Prints the pass rate and failed cases, and saves everything to `results-v1.json`.
 
-## Esegui
+## Run it
 
 ```bash
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# Run baseline
+# Baseline run
 python main.py --prompt v1
 
-# Run alternative + judge
+# Alternative prompt + judge
 python main.py --prompt v2 --judge
 
-# Confronta i due files results-*.json per A/B
+# Compare the two results-*.json files for the A/B
 ```
 
-## Output atteso
+## Expected output
 
 ```
 Eval con prompt=v1, judge=False, dataset=10 casi
@@ -47,27 +49,24 @@ Eval con prompt=v1, judge=False, dataset=10 casi
 Pass rate:    80.0%  (8/10)
 Latency:      18.4s, 1.8s/case
 Salvato: results-v1.json
-
-2 casi falliti:
-  - format: Elenca i 3 ingredienti principali della pizza...
-    output: La pizza margherita ha pomodoro san marzano…
-    checks: {'contains': False, 'max_words': True}
 ```
 
-## Struttura del dataset
+(The test cases and console labels are in Italian; the harness itself is language-agnostic.)
 
-Ogni riga è un JSON con almeno `id` e `input`. Criteri di success opzionali:
+## Dataset structure
 
-| Campo | Significato |
+Each line is a JSON object with at least `id` and `input`. Success criteria are optional:
+
+| Field | Meaning |
 |---|---|
-| `expected_contains` | tutte queste keywords devono apparire |
-| `expected_not_contains` | nessuna deve apparire |
-| `max_words` / `min_words` | vincoli sulla lunghezza |
-| `expected_language` | "it" o "en" |
+| `expected_contains` | all of these keywords must appear |
+| `expected_not_contains` | none of these may appear |
+| `max_words` / `min_words` | length constraints |
+| `expected_language` | `"it"` or `"en"` |
 
-## Esercizio per te
+## Exercise for you
 
-1. Aggiungi 10 casi al dataset, inclusi edge case (input vuoti, lingue diverse, contraddittori).
-2. Aggiungi un terzo prompt `v3` e confrontalo con v1/v2 sulle stesse metriche.
-3. Implementa una **regression check**: confronta `results-v2.json` con un baseline `baseline.json` e flagga differenze.
-4. Aggiungi una metrica di costo (token usati, costo in $) per valutare il tradeoff qualità/prezzo.
+1. Add 10 cases to the dataset, including edge cases (empty inputs, other languages, contradictory prompts).
+2. Add a third prompt `v3` and compare it against v1/v2 on the same metrics.
+3. Implement a **regression check**: compare `results-v2.json` against a `baseline.json` and flag differences.
+4. Add a cost metric (tokens used, cost in $) so you can judge the quality/price tradeoff.

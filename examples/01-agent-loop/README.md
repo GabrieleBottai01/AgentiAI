@@ -1,22 +1,24 @@
-# 01 — Loop minimale di un agente
+# 01 — The minimal agent loop
 
-Riferimento: **Capitolo 3** della guida.
+Reference: **Chapter 3** of the guide.
 
-## Cosa imparerai
+> 🇮🇹 [Versione italiana](README.it.md)
 
-- La struttura del loop di un agente (perceive → reason → act → observe → repeat).
-- Come si dichiarano e si chiamano i tool.
-- Come gestire lo stop naturale e il limite di iterazioni.
+## What you'll learn
 
-## Cosa fa
+- The structure of an agent loop (perceive → reason → act → observe → repeat).
+- How tools are declared and called.
+- How to handle both natural stopping and the iteration limit.
 
-L'agente riceve un obiettivo che richiede 2 passi:
-1. Sapere l'ora corrente (tool `current_time`).
-2. Calcolare i minuti dalla mezzanotte (tool `calculator`).
+## What it does
 
-Vedrai stampato a video ogni iterazione, ogni chiamata a tool, ogni risultato.
+The agent is given a goal that requires 2 steps:
+1. Find the current time (tool `current_time`).
+2. Compute the minutes elapsed since midnight (tool `calculator`).
 
-## Esegui
+Every iteration, every tool call and every result is printed to the terminal.
+
+## Run it
 
 ```bash
 pip install -r requirements.txt
@@ -24,7 +26,9 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 python main.py
 ```
 
-## Output atteso
+## Expected output
+
+The console labels are in Italian (`Iterazione` = iteration, `RISPOSTA FINALE` = final answer):
 
 ```
 OBIETTIVO: Quanti minuti sono passati dalla mezzanotte UTC fino ad adesso?…
@@ -42,19 +46,19 @@ Sono passati 872 minuti dalla mezzanotte UTC. Il calcolo:
 14 ore × 60 minuti = 840, più 32 minuti = 872.
 ```
 
-## Costo
+## Cost
 
-~€0.001 per esecuzione (modello Haiku, 2 turni).
+~$0.001 per run (Haiku model, 2 turns).
 
-## Da notare nel codice
+## What to notice in the code
 
-- **`stop_reason`** — distinguiamo `tool_use` (continua il loop) da tutto il resto (esci).
-- **Schema dei tool** — descrizione chiara, parametri tipizzati, `required`.
-- **Tool result strutturato** — `{"type": "tool_result", "tool_use_id": ..., "content": ...}`.
-- **`max_iterations`** — protegge da loop infiniti.
+- **`stop_reason`** — we distinguish `tool_use` (keep looping) from everything else (exit).
+- **Tool schema** — clear description, typed parameters, `required`.
+- **Structured tool result** — `{"type": "tool_result", "tool_use_id": ..., "content": ...}`.
+- **`max_iterations`** — guards against infinite loops.
 
-## Esercizio per te
+## Exercise for you
 
-1. Aggiungi un terzo tool: `convert_currency(amount, from, to)` (anche fake).
-2. Cambia l'obiettivo in: "Quanto costano 100€ in dollari, e quante ore della tua giornata lavorativa rappresentano se guadagni 50€/ora?"
-3. Verifica che l'agente chiami i tool nell'ordine giusto.
+1. Add a third tool: `convert_currency(amount, from, to)` (a fake one is fine).
+2. Change the goal to: "How much is €100 in dollars, and how many hours of your working day does that represent if you earn €50/hour?"
+3. Check that the agent calls the tools in the right order.

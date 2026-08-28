@@ -1,92 +1,180 @@
-# Guida agli Agenti AI
+# AI Agents — The Complete Guide
 
-Una guida completa, in italiano, pensata per chi parte da zero e vuole capire **cosa sono gli agenti AI, come funzionano e come usarli** — sia come utente, sia come sviluppatore.
+**A from-scratch guide to what AI agents are, how they work, and how to actually build them.**
+16 chapters, fully available in **English** and **Italian**, plus a static website, PDF editions, and 5 self-contained runnable Python examples.
 
-## A chi è rivolta
+[![Read online](https://img.shields.io/badge/read%20online-myfirstaiagent.netlify.app-2563eb?style=flat-square)](https://myfirstaiagent.netlify.app/en/)
+[![Chapters](https://img.shields.io/badge/chapters-16-16a34a?style=flat-square)](#table-of-contents)
+[![Languages](https://img.shields.io/badge/languages-EN%20%7C%20IT-7c3aed?style=flat-square)](#-two-languages)
+[![Examples](https://img.shields.io/badge/runnable%20examples-5-ea580c?style=flat-square)](examples/)
+[![Python](https://img.shields.io/badge/python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)](#run-the-examples)
 
-A te, se almeno una di queste frasi ti suona familiare:
+> 🇮🇹 **Parli italiano?** Vai al [README in italiano](README.it.md).
 
-- "Sento parlare di agenti AI ovunque ma non ho capito cosa li distingue da ChatGPT."
-- "Voglio iniziare a usare l'AI per lavorare meglio, ma non so da dove partire."
-- "So programmare ma non ho mai costruito un agente. Da dove comincio?"
-- "Ho provato un chatbot e mi ha deluso. Si può fare di meglio?"
+---
 
-Non serve nessuna conoscenza pregressa di machine learning. Serve curiosità e voglia di provare.
+## 🌐 Read it online
 
-## Come è organizzata
+| | |
+|---|---|
+| **English website** | **https://myfirstaiagent.netlify.app/en/** |
+| **Sito in italiano** | https://myfirstaiagent.netlify.app/ |
+| **PDF (English)** | [`Guide-AI-Agents-EN.pdf`](Guide-AI-Agents-EN.pdf) |
+| **PDF (Italiano)** | [`Guida-Agenti-AI.pdf`](Guida-Agenti-AI.pdf) |
 
-La guida è divisa in **capitoli brevi**, ognuno in un file `.md` separato. Puoi leggerli in ordine (consigliato la prima volta) oppure saltare a quello che ti serve.
+The website includes full-text search (`Cmd/Ctrl + K`), a chapter-aware tutor, and an interactive playground.
 
-Ogni capitolo è strutturato così:
-1. **Concetto** — la teoria, spiegata semplice.
-2. **Pratica** — esempi concreti, codice o screenshot di workflow.
-3. **Da ricordare** — i 3-5 punti chiave.
-4. **Errori tipici** — le trappole in cui cascano quasi tutti.
+---
 
-## Indice
+## What this is
 
-### Parte 1 — Fondamenti (capire)
-1. [Cosa sono gli Agenti AI](01-cosa-sono-gli-agenti-ai.md)
-2. [Come funzionano gli LLM (il motore)](02-come-funzionano-gli-llm.md)
-3. [Anatomia di un agente](03-anatomia-di-un-agente.md)
-4. [Tipi di agenti e architetture](04-tipi-di-agenti-e-architetture.md)
+Most AI-agent material is either a marketing blog post or a framework tutorial that hides the mechanics. This guide sits in between: it explains **the mechanism first**, then shows the code.
 
-### Parte 2 — Tecniche essenziali (saper parlare con loro)
-5. [Prompt engineering: l'arte di chiedere](05-prompt-engineering.md)
-6. [Tool use e function calling](06-tool-use-e-function-calling.md)
-7. [Memoria, contesto e RAG](07-memoria-contesto-e-rag.md)
+No machine-learning background required. If you can read Python, you can follow every example.
 
-### Parte 3 — Usare gli agenti (pratica quotidiana)
-8. [Usare i chatbot AI: ChatGPT, Claude.ai, Gemini](08-usare-i-chatbot-ai.md)
-9. [Claude Code: agente da terminale per sviluppatori](09-claude-code-per-sviluppatori.md)
+**It's for you if:**
 
-### Parte 4 — Costruire agenti (mani in pasta)
-10. [Costruire agenti custom con API e SDK](10-costruire-agenti-con-api-sdk.md)
-11. [Framework: LangChain, AutoGen, CrewAI](11-framework-langchain-autogen-crewai.md)
+- "I hear about AI agents everywhere but I still don't get what makes them different from ChatGPT."
+- "I want to use AI to work better, but I don't know where to start."
+- "I can code, but I've never built an agent. Where do I begin?"
+- "I tried a chatbot and it disappointed me. Can this be done better?"
 
-### Parte 5 — Lavorare bene (qualità e responsabilità)
-12. [Best practice di sviluppo con agenti](12-best-practice-sviluppo-con-agenti.md)
-13. [Sicurezza, costi, limiti](13-sicurezza-costi-e-limiti.md)
-14. [Valutazione e miglioramento](14-valutazione-e-miglioramento.md)
+**Every chapter follows the same structure:**
 
-### Parte 6 — Applicazioni
-15. [Casi d'uso e workflow reali](15-casi-uso-e-workflow-reali.md)
-16. [Glossario e risorse](16-glossario-e-risorse.md)
+1. **Concept** — the theory, explained plainly.
+2. **Practice** — concrete examples, code, real workflows.
+3. **Key takeaways** — the 3–5 things that matter.
+4. **Common mistakes** — the traps nearly everyone falls into.
 
-## Oltre ai capitoli
+---
 
-Il repository contiene anche:
+## Table of contents
 
-- **Sito statico bilingue** in `website/` — versione navigabile della guida (IT + EN) con ricerca, tutor e playground. Generato da `build_site.py`; per leggerlo in locale apri `website/index.html`.
-- **PDF** — `Guida-Agenti-AI.pdf` (IT) e `Guide-AI-Agents-EN.pdf` (EN), generati da `build_pdf.py`.
-- **Esempi di codice runnable** in [`examples/`](examples/README.md) — 5 progetti Python autonomi: agent loop minimale, tool use, RAG, prompt caching, eval harness.
-- **Versione inglese** dei 16 capitoli in [`en/`](en/).
-- **Istruzioni di deploy** in [`DEPLOY.md`](DEPLOY.md) — Netlify, Vercel o GitHub Pages.
-- **Registro di avanzamento** in [`docs/AVANZAMENTO.md`](docs/AVANZAMENTO.md) — struttura del progetto, come rigenerare sito e PDF, decisioni prese.
+### Part 1 — Foundations (understanding)
+1. [What AI Agents Are](en/01-cosa-sono-gli-agenti-ai.md)
+2. [How LLMs Work (the engine)](en/02-come-funzionano-gli-llm.md)
+3. [Anatomy of an Agent](en/03-anatomia-di-un-agente.md)
+4. [Types of Agents and Architectures](en/04-tipi-di-agenti-e-architetture.md)
 
-### Rigenerare sito e PDF
+### Part 2 — Core techniques (talking to them)
+5. [Prompt Engineering: the Art of Asking](en/05-prompt-engineering.md)
+6. [Tool Use and Function Calling](en/06-tool-use-e-function-calling.md)
+7. [Memory, Context and RAG](en/07-memoria-contesto-e-rag.md)
+
+### Part 3 — Using agents (day to day)
+8. [Using AI Chatbots: ChatGPT, Claude.ai, Gemini](en/08-usare-i-chatbot-ai.md)
+9. [Claude Code: Terminal-Based Agent for Developers](en/09-claude-code-per-sviluppatori.md)
+
+### Part 4 — Building agents (hands on)
+10. [Building Custom Agents with API and SDK](en/10-costruire-agenti-con-api-sdk.md)
+11. [Frameworks: LangChain, AutoGen, CrewAI](en/11-framework-langchain-autogen-crewai.md)
+
+### Part 5 — Doing it well (quality and responsibility)
+12. [Best Practices for Development with Agents](en/12-best-practice-sviluppo-con-agenti.md)
+13. [Security, Costs, Limits](en/13-sicurezza-costi-e-limiti.md)
+14. [Evaluation and Improvement](en/14-valutazione-e-miglioramento.md)
+
+### Part 6 — Applications
+15. [Real Use Cases and Workflows](en/15-casi-uso-e-workflow-reali.md)
+16. [Glossary and Resources](en/16-glossario-e-risorse.md)
+
+> The Italian chapters live in the repository root (`01-*.md` … `16-*.md`) and are indexed in [README.it.md](README.it.md).
+
+---
+
+## Runnable examples
+
+Five standalone Python projects in [`examples/`](examples/README.md), each mapped to a chapter. No shared state, no framework, pinned dependencies — read them top to bottom like pseudocode.
+
+| Folder | Chapter | What it demonstrates |
+|---|---|---|
+| [`01-agent-loop`](examples/01-agent-loop/) | Ch. 3 | The minimal agent loop: ~70 lines, 2 tools, readable as pseudocode. |
+| [`02-tool-use`](examples/02-tool-use/) | Ch. 6 | Real tool design: precise schemas, structured error handling, idempotency keys. |
+| [`03-rag-minimal`](examples/03-rag-minimal/) | Ch. 7 | End-to-end RAG: chunking, embedding, retrieval, generation with citations. |
+| [`04-prompt-caching`](examples/04-prompt-caching/) | Ch. 10 | Production-grade agent: prompt caching, retry with backoff, cost tracking. |
+| [`05-eval-harness`](examples/05-eval-harness/) | Ch. 14 | Eval harness: `.jsonl` dataset, programmatic checks, LLM-as-judge, A/B testing. |
+
+### Run the examples
+
+```bash
+git clone https://github.com/GabrieleBottai01/AgentiAI.git
+cd AgentiAI/examples/01-agent-loop
+
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+export ANTHROPIC_API_KEY="sk-ant-..."
+python main.py
+```
+
+Examples default to `claude-haiku-4-5` to keep costs low. **Running all five costs well under $0.10.** API keys are always read from environment variables, never hardcoded.
+
+---
+
+## 🌍 Two languages
+
+The guide is written and maintained in both languages — not machine-translated stubs. Both versions have all 16 chapters, both are on the website, both have a PDF edition.
+
+| | English | Italiano |
+|---|---|---|
+| Chapters | [`en/`](en/) | root (`01-*.md` … `16-*.md`) |
+| Website | [myfirstaiagent.netlify.app/en/](https://myfirstaiagent.netlify.app/en/) | [myfirstaiagent.netlify.app](https://myfirstaiagent.netlify.app/) |
+| PDF | [`Guide-AI-Agents-EN.pdf`](Guide-AI-Agents-EN.pdf) | [`Guida-Agenti-AI.pdf`](Guida-Agenti-AI.pdf) |
+| README | this file | [README.it.md](README.it.md) |
+
+Technical terms (*prompt*, *tool*, *token*, *embedding*) are kept in English in the Italian edition too — that's the vocabulary you'll meet in the documentation you read next.
+
+---
+
+## Repository structure
+
+```
+AgentiAI/
+├── 01-*.md … 16-*.md      # 16 chapters — Italian (source of truth)
+├── en/                    # 16 chapters — English (source of truth)
+├── examples/              # 5 standalone runnable Python projects
+├── build_site.py          # Markdown → static bilingual website
+├── build_pdf.py           # Markdown → PDF (EN + IT)
+├── website/               # BUILD OUTPUT — deployable static site
+├── static-js/             # Site sources: search, tutor, playground, i18n
+├── site/                  # Earlier Flask prototype (kept for reference)
+├── DEPLOY.md              # Deploy guide: Netlify / Vercel / GitHub Pages
+└── docs/AVANZAMENTO.md    # Progress log & project decisions (Italian)
+```
+
+The Markdown files are the **source of truth**. `website/` is generated — never edit it by hand.
+
+### Build the site and the PDFs yourself
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install markdown beautifulsoup4 pygments reportlab
-python3 build_site.py
-python3 build_pdf.py
+
+python3 build_site.py    # → website/
+python3 build_pdf.py     # → PDF, EN + IT
 ```
 
-I file `.md` (in root e in `en/`) sono la fonte di verità: `website/` è output di build e non va modificato a mano.
+Then open `website/index.html`, or serve the folder with `python3 -m http.server -d website`.
 
-## Come usare la guida al meglio
-
-- **Non leggerla passivamente.** Apri ChatGPT, Claude o un terminale di fianco e prova ogni esempio.
-- **Sbaglia presto.** Gli agenti AI si imparano usandoli, non studiandoli. La guida ti dà il vocabolario; la pratica ti dà l'intuito.
-- **Torna indietro.** I concetti dei primi capitoli prendono senso vero solo dopo aver fatto un po' di pratica nei capitoli 8 e 10.
-
-## Convenzioni
-
-- **Termini in inglese**: alcuni concetti (prompt, tool, token, embedding) li lascio in inglese perché in italiano non hanno una traduzione consolidata e troverai sempre la versione inglese nella documentazione che leggerai dopo.
-- **Codice**: gli esempi sono in Python (linguaggio dominante in AI). Dove utile uso TypeScript per esempi web.
-- **Citazioni**: quando cito "un modello" o "l'agente" senza specificare, intendo un comportamento generale comune ai LLM moderni; quando il dettaglio dipende dal modello specifico, lo dico esplicitamente.
+The site is plain HTML/CSS/JS — no framework, no bundler, no `node_modules`. Deployment instructions for Netlify, Vercel and GitHub Pages are in [DEPLOY.md](DEPLOY.md).
 
 ---
 
-Pronto? Si parte da [Capitolo 1 — Cosa sono gli Agenti AI](01-cosa-sono-gli-agenti-ai.md).
+## How to get the most out of it
+
+- **Don't read passively.** Keep ChatGPT, Claude, or a terminal open next to you and try every example.
+- **Fail early.** Agents are learned by using them, not by studying them. The guide gives you the vocabulary; practice gives you the intuition.
+- **Come back.** The early chapters only fully click after you've built something in chapters 8 and 10.
+
+---
+
+## Author
+
+**Gabriele Bottai**
+[Portfolio](https://gabrielebottai.netlify.app/) · [GitHub](https://github.com/GabrieleBottai01) · [LinkedIn](https://www.linkedin.com/in/gabriele-bottai-1825a9302/) · [X](https://x.com/bottai_gabriele)
+
+Found a mistake, or something explained badly? [Open an issue](https://github.com/GabrieleBottai01/AgentiAI/issues) — corrections in either language are welcome.
+
+---
+
+© 2026 Gabriele Bottai

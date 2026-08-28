@@ -1,39 +1,41 @@
-# 03 — RAG minimale end-to-end
+# 03 — Minimal end-to-end RAG
 
-Riferimento: **Capitolo 7** della guida.
+Reference: **Chapter 7** of the guide.
 
-## Cosa imparerai
+> 🇮🇹 [Versione italiana](README.it.md)
 
-- La pipeline RAG completa in ~150 righe.
-- Chunking, indicizzazione, retrieval con cosine similarity, generation con citazioni.
-- Come strutturare il prompt per **forzare le citazioni** e **ridurre allucinazioni**.
+## What you'll learn
 
-## ⚠️ Importante: l'embedding qui è fake
+- The complete RAG pipeline in ~150 lines.
+- Chunking, indexing, retrieval with cosine similarity, generation with citations.
+- How to structure the prompt to **force citations** and **reduce hallucinations**.
 
-Per evitare di forzarti a registrarti su un provider di embedding, l'esempio usa una funzione `fake_embed()` basata su hashing. **Funziona per dimostrare la pipeline, ma NON cattura significato semantico.**
+## ⚠️ Important: the embedding here is fake
 
-Per usarlo per davvero, sostituisci `fake_embed()` con uno di:
+So you don't have to sign up with an embedding provider just to run this, the example uses a hash-based `fake_embed()` function. **It works for demonstrating the pipeline, but it does NOT capture semantic meaning.**
+
+To use it for real, replace `fake_embed()` with one of these:
 
 ```python
-# Voyage AI (consigliato per qualità):
+# Voyage AI (recommended for quality):
 from voyageai import Client
 v = Client()
 def embed(text):
     return v.embed([text], model="voyage-3", input_type="document").embeddings[0]
 
-# OpenAI (più diffuso):
+# OpenAI (most widespread):
 from openai import OpenAI
 o = OpenAI()
 def embed(text):
     return o.embeddings.create(model="text-embedding-3-small", input=text).data[0].embedding
 ```
 
-## Cosa fa
+## What it does
 
-1. **Indicizza** 4 documenti di policy aziendale fittizi (rimborsi, ferie, smartworking, formazione).
-2. Per 4 domande, fa retrieval dei 3 chunk più simili e genera risposta con citazioni.
+1. **Indexes** 4 fictional company policy documents (expenses, holidays, remote work, training).
+2. For 4 questions, retrieves the 3 most similar chunks and generates an answer with citations.
 
-## Esegui
+## Run it
 
 ```bash
 pip install -r requirements.txt
@@ -41,10 +43,13 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 python main.py
 ```
 
-## Output atteso (con embedding reale)
+## Expected output (with a real embedding model)
+
+The sample corpus and answers are in Italian:
 
 ```
 Q: Posso farmi rimborsare un Uber per andare in ufficio?
+   ("Can I expense an Uber ride to the office?")
 
 [retrieved chunks: ['policy-rimborsi', 'policy-rimborsi', 'policy-smartworking']]
 
@@ -52,15 +57,15 @@ Sì, taxi e Uber per spostamenti aziendali sono rimborsabili
 [policy-rimborsi#0]. Servono le ricevute originali entro 30 giorni dal viaggio.
 ```
 
-## Da notare nel codice
+## What to notice in the code
 
-- **Chunking** con overlap (40 caratteri) per non spezzare info a metà.
-- **Citazioni nel system prompt**: "cita sempre con [doc-id#chunk], se non sai dillo".
-- **Top-K = 3** chunks. Più alzi K, più contesto ma più rumore + costo.
-- Niente persistenza: ogni run ricostruisce l'indice. In produzione: salva in DB.
+- **Chunking** with overlap (40 characters) so information isn't cut in half.
+- **Citations in the system prompt**: "always cite with [doc-id#chunk]; if you don't know, say so".
+- **Top-K = 3** chunks. The higher K, the more context — but also more noise and more cost.
+- No persistence: every run rebuilds the index. In production, store it in a database.
 
-## Esercizio per te
+## Exercise for you
 
-1. Sostituisci `fake_embed()` con un vero embedding model.
-2. Aggiungi un re-ranker: prendi top-10, poi chiedi a un LLM piccolo di riordinare in base a rilevanza alla domanda.
-3. Aggiungi una soglia di confidenza: se il top score è < 0.5, rispondi "non ho info sufficienti" senza chiamare il modello.
+1. Replace `fake_embed()` with a real embedding model.
+2. Add a re-ranker: take the top 10, then ask a small LLM to reorder them by relevance to the question.
+3. Add a confidence threshold: if the top score is < 0.5, answer "I don't have enough information" without calling the model at all.

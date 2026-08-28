@@ -1,58 +1,60 @@
-# Examples — Codice runnable della guida
+# Examples — Runnable code from the guide
 
-Repository di esempi self-contained per i capitoli chiave della *Guida agli Agenti AI*. Ogni cartella contiene un progetto Python autonomo con `requirements.txt` e `README.md`.
+Self-contained examples for the key chapters of *AI Agents — The Complete Guide*. Every folder is a standalone Python project with its own `requirements.txt` and `README.md`.
+
+> 🇮🇹 [Versione italiana](README.it.md)
 
 ## Quick start
 
 ```bash
-# Crea un virtualenv (consigliato)
+# Create a virtualenv (recommended)
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Installa le dipendenze del progetto specifico
+# Install the dependencies of the specific project
 cd 01-agent-loop
 pip install -r requirements.txt
 
-# Imposta la API key (Anthropic)
+# Set the API key (Anthropic)
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# Esegui
+# Run
 python main.py
 ```
 
-## Esempi
+## The examples
 
-| Cartella | Capitolo | Cosa fa |
+| Folder | Chapter | What it does |
 |---|---|---|
-| `01-agent-loop` | Cap. 3 | Il loop minimale di un agente: ~70 righe, 2 tool, leggibile come pseudocodice. |
-| `02-tool-use` | Cap. 6 | Tool design completo: schema preciso, error handling strutturato, multiple tools. |
-| `03-rag-minimal` | Cap. 7 | RAG end-to-end: chunking, embedding, retrieval, generation con citazioni. |
-| `04-prompt-caching` | Cap. 10 | Agente di research con prompt caching, retry, streaming, loop detection. |
-| `05-eval-harness` | Cap. 14 | Eval harness con dataset .jsonl, programmatic checks, LLM-as-judge. |
+| [`01-agent-loop`](01-agent-loop/) | Ch. 3 | The minimal agent loop: ~70 lines, 2 tools, readable as pseudocode. |
+| [`02-tool-use`](02-tool-use/) | Ch. 6 | Complete tool design: precise schemas, structured error handling, multiple tools. |
+| [`03-rag-minimal`](03-rag-minimal/) | Ch. 7 | End-to-end RAG: chunking, embedding, retrieval, generation with citations. |
+| [`04-prompt-caching`](04-prompt-caching/) | Ch. 10 | Research agent with prompt caching, retry, streaming, loop detection. |
+| [`05-eval-harness`](05-eval-harness/) | Ch. 14 | Eval harness with a `.jsonl` dataset, programmatic checks, LLM-as-judge. |
 
-## Convenzioni
+## Conventions
 
-- **Ogni esempio è indipendente.** Niente file condivisi tra cartelle.
-- **API key via env var.** Mai hardcoded.
-- **Output stampato a video.** Niente UI, niente file generati (salvo il vector store del RAG).
-- **Modello di default `claude-haiku-4-5`** per tenere bassi i costi durante i test.
+- **Every example is independent.** No files shared between folders.
+- **API key via environment variable.** Never hardcoded.
+- **Output printed to the terminal.** No UI, no generated files (except the RAG vector store).
+- **Default model `claude-haiku-4-5`** to keep costs low while testing.
 
-Costo medio per eseguire tutti e 5 gli esempi: **< €0.10**.
+Average cost to run all five examples: **under $0.10**.
 
-## Struttura tipica di un esempio
+## Typical structure of an example
 
 ```
 01-agent-loop/
-├── README.md           # cosa fa, come si esegue, cosa imparare
-├── requirements.txt    # dipendenze pin-versioned
-├── main.py            # script principale, eseguibile
-└── (eventuali file di supporto)
+├── README.md           # what it does, how to run it, what to learn
+├── requirements.txt    # version-pinned dependencies
+├── main.py             # main script, executable
+└── (any supporting files)
 ```
 
-## Note
+## Notes
 
-Gli esempi usano **Anthropic Claude** come provider primario. Per usare OpenAI/Gemini, vedi i commenti `# OpenAI:` e `# Gemini:` negli esempi: sono indicate le righe da modificare.
+The examples use **Anthropic Claude** as the primary provider. To use OpenAI/Gemini instead, look for the `# OpenAI:` and `# Gemini:` comments in the code — they mark the lines to change.
 
 ---
 
-© 2026 Gabriele Bottai · Guida agli Agenti AI
+© 2026 Gabriele Bottai · AI Agents — The Complete Guide
